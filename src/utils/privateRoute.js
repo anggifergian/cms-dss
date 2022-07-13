@@ -1,13 +1,18 @@
-import { Navigate, Route } from 'react-router-dom'
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, isLoggedIn, ...rest }) => (
-  <Route {...rest} element={props => (
+  <Route {...rest} render={props => (
     isLoggedIn ? (
       <Component {...props} />
     ) : (
-      <Navigate to='/login' replace />
+      <Redirect to={{
+        pathname: '/login',
+        state: { from: props.location }
+      }}
+      />
     )
   )} />
-)
+);
 
-export default PrivateRoute
+export default PrivateRoute;

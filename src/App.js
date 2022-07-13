@@ -1,29 +1,36 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
+import { Switch, Route } from 'react-router-dom';
 
 import './App.scss';
+import { privateRoutes } from './utils/routes';
+import PrivateRoute from './utils/privateRoute';
 
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import User from './pages/User';
-
-function App() {
+function App({ history }) {
   return (
-    <Routes>
-      <Route path='/login' element={<Login />} />
-
-      <Route path='/app'>
-        <Route path='home' element={<Dashboard />} />
-        <Route path='user' element={<User />} />
-      </Route>
-
-      <Route
-        path="*"
-        element={
-          <Navigate to='/login' />
-        }
-      />
-    </Routes>
+    <ConnectedRouter history={history}>
+      <Switch>
+        {privateRoutes.map(route => (
+          route.submenu ? (
+            route.submenu.map(sub_route => (
+              <PrivateRoute
+                key={sub_route.key}
+                path={sub_route.path}
+                component={sub_route.component}
+                isLoggedIn={true}
+              />
+            ))
+          ) : (
+            <PrivateRoute
+              key={route.key}
+              path={route.path}
+              component={route.component}
+              isLoggedIn={true}
+            />
+          )
+        ))}
+      </Switch>
+    </ConnectedRouter>
   )
 }
 
