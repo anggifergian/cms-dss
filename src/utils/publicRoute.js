@@ -1,13 +1,18 @@
-import { Navigate, Route } from 'react-router-dom'
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
 
 const PublicRoute = ({ component: Component, isLoggedIn, ...rest }) => (
-  <Route {...rest} element={props => (
-    isLoggedIn ? (
+  <Route {...rest} render={props => (
+    !isLoggedIn ? (
       <Component {...props} />
     ) : (
-      <Navigate to='/dashboard' replace />
+      <Redirect to={{
+        pathname: '/dashboard',
+        state: { from: props.location }
+      }}
+      />
     )
   )} />
-)
+);
 
-export default PublicRoute
+export default PublicRoute;

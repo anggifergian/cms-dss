@@ -1,15 +1,25 @@
 import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
 import './App.scss';
-import { privateRoutes } from './utils/routes';
+import { privateRoutes, publicRoutes } from './utils/routes';
 import PrivateRoute from './utils/privateRoute';
+import PublicRoute from './utils/publicRoute';
 
 function App({ history }) {
   return (
     <ConnectedRouter history={history}>
       <Switch>
+        {publicRoutes.map(route => (
+          <PublicRoute
+            key={route.key}
+            exact={route.exact}
+            path={route.path}
+            component={route.component}
+            isLoggedIn={false}
+          />
+        ))}
         {privateRoutes.map(route => (
           route.submenu ? (
             route.submenu.map(sub_route => (

@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react'
 import { Layout, Menu } from 'antd'
 import { privateRoutes } from "../../utils/routes"
+import { useHistory } from 'react-router-dom'
 
 const { Sider } = Layout
 
 
 function Sidebar({ isCollapsed }) {
 
-  useEffect(() => {
-
-  }, [])
+  const history = useHistory()
 
   return (
     <Sider
@@ -30,20 +29,24 @@ function Sidebar({ isCollapsed }) {
         mode="inline"
         items={[
           {
-            key: '/app/home',
+            key: '/dashboard',
             label: 'Home',
+            onClick: (key) => history.push(key),
           },
           {
-            key: '/app/region',
+            key: '/master-data/company',
+            label: 'Company',
+            onClick: (key) => history.push(key)
+          },
+          {
+            key: '/master-data/region',
             label: 'Region',
+            onClick: (key) => history.push(key)
           },
           {
-            key: '/app/user',
-            label: 'User',
-          },
-          {
-            key: '3',
+            key: '/master-data/branch',
             label: 'Branch',
+            onClick: (key) => history.push(key)
           },
         ]}
       />

@@ -9,7 +9,7 @@ const routeMiddleware = routerMiddleware(history)
 
 const store = configureStore({
   reducer: reducer(history),
-  middleware: [routeMiddleware]
+  middleware: [routeMiddleware],
 })
 
 export { store, history }

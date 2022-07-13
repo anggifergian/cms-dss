@@ -2,8 +2,8 @@ import React from 'react'
 
 const index = ({ label }) => {
   return (
-    <div className='pb-4'>
-      <h3 className='text-xl font-bold text-gray-700'>
+    <div>
+      <h3 className='text-xl font-bold text-gray-700 mb-0'>
         {label}
       </h3>
     </div>

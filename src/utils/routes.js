@@ -1,6 +1,22 @@
 import Dashboard from "../pages/Dashboard"
 import Company from "../pages/Master/Company"
 import Region from "../pages/Master/Region"
+import Login from "../pages/Login"
+
+export const publicRoutes = [
+  {
+    key: 'home',
+    exact: true,
+    path: '/',
+    component: Login
+  },
+  {
+    key: 'login',
+    exact: true,
+    path: '/login',
+    component: Login
+  },
+]
 
 export const privateRoutes = [
   {
