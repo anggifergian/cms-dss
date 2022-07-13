@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react'
 import { Layout, Menu } from 'antd'
-import { useMatch, useNavigate } from 'react-router-dom'
+import { privateRoutes } from "../../utils/routes"
 
 const { Sider } = Layout
 
+
 function Sidebar({ isCollapsed }) {
-  const navigate = useNavigate()
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <Sider
       width={250}
+      breakpoint="lg"
       collapsible
       collapsed={isCollapsed}
       trigger={null}
@@ -27,12 +32,14 @@ function Sidebar({ isCollapsed }) {
           {
             key: '/app/home',
             label: 'Home',
-            onClick: ({ key }) => navigate(key)
+          },
+          {
+            key: '/app/region',
+            label: 'Region',
           },
           {
             key: '/app/user',
             label: 'User',
-            onClick: ({ key }) => navigate(key)
           },
           {
             key: '3',
