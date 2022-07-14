@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getCompanies } from '../../api/company'
 
@@ -19,6 +19,7 @@ function Login() {
       }
 
       const payload = await getCompanies(query)
+      console.log(payload)
     } catch (error) {
       console.log(error)
     }
