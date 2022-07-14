@@ -26,6 +26,7 @@ function Login() {
   }
 
   useEffect(() => {
+    console.log('TEST LOGIN')
     initFetch()
   }, [])
 
