@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getCompanies } from '../../api/company'
+import { login } from '../../api/auth'
 
 function Login() {
   const history = useHistory()
+  const [state, setState] = useState({
+    username: '',
+    password: ''
+  })
 
   const initFetch = async () => {
     try {
@@ -30,6 +35,22 @@ function Login() {
     initFetch()
   }, [])
 
+  const handleLogin = async () => {
+    console.log(state)
+    try {
+      const query = {
+        "user_name": state.username,
+        "user_email": "",
+        "user_password": state.password
+      }
+      const data = await login(query)
+      console.log('login...', data)
+    } catch (error) {
+      console.log('error...', error.message)
+    }
+    // history.push('/dashboard')
+  }
+
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="mt-20 lg:mt-0 w-full px-4 py-12 lg:w-1/2 sm:px-6 lg:px-8 sm:py-16 lg:py-24">
@@ -50,6 +71,8 @@ function Login() {
                 type="email"
                 className="w-full p-4 pr-12 text-sm border border-gray-200 rounded-lg shadow-sm"
                 placeholder="Enter email"
+                value={state.username}
+                onChange={e => setState({ ...state, username: e.target.value })}
               />
 
               <span className="absolute inset-y-0 inline-flex items-center right-4">
@@ -78,6 +101,8 @@ function Login() {
                 type="password"
                 className="w-full p-4 pr-12 text-sm border border-gray-200 rounded-lg shadow-sm"
                 placeholder="Enter password"
+                value={state.password}
+                onChange={e => setState({ ...state, password: e.target.value })}
               />
 
               <span className="absolute inset-y-0 inline-flex items-center right-4">
@@ -109,7 +134,7 @@ function Login() {
             <button
               type="button"
               className="w-full md:w-28 inline-block px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg"
-              onClick={() => history.push('/dashboard')}
+              onClick={handleLogin}
             >
               Sign in
             </button>

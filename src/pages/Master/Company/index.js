@@ -16,6 +16,31 @@ const Company = () => {
     typeModal: ''
   })
 
+  const initFetch = async () => {
+    try {
+      const query = {
+        "company_name": "",
+        "company_address": "",
+        "company_phone": "",
+        "company_email": "",
+        "status": "",
+        "created_by": "",
+        "created_date": "",
+        "user_token": "1657719661"
+      }
+
+      const payload = await getCompanies(query)
+      console.log(payload)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    console.log('TEST LOGIN')
+    initFetch()
+  }, [])
+
   const handleShowModal = (typeModal = '') => {
     setState({
       ...state,
