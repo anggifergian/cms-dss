@@ -1,8 +1,32 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import { getCompanies } from '../../api/company'
 
 function Login() {
   const history = useHistory()
+
+  const initFetch = async () => {
+    try {
+      const query = {
+        "company_name": "",
+        "company_address": "",
+        "company_phone": "",
+        "company_email": "",
+        "status": "",
+        "created_by": "",
+        "created_date": "",
+        "user_token": "1657719661"
+      }
+
+      const payload = await getCompanies(query)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    initFetch()
+  }, [])
 
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
