@@ -1,54 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { getCompanies } from '../../api/company'
-import { login } from '../../api/auth'
+import React, { useState } from 'react'
 
 function Login() {
-  const history = useHistory()
   const [state, setState] = useState({
     username: '',
     password: ''
   })
 
-  const initFetch = async () => {
-    try {
-      const query = {
-        "company_name": "",
-        "company_address": "",
-        "company_phone": "",
-        "company_email": "",
-        "status": "",
-        "created_by": "",
-        "created_date": "",
-        "user_token": "1657719661"
-      }
-
-      const payload = await getCompanies(query)
-      console.log(payload)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    console.log('TEST LOGIN')
-    initFetch()
-  }, [])
-
   const handleLogin = async () => {
-    console.log(state)
-    try {
-      const query = {
-        "user_name": state.username,
-        "user_email": "",
-        "user_password": state.password
-      }
-      const data = await login(query)
-      console.log('login...', data)
-    } catch (error) {
-      console.log('error...', error.message)
-    }
-    // history.push('/dashboard')
+    // 1. setToken
+    // 2. handle UI
+    // 3. push route
   }
 
   return (
