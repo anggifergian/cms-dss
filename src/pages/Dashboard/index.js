@@ -5,10 +5,12 @@ import { BaseLayout, Title } from '../../containers/'
 const Dashboard = () => {
   return (
     <BaseLayout>
-      <Title label="Dashboard" />
+      <div className='mb-4'>
+        <Title label="Dashboard" />
+      </div>
 
       <div className='w-full rounded bg-white p-6'>
-        /app/dashboard
+        Welcome!
       </div>
     </BaseLayout>
   )

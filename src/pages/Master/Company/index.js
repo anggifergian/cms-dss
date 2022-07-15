@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Layout, Row } from 'antd'
-import axios from 'axios'
 
 import { Title, BaseLayout } from '../../../containers'
 import SectionModal from './SectionModal'
 import SectionTable from './SectionTable'
-import { dev_api } from '../../../settings/config'
 import { getCompanies } from '../../../api/company'
 
 const { Content } = Layout
@@ -37,7 +35,6 @@ const Company = () => {
   }
 
   useEffect(() => {
-    console.log('TEST LOGIN')
     initFetch()
   }, [])
 
