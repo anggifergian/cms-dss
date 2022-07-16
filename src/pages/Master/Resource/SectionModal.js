@@ -1,9 +1,16 @@
-import React from 'react'
+import CreateModal from "./components/CreateModal"
 
-const SectionModal = () => {
-  return (
-    <div>SectionModal</div>
-  )
+const SectionModal = ({
+  modalType,
+  handleCloseModal,
+  visible,
+}) => {
+  switch (modalType) {
+    case 'create':
+      return <CreateModal visible={visible} onClose={handleCloseModal} />
+    default:
+      return <></>
+  }
 }
 
 export default SectionModal
