@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Row, Layout } from 'antd'
 
 import { Title, BaseLayout } from '../../../containers'
@@ -8,6 +8,19 @@ import SectionTable from './SectionTable'
 const { Content } = Layout
 
 const Branch = () => {
+  const [state, setState] = useState({
+    visible: false,
+    typeModal: ''
+  })
+
+  const handleShowModal = (typeModal = '') => {
+    setState({
+      ...state,
+      visible: !state.visible,
+      typeModal,
+    })
+  }
+
   return (
     <BaseLayout>
       <Row
@@ -19,6 +32,7 @@ const Branch = () => {
 
         <Button
           type='primary'
+          onClick={() => handleShowModal('create')}
         >
           Add Branch
         </Button>
@@ -26,6 +40,11 @@ const Branch = () => {
 
       <div className='w-full rounded bg-white p-6'>
         <Content>
+          <SectionModal
+            modalType={state.typeModal}
+            visible={state.visible}
+            handleCloseModal={() => setState({ ...state, visible: false })}
+          />
           <SectionTable />
         </Content>
       </div>
