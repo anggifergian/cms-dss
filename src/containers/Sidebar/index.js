@@ -22,8 +22,7 @@ function Sidebar({ isCollapsed }) {
     if (App.current.length && !originalCurrentLocation) return
 
     if (App.current[0] !== originalCurrentLocation[originalCurrentLocation.length - 1]) {
-      const changeCurrentPage = page => dispatch(changeCurrentRoute([page]))
-      changeCurrentPage(originalCurrentLocation[originalCurrentLocation.length - 1])
+      changeCurrentPage([originalCurrentLocation[originalCurrentLocation.length - 1]])
     }
   }, [App, dispatch, originalCurrentLocation])
 

@@ -1,3 +1,4 @@
+import { Row } from 'antd'
 import React from 'react'
 
 import { BaseLayout, Title } from '../../containers/'
@@ -5,9 +6,9 @@ import { BaseLayout, Title } from '../../containers/'
 const Dashboard = () => {
   return (
     <BaseLayout>
-      <div className='mb-4'>
+      <Row align='bottom' justify='start' style={{ marginBottom: 20 }}>
         <Title label="Dashboard" />
-      </div>
+      </Row>
 
       <div className='w-full rounded bg-white p-6'>
         Welcome!
