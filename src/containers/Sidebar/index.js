@@ -60,10 +60,12 @@ function Sidebar({ isCollapsed }) {
               <SubMenu
                 key={item.key}
                 title={item.title}
+                icon={item.icon}
               >
                 {item.submenu.map(subItem => (
                   <Menu.Item
                     key={subItem.key}
+                    icon={subItem.icon}
                     className={subItem.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
                   >
                     <Link id={`menu-${subItem.key}`} to={subItem.path}>
@@ -75,6 +77,7 @@ function Sidebar({ isCollapsed }) {
             ) : (
               <Menu.Item
                 key={item.key}
+                icon={item.icon}
                 className={item.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
               >
                 <Link id={`menu-${item.key}`} to={item.path}>

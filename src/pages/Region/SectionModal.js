@@ -1,4 +1,4 @@
-import CreateModal from "./components/CreateModal"
+import CreateModal from "../Region/components/CreateModal"
 
 const SectionModal = ({
   modalType,

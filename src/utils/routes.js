@@ -1,3 +1,5 @@
+import { AppstoreOutlined, DashboardOutlined, DollarCircleOutlined } from "@ant-design/icons"
+
 import Dashboard from "../pages/Dashboard"
 import Company from "../pages/Company"
 import Region from "../pages/Region"
@@ -6,6 +8,7 @@ import Device from "../pages/Device"
 import Position from "../pages/Position"
 import Resource from "../pages/Resource"
 import Login from "../pages/Login"
+import Promo from "../pages/Promo"
 
 export const publicRoutes = [
   {
@@ -29,13 +32,13 @@ export const privateRoutes = [
     component: Dashboard,
     title: 'Dashboard',
     sidebar: true,
-    icon: null,
+    icon: <DashboardOutlined />,
   },
   {
     key: 'master_data',
     title: 'Master Data',
     sidebar: true,
-    icon: null,
+    icon: <AppstoreOutlined />,
     submenu: [
       {
         key: 'company',
@@ -80,5 +83,13 @@ export const privateRoutes = [
         icon: null
       },
     ]
-  }
+  },
+  {
+    key: 'promo',
+    path: '/promo',
+    component: Promo,
+    title: 'Promo',
+    sidebar: true,
+    icon: <DollarCircleOutlined />,
+  },
 ]
