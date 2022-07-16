@@ -15,7 +15,7 @@ function BaseLayout({ children }) {
           isCollapsed={state.sidebarCollapsed}
         />
 
-        <div className='w-full mx-6 md:mx-10 mt-20 lg:mx-auto lg:max-w-screen-md'>
+        <div className='w-full mx-6 md:mx-10 mt-20 lg:mx-auto lg:max-w-screen-lg'>
           {children}
         </div>
       </Layout>
