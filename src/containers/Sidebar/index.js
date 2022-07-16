@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Layout, Menu } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { privateRoutes } from "../../utils/routes"
 import { changeCurrentRoute } from '../../redux/app/action'
@@ -11,12 +11,13 @@ const { SubMenu } = Menu
 
 function Sidebar({ isCollapsed }) {
   const dispatch = useDispatch()
-  const history = useHistory()
   const App = useSelector(state => state.App)
 
   const originalCurrentLocation = window && window.location.pathname.split("/")
 
-  const changeCurrentPage = page => dispatch(changeCurrentRoute(page))
+  const changeCurrentPage = useCallback((page) => {
+    dispatch(changeCurrentRoute(page))
+  }, [dispatch])
 
   useEffect(() => {
     if (App.current.length && !originalCurrentLocation) return
@@ -24,7 +25,7 @@ function Sidebar({ isCollapsed }) {
     if (App.current[0] !== originalCurrentLocation[originalCurrentLocation.length - 1]) {
       changeCurrentPage([originalCurrentLocation[originalCurrentLocation.length - 1]])
     }
-  }, [App, dispatch, originalCurrentLocation])
+  }, [App, dispatch, originalCurrentLocation, changeCurrentPage])
 
   const handleClick = (e) => {
     changeCurrentPage([e.key])

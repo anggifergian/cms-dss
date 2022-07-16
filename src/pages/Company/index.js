@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { Button, Row, Layout } from 'antd'
+import { Button, Layout, Row } from 'antd'
 
-import { Title, BaseLayout } from '../../../containers'
+import { Title, BaseLayout } from '../../containers'
 import SectionModal from './SectionModal'
 import SectionTable from './SectionTable'
 
 const { Content } = Layout
 
-const Resource = () => {
+const Company = () => {
   const [state, setState] = useState({
     visible: false,
     typeModal: ''
@@ -28,13 +28,13 @@ const Resource = () => {
         justify="space-between"
         style={{ marginBottom: 20 }}
       >
-        <Title label="Resource" />
+        <Title label="Company" />
 
         <Button
           type='primary'
           onClick={() => handleShowModal('create')}
         >
-          Add Resource
+          Add company
         </Button>
       </Row>
 
@@ -52,4 +52,4 @@ const Resource = () => {
   )
 }
 
-export default Resource
+export default Company

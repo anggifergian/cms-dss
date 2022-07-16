@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Form, Input, Row, Col, Button } from 'antd'
 
-import { Title } from '../../../../containers'
+import { Title } from '../../../containers'
 
 const CreateModal = ({ visible, onClose }) => {
   const [form] = Form.useForm()
@@ -25,7 +25,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   return (
     <Modal
-      title={<Title label="Form Device" />}
+      title={<Title label="Form Position" />}
       visible={visible}
       onCancel={closeModal}
       width={600}
@@ -34,12 +34,12 @@ const CreateModal = ({ visible, onClose }) => {
       <Form
         {...formItemLayout}
         form={form}
-        name='deviceCreateModal'
+        name='positionCreateModal'
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
       >
-        <Form.Item label="Device name" name="company_name">
+        <Form.Item label="Position name" name="company_name">
           <Input />
         </Form.Item>
 

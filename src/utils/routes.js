@@ -1,10 +1,10 @@
 import Dashboard from "../pages/Dashboard"
-import Company from "../pages/Master/Company"
-import Region from "../pages/Master/Region"
-import Branch from "../pages/Master/Branch"
-import Device from "../pages/Master/Device"
-import Position from "../pages/Master/Position"
-import Resource from "../pages/Master/Resource"
+import Company from "../pages/Company"
+import Region from "../pages/Region"
+import Branch from "../pages/Branch"
+import Device from "../pages/Device"
+import Position from "../pages/Position"
+import Resource from "../pages/Resource"
 import Login from "../pages/Login"
 
 export const publicRoutes = [

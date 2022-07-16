@@ -1,11 +1,13 @@
-import { Button, Row } from 'antd'
 import React, { useState } from 'react'
+import { Button, Row, Layout } from 'antd'
 
-import { Title, BaseLayout } from '../../../containers'
+import { Title, BaseLayout } from '../../containers'
 import SectionModal from './SectionModal'
 import SectionTable from './SectionTable'
 
-const Region = () => {
+const { Content } = Layout
+
+const Position = () => {
   const [state, setState] = useState({
     visible: false,
     typeModal: ''
@@ -26,26 +28,28 @@ const Region = () => {
         justify="space-between"
         style={{ marginBottom: 20 }}
       >
-        <Title label="Region" />
+        <Title label="Position" />
 
         <Button
           type='primary'
           onClick={() => handleShowModal('create')}
         >
-          Add region
+          Add Position
         </Button>
       </Row>
 
       <div className='w-full rounded bg-white p-6'>
-        <SectionModal
-          modalType={state.typeModal}
-          visible={state.visible}
-          handleCloseModal={() => setState({ ...state, visible: false })}
-        />
-        <SectionTable />
+        <Content>
+          <SectionModal
+            modalType={state.typeModal}
+            visible={state.visible}
+            handleCloseModal={() => setState({ ...state, visible: false })}
+          />
+          <SectionTable />
+        </Content>
       </div>
     </BaseLayout>
   )
 }
 
-export default Region
+export default Position
