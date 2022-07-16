@@ -4,6 +4,7 @@ import { Button, Layout, Row } from 'antd'
 import { Title, BaseLayout } from '../../../containers'
 import SectionModal from './SectionModal'
 import SectionTable from './SectionTable'
+
 import { getCompanies } from '../../../api/company'
 
 const { Content } = Layout
@@ -13,30 +14,6 @@ const Company = () => {
     visible: false,
     typeModal: ''
   })
-
-  const initFetch = async () => {
-    try {
-      const query = {
-        "company_name": "",
-        "company_address": "",
-        "company_phone": "",
-        "company_email": "",
-        "status": "",
-        "created_by": "",
-        "created_date": "",
-        "user_token": "1657719661"
-      }
-
-      const payload = await getCompanies(query)
-      console.log(payload)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    initFetch()
-  }, [])
 
   const handleShowModal = (typeModal = '') => {
     setState({
