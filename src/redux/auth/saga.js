@@ -53,7 +53,7 @@ function* loginRequest() {
           headers,
           body,
         }),
-        timeout: call(delay, 30000),
+        timeout: call(delay, 10000),
       })
 
       if (response) {

@@ -9,7 +9,9 @@ import { store, history } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <App history={history} />
-  </Provider>
+  <BrowserRouter>
+    <Provider store={store}>
+      <App history={history} />
+    </Provider>
+  </BrowserRouter>
 );
