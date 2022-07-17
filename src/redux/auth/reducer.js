@@ -7,9 +7,6 @@ import {
 import {
   setToken,
   setUser,
-  logout,
-  checkAuthorization,
-  removeAuthorization,
   failureLogin,
   requestLogin,
   successLogin,

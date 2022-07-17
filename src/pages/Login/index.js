@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { requestLogin } from '../../redux/auth/action'
-import { checkStatus } from '../../utils/helpers'
 
 function Login() {
   const dispatch = useDispatch()
