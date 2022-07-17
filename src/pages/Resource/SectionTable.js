@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Table } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { requestListResource } from '../../redux/master/action'
 
 const SectionTable = () => {
+  const dispatch = useDispatch()
+  const Auth = useSelector(state => state.Auth)
+  const Master = useSelector(state => state.Master)
+
+  const fetchList = useCallback((query) => {
+    dispatch(requestListResource(query))
+  }, [dispatch])
+
+  useEffect(() => {
+    const query = {}
+
+    fetchList(query)
+  }, [Master.reload, Auth.token, fetchList])
+
   const columns = [
     {
       title: 'Recourse',

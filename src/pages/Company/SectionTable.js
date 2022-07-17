@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Table } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { requestListCompany } from '../../redux/master/action'
 
