@@ -17,10 +17,8 @@ function Login() {
       user_name: query.username,
       user_password: query.password
     }
+
     onLogin(data)
-    // 1. setToken
-    // 2. handle UI
-    // 3. push route
   }
 
   return (
