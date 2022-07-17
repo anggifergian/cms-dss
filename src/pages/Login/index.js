@@ -1,12 +1,24 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { requestLogin } from '../../redux/auth/action'
+import { checkStatus } from '../../utils/helpers'
 
 function Login() {
-  const [state, setState] = useState({
+  const dispatch = useDispatch()
+  const [query, setQuery] = useState({
     username: '',
     password: ''
   })
 
-  const handleLogin = async () => {
+  const onLogin = params => dispatch(requestLogin(params))
+
+  const handleLogin = () => {
+    const data = {
+      user_name: query.username,
+      user_password: query.password
+    }
+    onLogin(data)
     // 1. setToken
     // 2. handle UI
     // 3. push route
@@ -32,8 +44,8 @@ function Login() {
                 type="email"
                 className="w-full p-4 pr-12 text-sm border border-gray-200 rounded-lg shadow-sm"
                 placeholder="Enter email"
-                value={state.username}
-                onChange={e => setState({ ...state, username: e.target.value })}
+                value={query.username}
+                onChange={e => setQuery({ ...query, username: e.target.value })}
               />
 
               <span className="absolute inset-y-0 inline-flex items-center right-4">
@@ -62,8 +74,8 @@ function Login() {
                 type="password"
                 className="w-full p-4 pr-12 text-sm border border-gray-200 rounded-lg shadow-sm"
                 placeholder="Enter password"
-                value={state.password}
-                onChange={e => setState({ ...state, password: e.target.value })}
+                value={query.password}
+                onChange={e => setQuery({ ...query, password: e.target.value })}
               />
 
               <span className="absolute inset-y-0 inline-flex items-center right-4">

@@ -1,15 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
 import { routerMiddleware } from 'connected-react-router'
+import createSagaMiddleware from 'redux-saga'
 
-import reducer from './rootReducer'
+import rootReducer from './rootReducer'
+import rootSaga from './rootSaga'
 
 const history = createBrowserHistory()
 const routeMiddleware = routerMiddleware(history)
+const sagaMiddleware = createSagaMiddleware()
 
 const store = configureStore({
-  reducer: reducer(history),
-  middleware: [routeMiddleware],
+  reducer: rootReducer(history),
+  middleware: [routeMiddleware, sagaMiddleware],
 })
+
+sagaMiddleware.run(rootSaga)
 
 export { store, history }
