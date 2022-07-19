@@ -30,7 +30,7 @@ const EditModal = ({ visible, onClose, data }) => {
       "company_address": "",
       "company_phone": "",
       "company_email": "",
-      "status": "",
+      "status": "active",
       "created_by": "",
       "created_date": "",
       "user_token": Auth.token
@@ -44,7 +44,8 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/region/updateRegion',
       data: {
         ...values,
-        status: data.status,
+        status: data['status'],
+        region_id: data['region_id'],
         user_token: Auth.token,
       }
     }
@@ -76,7 +77,7 @@ const EditModal = ({ visible, onClose, data }) => {
       >
         <Form.Item
           name="region_name"
-          label="Region name"
+          label="Region"
         >
           <Input />
         </Form.Item>
@@ -87,6 +88,7 @@ const EditModal = ({ visible, onClose, data }) => {
         >
           <Select
             options={Master.company.options}
+            loading={Master.company.isLoading}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }

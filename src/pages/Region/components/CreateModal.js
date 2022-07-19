@@ -21,23 +21,22 @@ const CreateModal = ({ visible, onClose }) => {
   }, [Master.reload, closeModal])
 
   const fetchCreate = query => dispatch(requestCreateRegion(query))
+  const fetchCompany = query => dispatch(requestListCompany(query))
 
-  const fetchCompany = useCallback(query => dispatch(requestListCompany(query)), [dispatch])
-
-  useEffect(() => {
+  const initOption = () => {
     const query = {
       "company_name": "",
       "company_address": "",
       "company_phone": "",
       "company_email": "",
-      "status": "",
+      "status": "active",
       "created_by": "",
       "created_date": "",
       "user_token": Auth.token
     }
 
-    visible && fetchCompany(query)
-  }, [visible, Auth.token, fetchCompany])
+    fetchCompany(query)
+  }
 
   const handleSubmit = (values) => {
     const payload = {
@@ -90,6 +89,7 @@ const CreateModal = ({ visible, onClose }) => {
           label="Company"
         >
           <Select
+            onFocus={() => !Master.company.options && initOption()}
             options={Master.company.options}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
