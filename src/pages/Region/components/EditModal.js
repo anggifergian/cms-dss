@@ -5,7 +5,7 @@ import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 import { Title } from '../../../containers'
 import { requestCreateRegion, requestListCompany } from '../../../redux/master/action'
 
-const CreateModal = ({ visible, onClose }) => {
+const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
@@ -41,9 +41,10 @@ const CreateModal = ({ visible, onClose }) => {
 
   const handleSubmit = (values) => {
     const payload = {
-      endpoint: '/region/addNewRegion',
+      endpoint: '/region/updateRegion',
       data: {
         ...values,
+        status: data.status,
         user_token: Auth.token,
       }
     }
@@ -54,22 +55,16 @@ const CreateModal = ({ visible, onClose }) => {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 6 },
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 18 },
+      sm: { span: 16 },
     }
   }
 
-  return (
-    <Modal
-      title={<Title label="Form Region" />}
-      visible={visible}
-      onCancel={closeModal}
-      width={600}
-      footer={null}
-    >
+  const EditForm = ({ data }) => {
+    return (
       <Form
         {...formItemLayout}
         form={form}
@@ -77,6 +72,7 @@ const CreateModal = ({ visible, onClose }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
+        initialValues={data}
       >
         <Form.Item
           name="region_name"
@@ -113,8 +109,20 @@ const CreateModal = ({ visible, onClose }) => {
           </Row>
         </Form.Item>
       </Form>
+    )
+  }
+
+  return (
+    <Modal
+      title={<Title label="Edit Region" />}
+      visible={visible}
+      onCancel={closeModal}
+      width={600}
+      footer={null}
+    >
+      <EditForm data={data} />
     </Modal>
   )
 }
 
-export default CreateModal
+export default EditModal

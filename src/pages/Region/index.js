@@ -1,5 +1,5 @@
-import { Button, Row } from 'antd'
 import React, { useState } from 'react'
+import { Button, Row } from 'antd'
 
 import { Title, BaseLayout } from '../../containers'
 import SectionModal from './SectionModal'
@@ -8,14 +8,16 @@ import SectionTable from './SectionTable'
 const Region = () => {
   const [state, setState] = useState({
     visible: false,
-    typeModal: ''
+    typeModal: '',
+    data: {}
   })
 
-  const handleShowModal = (typeModal = '') => {
+  const handleShowModal = (typeModal = '', data = {}) => {
     setState({
       ...state,
       visible: !state.visible,
       typeModal,
+      data,
     })
   }
 
@@ -40,9 +42,10 @@ const Region = () => {
         <SectionModal
           modalType={state.typeModal}
           visible={state.visible}
+          data={state.data}
           handleCloseModal={() => setState({ ...state, visible: false })}
         />
-        <SectionTable />
+        <SectionTable handleShowModal={handleShowModal} />
       </div>
     </BaseLayout>
   )
