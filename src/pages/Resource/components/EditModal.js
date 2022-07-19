@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
+import { requestCreateResource } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
+  const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
@@ -18,6 +20,61 @@ const EditModal = ({ visible, onClose, data }) => {
     Master.reload && closeModal()
   }, [Master.reload, closeModal])
 
+  const fetchCreate = query => dispatch(requestCreateResource(query))
+
+  const handleSubmit = (values) => {
+    const payload = {
+      endpoint: '/resource/updateResource',
+      data: {
+        ...values,
+        status: data['status'],
+        resource_id: data['resource_id'],
+        user_token: Auth.token,
+      }
+    }
+
+    fetchCreate(payload)
+  }
+
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 },
+    }
+  }
+
+  const EditForm = ({ data }) => {
+    return (
+      <Form
+        {...formItemLayout}
+        form={form}
+        name='branchCreateModal'
+        onFinish={handleSubmit}
+        layout='horizontal'
+        autoComplete='off'
+        initialValues={data}
+      >
+        <Form.Item noStyle>
+          <Row align="middle" justify="end">
+            <Col>
+              <Button
+                id="btn-create-submit"
+                type="primary"
+                htmlType="submit"
+              >
+                Update
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+      </Form>
+    )
+  }
+
   return (
     <Modal
       title={<Title label="Edit Resource" />}
@@ -26,7 +83,7 @@ const EditModal = ({ visible, onClose, data }) => {
       width={600}
       footer={null}
     >
-      <div>EditModal</div>
+      <EditForm data={data} />
     </Modal>
   )
 }

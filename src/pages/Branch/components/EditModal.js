@@ -102,7 +102,7 @@ const EditModal = ({ visible, onClose, data }) => {
                 type="primary"
                 htmlType="submit"
               >
-                Submit
+                Update
               </Button>
             </Col>
           </Row>
