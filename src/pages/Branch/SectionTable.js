@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect } from 'react'
-import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button, Space, Table, Modal } from 'antd'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
-import { requestListBranch } from '../../redux/master/action'
+import { titleCase } from '../../utils/text'
+import { requestDeleteBranch, requestListBranch } from '../../redux/master/action'
 
-const SectionTable = () => {
+const { confirm } = Modal
+
+const SectionTable = ({ handleShowModal }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
@@ -13,11 +17,28 @@ const SectionTable = () => {
     dispatch(requestListBranch(query))
   }, [dispatch])
 
-  useEffect(() => {
-    const query = {}
+  const handleDelete = (query) => dispatch(requestDeleteBranch(query))
+
+  const initFetch = useCallback(() => {
+    const query = {
+      "branch_name": "",
+      "region_id": "",
+      "status": "",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
 
     fetchList(query)
-  }, [Master.reload, Auth.token, fetchList])
+  }, [Auth.token, fetchList])
+
+  useEffect(() => {
+    initFetch()
+  }, [initFetch])
+
+  useEffect(() => {
+    Master.reload && initFetch()
+  }, [Master.reload, initFetch])
 
   const columns = [
     {
@@ -27,9 +48,9 @@ const SectionTable = () => {
       width: 150,
     },
     {
-      title: 'Status',
-      dataIndex: 'branch_status',
-      key: 'branch_status',
+      title: 'Region',
+      dataIndex: 'region_name',
+      key: 'region_name',
       width: 150,
     },
     {
@@ -37,12 +58,50 @@ const SectionTable = () => {
       key: 'action',
       fixed: 'right',
       width: 150,
+      render: (data) => {
+        return (
+          <Space wrap>
+            <Button
+              type='primary'
+              onClick={() => handleShowModal('edit', data)}
+            >
+              <EditOutlined />
+            </Button>
+            <Button
+              danger
+              onClick={() => showConfirm(data)}
+            >
+              <DeleteOutlined />
+            </Button>
+          </Space>
+        )
+      }
     },
   ]
 
+  const showConfirm = (data) => {
+    confirm({
+      title: 'Are you sure want to delete?',
+      onOk() {
+        const payload = {
+          endpoint: '/branch/deleteBranch',
+          data: {
+            "branch_id": data['branch_id'],
+            "user_token": Auth.token
+          }
+        }
+
+        handleDelete(payload)
+      },
+    })
+  }
+
   return (
     <Table
+      rowKey='branch_id'
       columns={columns}
+      dataSource={Master.branch.data}
+      loading={Master.branch.isLoading}
     />
   )
 }

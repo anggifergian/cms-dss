@@ -5,7 +5,7 @@ import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 import { Title } from '../../../containers'
 import { requestCreateBranch, requestListRegion } from '../../../redux/master/action'
 
-const CreateModal = ({ visible, onClose }) => {
+const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
@@ -21,9 +21,10 @@ const CreateModal = ({ visible, onClose }) => {
   }, [Master.reload, closeModal])
 
   const fetchCreate = query => dispatch(requestCreateBranch(query))
-  const fetchRegion = query => dispatch(requestListRegion(query))
 
-  const initOption = () => {
+  const fetchRegion = useCallback(query => dispatch(requestListRegion(query)), [dispatch])
+
+  useEffect(() => {
     const query = {
       "region_name": "",
       "company_id": "",
@@ -33,14 +34,16 @@ const CreateModal = ({ visible, onClose }) => {
       "user_token": Auth.token
     }
 
-    fetchRegion(query)
-  }
+    visible && fetchRegion(query)
+  }, [visible, Auth.token, fetchRegion])
 
   const handleSubmit = (values) => {
     const payload = {
-      endpoint: '/branch/addNewBranch',
+      endpoint: '/branch/updateBranch',
       data: {
         ...values,
+        status: data['status'],
+        branch_id: data['branch_id'],
         user_token: Auth.token,
       }
     }
@@ -59,14 +62,8 @@ const CreateModal = ({ visible, onClose }) => {
     }
   }
 
-  return (
-    <Modal
-      title={<Title label="Form Branch" />}
-      visible={visible}
-      onCancel={closeModal}
-      width={600}
-      footer={null}
-    >
+  const EditForm = ({ data }) => {
+    return (
       <Form
         {...formItemLayout}
         form={form}
@@ -74,6 +71,7 @@ const CreateModal = ({ visible, onClose }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
+        initialValues={data}
       >
         <Form.Item
           name="branch_name"
@@ -87,7 +85,6 @@ const CreateModal = ({ visible, onClose }) => {
           label="Region"
         >
           <Select
-            onFocus={() => !Master.region.options && initOption()}
             options={Master.region.options}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -111,8 +108,20 @@ const CreateModal = ({ visible, onClose }) => {
           </Row>
         </Form.Item>
       </Form>
+    )
+  }
+
+  return (
+    <Modal
+      title={<Title label="Edit Branch" />}
+      visible={visible}
+      onCancel={closeModal}
+      width={600}
+      footer={null}
+    >
+      <EditForm data={data} />
     </Modal>
   )
 }
 
-export default CreateModal
+export default EditModal
