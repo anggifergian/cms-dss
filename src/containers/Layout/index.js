@@ -10,14 +10,16 @@ function BaseLayout({ children }) {
 
   return (
     <div className='min-h-screen bg-gray-100'>
-      <Layout style={{ height: '100vh' }}>
+      <Layout hasSider>
         <Sidebar
           isCollapsed={state.sidebarCollapsed}
         />
 
-        <div className='w-full mx-6 md:mx-10 mt-20 lg:mx-auto lg:max-w-screen-lg'>
-          {children}
-        </div>
+        <Layout style={{ marginLeft: 250 }}>
+          <div className='w-full px-6 md:px-10 pt-20 pb-10 lg:mx-auto lg:max-w-screen-lg'>
+            {children}
+          </div>
+        </Layout>
       </Layout>
     </div>
   )

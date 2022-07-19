@@ -41,7 +41,13 @@ function Sidebar({ isCollapsed }) {
       collapsed={isCollapsed}
       trigger={null}
       style={{
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        overflow: 'auto',
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
       }}
     >
       <div className='flex justify-center items-center my-8'>
