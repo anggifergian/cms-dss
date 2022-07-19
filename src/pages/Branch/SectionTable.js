@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Space, Table, Modal } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
-import { titleCase } from '../../utils/text'
 import { requestDeleteBranch, requestListBranch } from '../../redux/master/action'
 
 const { confirm } = Modal
