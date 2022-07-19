@@ -34,21 +34,6 @@ const Company = () => {
 
         <Space>
           <Button
-            onClick={() => {
-              const data = {
-                company_id: 1,
-                company_name: '1',
-                company_address: '1',
-                company_phone: '1',
-                company_email: '1'
-              }
-
-              handleShowModal('edit', data)
-            }}
-          >
-            Edit company
-          </Button>
-          <Button
             type='primary'
             onClick={() => handleShowModal('create')}
           >

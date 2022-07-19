@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button } from 'antd'
+import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
 import { requestCreateCompany } from '../../../redux/master/action'
@@ -27,6 +27,7 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/company/updateCompany',
       data: {
         ...values,
+        company_id: data['company_id'],
         user_token: Auth.token,
       }
     }
@@ -94,6 +95,23 @@ const EditModal = ({ visible, onClose, data }) => {
           ]}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={(input, option) =>
+              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item noStyle>
