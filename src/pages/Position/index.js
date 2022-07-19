@@ -10,14 +10,16 @@ const { Content } = Layout
 const Position = () => {
   const [state, setState] = useState({
     visible: false,
-    typeModal: ''
+    typeModal: '',
+    data: {}
   })
 
-  const handleShowModal = (typeModal = '') => {
+  const handleShowModal = (typeModal = '', data = {}) => {
     setState({
       ...state,
       visible: !state.visible,
       typeModal,
+      data,
     })
   }
 
@@ -43,9 +45,10 @@ const Position = () => {
           <SectionModal
             modalType={state.typeModal}
             visible={state.visible}
+            data={state.data}
             handleCloseModal={() => setState({ ...state, visible: false })}
           />
-          <SectionTable />
+          <SectionTable handleShowModal={handleShowModal} />
         </Content>
       </div>
     </BaseLayout>

@@ -1,16 +1,53 @@
-import React from 'react'
-import { Modal, Form, Input, Row, Col, Button } from 'antd'
+import React, { useCallback, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Modal, Form, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
+import { requestCreatePosition, requestListDevice } from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
+  const dispatch = useDispatch()
+  const Auth = useSelector(state => state.Auth)
+  const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const handleSubmit = (values) => {
-    console.log('submitting...', values)
+  const closeModal = useCallback(() => {
+    form.resetFields()
+    onClose()
+  }, [onClose, form])
+
+  useEffect(() => {
+    Master.reload && closeModal()
+  }, [Master.reload, closeModal])
+
+  const fetchCreate = query => dispatch(requestCreatePosition(query))
+  const fetchDevice = query => dispatch(requestListDevice(query))
+
+  const initOption = () => {
+    const query = {
+      "device_name": "",
+      "status": "active",
+      "created_by": "",
+      "created_date": "",
+      "updated_by": "",
+      "updated_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchDevice(query)
   }
 
-  const closeModal = () => onClose()
+  const handleSubmit = (values) => {
+    const payload = {
+      endpoint: '/position/addNewPosition',
+      data: {
+        ...values,
+        user_token: Auth.token,
+      }
+    }
+
+    fetchCreate(payload)
+  }
 
   const formItemLayout = {
     labelCol: {
@@ -39,8 +76,19 @@ const CreateModal = ({ visible, onClose }) => {
         layout='horizontal'
         autoComplete='off'
       >
-        <Form.Item label="Position name" name="company_name">
-          <Input />
+        <Form.Item
+          name="device_id"
+          label="Device"
+        >
+          <Select
+            onFocus={() => !Master.device.options && initOption()}
+            options={Master.device.options}
+            filterOption={(input, option) =>
+              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item noStyle>
