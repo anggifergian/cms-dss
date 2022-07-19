@@ -5,7 +5,7 @@ import { Modal, Form, Input, Row, Col, Button } from 'antd'
 import { Title } from '../../../containers'
 import { requestCreateCompany } from '../../../redux/master/action'
 
-const CreateModal = ({ visible, onClose }) => {
+const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
@@ -24,7 +24,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const handleSubmit = (values) => {
     const payload = {
-      endpoint: '/company/addNewCompany',
+      endpoint: '/company/updateCompany',
       data: {
         ...values,
         user_token: Auth.token,
@@ -45,21 +45,16 @@ const CreateModal = ({ visible, onClose }) => {
     }
   }
 
-  return (
-    <Modal
-      title={<Title label="Form Company" />}
-      visible={visible}
-      onCancel={closeModal}
-      width={600}
-      footer={null}
-    >
+  const EditForm = ({ data }) => {
+    return (
       <Form
         {...formItemLayout}
         form={form}
-        name='companyCreateModal'
+        name='companyEditModal'
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
+        initialValues={data}
       >
         <Form.Item
           name="company_name"
@@ -109,14 +104,26 @@ const CreateModal = ({ visible, onClose }) => {
                 type="primary"
                 htmlType="submit"
               >
-                Submit
+                Update
               </Button>
             </Col>
           </Row>
         </Form.Item>
       </Form>
+    )
+  }
+
+  return (
+    <Modal
+      title={<Title label="Edit Company" />}
+      visible={visible}
+      onCancel={closeModal}
+      width={600}
+      footer={null}
+    >
+      <EditForm data={data} />
     </Modal>
   )
 }
 
-export default CreateModal
+export default EditModal
