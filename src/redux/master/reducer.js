@@ -326,11 +326,14 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListDevice.type:
+      const devices = action.payload.data;
+
       return {
         ...state,
         device: {
           ...finishLoading(state.device),
-          data: action.payload.data
+          data: devices,
+          options: devices.map(data => ({ label: data.device_name, value: data.device_id }))
         }
       }
     case failureListDevice.type:
@@ -469,7 +472,7 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListRegion.type:
-      const items = action.payload.data
+      const regions = action.payload.data
         && action.payload.data.length
         && action.payload.data.map(item => {
           const data = {
@@ -484,8 +487,8 @@ const masterReducer = (state = initialState, action) => {
         ...state,
         region: {
           ...finishLoading(state.region),
-          data: items,
-          options: items.map(data => ({ label: data.region_name, value: data.region_id }))
+          data: regions,
+          options: regions.map(data => ({ label: data.region_name, value: data.region_id }))
         }
       }
     case failureListRegion.type:
@@ -548,12 +551,14 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListCompany.type:
+      const companies = action.payload.data
+
       return {
         ...state,
         company: {
           ...finishLoading(state.company),
-          data: action.payload.data,
-          options: action.payload.data && action.payload.data.length && action.payload.data.map(data => ({ label: data.company_name, value: data.company_id }))
+          data: companies,
+          options: companies.map(data => ({ label: data.company_name, value: data.company_id }))
         }
       }
     case failureListCompany.type:
