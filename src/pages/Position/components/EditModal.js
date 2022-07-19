@@ -12,7 +12,7 @@ const EditModal = ({ visible, onClose, data }) => {
   const [form] = Form.useForm()
 
   const closeModal = useCallback(() => {
-    form.resetFields()
+    form.setFieldsValue({})
     onClose()
   }, [onClose, form])
 
