@@ -18,7 +18,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
   useEffect(() => {
     Master.reload && closeModal()
-  }, [Master.reload])
+  }, [Master.reload, closeModal])
 
   const fetchCreate = query => dispatch(requestCreateRegion(query))
 
