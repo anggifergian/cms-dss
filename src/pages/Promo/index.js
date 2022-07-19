@@ -45,7 +45,7 @@ const Promo = () => {
             visible={state.visible}
             handleCloseModal={() => setState({ ...state, visible: false })}
           />
-          <SectionTable />
+          <SectionTable handleShowModal={handleShowModal} />
         </Content>
       </div>
     </BaseLayout>
