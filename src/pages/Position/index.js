@@ -15,6 +15,9 @@ const Position = () => {
   })
 
   const handleShowModal = (typeModal = '', data = {}) => {
+
+    console.log('[index] ->', data)
+
     setState({
       ...state,
       visible: !state.visible,
