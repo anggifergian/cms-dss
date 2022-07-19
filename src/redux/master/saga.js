@@ -48,6 +48,30 @@ import {
   requestDeletePromo,
   successDeletePromo,
   failureDeletePromo,
+  requestCreateBranch,
+  successCreateBranch,
+  failureCreateBranch,
+  requestDeleteBranch,
+  successDeleteBranch,
+  failureDeleteBranch,
+  requestDeleteDevice,
+  requestDeletePosition,
+  requestDeleteResource,
+  successDeleteResource,
+  failureDeleteResource,
+  successDeletePosition,
+  failureDeletePosition,
+  successDeleteDevice,
+  failureDeleteDevice,
+  requestCreateResource,
+  requestCreatePosition,
+  requestCreateDevice,
+  successCreateResource,
+  failureCreateResource,
+  successCreatePosition,
+  failureCreatePosition,
+  successCreateDevice,
+  failureCreateDevice,
 } from './action'
 
 function* getListResource() {
@@ -76,6 +100,72 @@ function* getListResource() {
       }
     } catch (error) {
       yield put(failureListResource(error))
+    }
+  })
+}
+
+function* addResource() {
+  yield takeEvery(requestCreateResource.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreateResource(payload))
+        notifyError('success', 'Resource created!')
+      } else {
+        yield put(failureCreateResource(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreateResource(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
+function* deleteResource() {
+  yield takeEvery(requestDeleteResource.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeleteResource(payload))
+        notifyError('success', 'Resource deleted!')
+      } else {
+        yield put(failureDeleteResource(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeleteResource(error))
+      notifyError('error', error.message)
     }
   })
 }
@@ -110,6 +200,72 @@ function* getListPosition() {
   })
 }
 
+function* addPosition() {
+  yield takeEvery(requestCreatePosition.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreatePosition(payload))
+        notifyError('success', 'Position created!')
+      } else {
+        yield put(failureCreatePosition(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreatePosition(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
+function* deletePosition() {
+  yield takeEvery(requestDeletePosition.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeletePosition(payload))
+        notifyError('success', 'Position deleted!')
+      } else {
+        yield put(failureDeletePosition(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeletePosition(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
 function* getListDevice() {
   yield takeEvery(requestListDevice.type, function* ({ payload }) {
     try {
@@ -140,6 +296,72 @@ function* getListDevice() {
   })
 }
 
+function* addDevice() {
+  yield takeEvery(requestCreateDevice.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreateDevice(payload))
+        notifyError('success', 'Device created!')
+      } else {
+        yield put(failureCreateDevice(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreateDevice(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
+function* deleteDevice() {
+  yield takeEvery(requestDeleteDevice.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeleteDevice(payload))
+        notifyError('success', 'Device deleted!')
+      } else {
+        yield put(failureDeleteDevice(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeleteDevice(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
 function* getListBranch() {
   yield takeEvery(requestListBranch.type, function* ({ payload }) {
     try {
@@ -166,6 +388,72 @@ function* getListBranch() {
       }
     } catch (error) {
       yield put(failureListBranch(error))
+    }
+  })
+}
+
+function* addBranch() {
+  yield takeEvery(requestCreateBranch.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreateBranch(payload))
+        notifyError('success', 'Branch created!')
+      } else {
+        yield put(failureCreateBranch(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreateBranch(error))
+      notifyError('error', error.message)
+    }
+  })
+}
+
+function* deleteBranch() {
+  yield takeEvery(requestDeleteBranch.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeleteBranch(payload))
+        notifyError('success', 'Branch deleted!')
+      } else {
+        yield put(failureDeleteBranch(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeleteBranch(error))
+      notifyError('error', error.message)
     }
   })
 }
@@ -460,9 +748,17 @@ export default function* rootSaga() {
     fork(addCompany),
     fork(addRegion),
     fork(addPromo),
+    fork(addBranch),
+    fork(addDevice),
+    fork(addPosition),
+    fork(addResource),
     fork(deleteCompany),
     fork(deleteRegion),
     fork(deletePromo),
+    fork(deleteBranch),
+    fork(deleteDevice),
+    fork(deletePosition),
+    fork(deleteResource),
     fork(getListCompany),
     fork(getListRegion),
     fork(getListBranch),

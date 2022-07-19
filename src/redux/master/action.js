@@ -1,76 +1,92 @@
 import { createAction } from '@reduxjs/toolkit'
 
 // Promo
-export const requestListPromo = createAction('[REQ] LIST PROMO')
-export const successListPromo = createAction('[SUC] LIST PROMO')
-export const failureListPromo = createAction('[ERR] LIST PROMO')
+export const requestListPromo = createAction('[Request] LIST PROMO')
+export const successListPromo = createAction('[Success] LIST PROMO')
+export const failureListPromo = createAction('[Error] LIST PROMO')
 
-export const requestCreatePromo = createAction('[REQ] CREATE PROMO')
-export const successCreatePromo = createAction('[SUC] CREATE PROMO')
-export const failureCreatePromo = createAction('[ERR] CREATE PROMO')
+export const requestCreatePromo = createAction('[Request] CREATE PROMO')
+export const successCreatePromo = createAction('[Success] CREATE PROMO')
+export const failureCreatePromo = createAction('[Error] CREATE PROMO')
 
-export const requestDeletePromo = createAction('[REQ] DELETE PROMO')
-export const successDeletePromo = createAction('[SUC] DELETE PROMO')
-export const failureDeletePromo = createAction('[ERR] DELETE PROMO')
+export const requestDeletePromo = createAction('[Request] DELETE PROMO')
+export const successDeletePromo = createAction('[Success] DELETE PROMO')
+export const failureDeletePromo = createAction('[Error] DELETE PROMO')
 
 // Company
-export const requestListCompany = createAction('[REQ] LIST COMPANY')
-export const successListCompany = createAction('[SUC] LIST COMPANY')
-export const failureListCompany = createAction('[ERR] LIST COMPANY')
+export const requestListCompany = createAction('[Request] LIST COMPANY')
+export const successListCompany = createAction('[Success] LIST COMPANY')
+export const failureListCompany = createAction('[Error] LIST COMPANY')
 
-export const requestCreateCompany = createAction('[REQ] CREATE COMPANY')
-export const successCreateCompany = createAction('[SUC] CREATE COMPANY')
-export const failureCreateCompany = createAction('[ERR] CREATE COMPANY')
+export const requestCreateCompany = createAction('[Request] CREATE COMPANY')
+export const successCreateCompany = createAction('[Success] CREATE COMPANY')
+export const failureCreateCompany = createAction('[Error] CREATE COMPANY')
 
-export const requestDeleteCompany = createAction('[REQ] DELETE COMPANY')
-export const successDeleteCompany = createAction('[SUC] DELETE COMPANY')
-export const failureDeleteCompany = createAction('[ERR] DELETE COMPANY')
+export const requestDeleteCompany = createAction('[Request] DELETE COMPANY')
+export const successDeleteCompany = createAction('[Success] DELETE COMPANY')
+export const failureDeleteCompany = createAction('[Error] DELETE COMPANY')
 
 // Region
-export const requestListRegion = createAction('[REQ] LIST REGION')
-export const successListRegion = createAction('[SUC] LIST REGION')
-export const failureListRegion = createAction('[ERR] LIST REGION')
+export const requestListRegion = createAction('[Request] LIST REGION')
+export const successListRegion = createAction('[Success] LIST REGION')
+export const failureListRegion = createAction('[Error] LIST REGION')
 
-export const requestCreateRegion = createAction('[REQ] CREATE REGION')
-export const successCreateRegion = createAction('[SUC] CREATE REGION')
-export const failureCreateRegion = createAction('[ERR] CREATE REGION')
+export const requestCreateRegion = createAction('[Request] CREATE REGION')
+export const successCreateRegion = createAction('[Success] CREATE REGION')
+export const failureCreateRegion = createAction('[Error] CREATE REGION')
 
-export const requestDeleteRegion = createAction('[REQ] DELETE REGION')
-export const successDeleteRegion = createAction('[SUC] DELETE REGION')
-export const failureDeleteRegion = createAction('[ERR] DELETE REGION')
+export const requestDeleteRegion = createAction('[Request] DELETE REGION')
+export const successDeleteRegion = createAction('[Success] DELETE REGION')
+export const failureDeleteRegion = createAction('[Error] DELETE REGION')
 
 // Branch
-export const requestListBranch = createAction('[REQ] LIST BRANCH')
-export const successListBranch = createAction('[SUC] LIST BRANCH')
-export const failureListBranch = createAction('[ERR] LIST BRANCH')
+export const requestListBranch = createAction('[Request] LIST BRANCH')
+export const successListBranch = createAction('[Success] LIST BRANCH')
+export const failureListBranch = createAction('[Error] LIST BRANCH')
 
-export const requestCreateBranch = createAction('[REQ] CREATE BRANCH')
-export const successCreateBranch = createAction('[SUC] CREATE BRANCH')
-export const failureCreateBranch = createAction('[ERR] CREATE BRANCH')
+export const requestCreateBranch = createAction('[Request] CREATE BRANCH')
+export const successCreateBranch = createAction('[Success] CREATE BRANCH')
+export const failureCreateBranch = createAction('[Error] CREATE BRANCH')
+
+export const requestDeleteBranch = createAction('[Request] DELETE BRANCH')
+export const successDeleteBranch = createAction('[Success] DELETE BRANCH')
+export const failureDeleteBranch = createAction('[Error] DELETE BRANCH')
 
 // Device
-export const requestListDevice = createAction('[REQ] LIST DEVICE')
-export const successListDevice = createAction('[SUC] LIST DEVICE')
-export const failureListDevice = createAction('[ERR] LIST DEVICE')
+export const requestListDevice = createAction('[Request] LIST DEVICE')
+export const successListDevice = createAction('[Success] LIST DEVICE')
+export const failureListDevice = createAction('[Error] LIST DEVICE')
 
-export const requestCreateDevice = createAction('[REQ] CREATE DEVICE')
-export const successCreateDevice = createAction('[SUC] CREATE DEVICE')
-export const failureCreateDevice = createAction('[ERR] CREATE DEVICE')
+export const requestCreateDevice = createAction('[Request] CREATE DEVICE')
+export const successCreateDevice = createAction('[Success] CREATE DEVICE')
+export const failureCreateDevice = createAction('[Error] CREATE DEVICE')
+
+export const requestDeleteDevice = createAction('[Request] DELETE DEVICE')
+export const successDeleteDevice = createAction('[Success] DELETE DEVICE')
+export const failureDeleteDevice = createAction('[Error] DELETE DEVICE')
 
 // Position
-export const requestListPosition = createAction('[REQ] LIST POSITION')
-export const successListPosition = createAction('[SUC] LIST POSITION')
-export const failureListPosition = createAction('[ERR] LIST POSITION')
+export const requestListPosition = createAction('[Request] LIST POSITION')
+export const successListPosition = createAction('[Success] LIST POSITION')
+export const failureListPosition = createAction('[Error] LIST POSITION')
 
-export const requestCreatePosition = createAction('[REQ] CREATE POSITION')
-export const successCreatePosition = createAction('[SUC] CREATE POSITION')
-export const failureCreatePosition = createAction('[ERR] CREATE POSITION')
+export const requestCreatePosition = createAction('[Request] CREATE POSITION')
+export const successCreatePosition = createAction('[Success] CREATE POSITION')
+export const failureCreatePosition = createAction('[Error] CREATE POSITION')
+
+export const requestDeletePosition = createAction('[Request] DELETE POSITION')
+export const successDeletePosition = createAction('[Success] DELETE POSITION')
+export const failureDeletePosition = createAction('[Error] DELETE POSITION')
 
 // Resource
-export const requestListResource = createAction('[REQ] LIST RESOURCE')
-export const successListResource = createAction('[SUC] LIST RESOURCE')
-export const failureListResource = createAction('[ERR] LIST RESOURCE')
+export const requestListResource = createAction('[Request] LIST RESOURCE')
+export const successListResource = createAction('[Success] LIST RESOURCE')
+export const failureListResource = createAction('[Error] LIST RESOURCE')
 
-export const requestCreateResource = createAction('[REQ] CREATE RESOURCE')
-export const successCreateResource = createAction('[SUC] CREATE RESOURCE')
-export const failureCreateResource = createAction('[ERR] CREATE RESOURCE')
+export const requestCreateResource = createAction('[Request] CREATE RESOURCE')
+export const successCreateResource = createAction('[Success] CREATE RESOURCE')
+export const failureCreateResource = createAction('[Error] CREATE RESOURCE')
+
+export const requestDeleteResource = createAction('[Request] DELETE RESOURCE')
+export const successDeleteResource = createAction('[Success] DELETE RESOURCE')
+export const failureDeleteResource = createAction('[Error] DELETE RESOURCE')

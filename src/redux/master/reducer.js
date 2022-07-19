@@ -44,6 +44,30 @@ import {
   requestDeletePromo,
   successDeletePromo,
   failureDeletePromo,
+  requestCreateBranch,
+  successCreateBranch,
+  failureCreateBranch,
+  requestDeleteBranch,
+  successDeleteBranch,
+  failureDeleteBranch,
+  requestCreateDevice,
+  successCreateDevice,
+  failureCreateDevice,
+  requestDeleteDevice,
+  successDeleteDevice,
+  failureDeleteDevice,
+  requestCreatePosition,
+  successCreatePosition,
+  failureCreatePosition,
+  requestDeletePosition,
+  successDeletePosition,
+  failureDeletePosition,
+  requestCreateResource,
+  successCreateResource,
+  failureCreateResource,
+  requestDeleteResource,
+  successDeleteResource,
+  failureDeleteResource,
 } from './action'
 
 const initialState = {
@@ -86,15 +110,15 @@ const masterReducer = (state = initialState, action) => {
         promo: {
           ...finishLoading(state.promo),
           data: action.payload.data
-          && action.payload.data.length
-          && action.payload.data.map(item => {
-            let data = {
-              ...item,
-              ...item.promo,
-            }
+            && action.payload.data.length
+            && action.payload.data.map(item => {
+              let data = {
+                ...item,
+                ...item.promo,
+              }
 
-            return data
-          })
+              return data
+            })
         }
       }
     case failureListPromo.type:
@@ -151,17 +175,17 @@ const masterReducer = (state = initialState, action) => {
     case requestListResource.type:
       return {
         ...state,
-        // reload: false,
+        reload: false,
         resource: {
           ...startLoading(state.position)
         }
       }
     case successListResource.type:
-      console.log('resource_list', action.payload)
       return {
         ...state,
         resource: {
-          ...finishLoading(state.position)
+          ...finishLoading(state.position),
+          data: action.payload.data
         }
       }
     case failureListResource.type:
@@ -171,20 +195,75 @@ const masterReducer = (state = initialState, action) => {
           ...errorLoading(state.position, action.payload.message)
         }
       }
+    case requestCreateResource.type:
+      return {
+        ...state,
+        resource: {
+          ...startLoading(state.resource)
+        }
+      }
+    case successCreateResource.type:
+      return {
+        ...state,
+        reload: true,
+        resource: {
+          ...finishLoading(state.resource)
+        }
+      }
+    case failureCreateResource.type:
+      return {
+        ...state,
+        resource: {
+          ...errorLoading(state.resource, action.payload.message)
+        }
+      }
+    case requestDeleteResource.type:
+      return {
+        ...state,
+        resource: {
+          ...startLoading(state.resource)
+        }
+      }
+    case successDeleteResource.type:
+      return {
+        ...state,
+        reload: true,
+        resource: {
+          ...finishLoading(state.resource)
+        }
+      }
+    case failureDeleteResource.type:
+      return {
+        ...state,
+        resource: {
+          ...errorLoading(state.resource, action.payload.message)
+        }
+      }
     case requestListPosition.type:
       return {
         ...state,
-        // reload: false,
+        reload: false,
         position: {
           ...startLoading(state.position)
         }
       }
     case successListPosition.type:
-      console.log('position_list', action.payload)
+      const positions = action.payload.data
+        && action.payload.data.length
+        && action.payload.data.map(item => {
+          const data = {
+            ...item,
+            ...item.position
+          }
+
+          return data
+        })
+
       return {
         ...state,
         position: {
-          ...finishLoading(state.position)
+          ...finishLoading(state.position),
+          data: positions
         }
       }
     case failureListPosition.type:
@@ -194,20 +273,64 @@ const masterReducer = (state = initialState, action) => {
           ...errorLoading(state.position, action.payload.message)
         }
       }
+    case requestCreatePosition.type:
+      return {
+        ...state,
+        position: {
+          ...startLoading(state.position)
+        }
+      }
+    case successCreatePosition.type:
+      return {
+        ...state,
+        reload: true,
+        position: {
+          ...finishLoading(state.position)
+        }
+      }
+    case failureCreatePosition.type:
+      return {
+        ...state,
+        position: {
+          ...errorLoading(state.position, action.payload.message)
+        }
+      }
+    case requestDeletePosition.type:
+      return {
+        ...state,
+        position: {
+          ...startLoading(state.position)
+        }
+      }
+    case successDeletePosition.type:
+      return {
+        ...state,
+        reload: true,
+        position: {
+          ...finishLoading(state.position)
+        }
+      }
+    case failureDeletePosition.type:
+      return {
+        ...state,
+        position: {
+          ...errorLoading(state.position, action.payload.message)
+        }
+      }
     case requestListDevice.type:
       return {
         ...state,
-        // reload: false,
+        reload: false,
         device: {
           ...startLoading(state.device)
         }
       }
     case successListDevice.type:
-      console.log('device_list', action.payload)
       return {
         ...state,
         device: {
-          ...finishLoading(state.device)
+          ...finishLoading(state.device),
+          data: action.payload.data
         }
       }
     case failureListDevice.type:
@@ -217,23 +340,120 @@ const masterReducer = (state = initialState, action) => {
           ...errorLoading(state.device, action.payload.message)
         }
       }
+    case requestCreateDevice.type:
+      return {
+        ...state,
+        device: {
+          ...startLoading(state.device)
+        }
+      }
+    case successCreateDevice.type:
+      return {
+        ...state,
+        reload: true,
+        device: {
+          ...finishLoading(state.device)
+        }
+      }
+    case failureCreateDevice.type:
+      return {
+        ...state,
+        device: {
+          ...errorLoading(state.device, action.payload.message)
+        }
+      }
+    case requestDeleteDevice.type:
+      return {
+        ...state,
+        device: {
+          ...startLoading(state.device)
+        }
+      }
+    case successDeleteDevice.type:
+      return {
+        ...state,
+        reload: true,
+        device: {
+          ...finishLoading(state.device)
+        }
+      }
+    case failureDeleteDevice.type:
+      return {
+        ...state,
+        device: {
+          ...errorLoading(state.device, action.payload.message)
+        }
+      }
     case requestListBranch.type:
       return {
         ...state,
-        // reload: false,
+        reload: false,
         branch: {
           ...startLoading(state.branch)
         }
       }
     case successListBranch.type:
-      console.log('branch_list', action.payload)
       return {
         ...state,
+        branch: {
+          ...finishLoading(state.branch),
+          data: action.payload.data
+            && action.payload.data.length
+            && action.payload.data.map(item => {
+              const data = {
+                ...item,
+                ...item.branch
+              }
+
+              return data
+            })
+        }
+      }
+    case failureListBranch.type:
+      return {
+        ...state,
+        branch: {
+          ...errorLoading(state.branch, action.payload.message)
+        }
+      }
+    case requestCreateBranch.type:
+      return {
+        ...state,
+        branch: {
+          ...startLoading(state.branch)
+        }
+      }
+    case successCreateBranch.type:
+      return {
+        ...state,
+        reload: true,
         branch: {
           ...finishLoading(state.branch)
         }
       }
-    case failureListBranch.type:
+    case failureCreateBranch.type:
+      return {
+        ...state,
+        branch: {
+          ...errorLoading(state.branch, action.payload.message)
+        }
+      }
+    case requestDeleteBranch.type:
+      return {
+        ...state,
+        branch: {
+          ...startLoading(state.branch)
+        }
+      }
+    case successDeleteBranch.type:
+      return {
+        ...state,
+        reload: true,
+        branch: {
+          ...finishLoading(state.branch)
+        }
+      }
+    case failureDeleteBranch.type:
       return {
         ...state,
         branch: {
@@ -249,20 +469,23 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListRegion.type:
+      const items = action.payload.data
+        && action.payload.data.length
+        && action.payload.data.map(item => {
+          const data = {
+            ...item,
+            ...item.region
+          }
+
+          return data
+        })
+
       return {
         ...state,
         region: {
           ...finishLoading(state.region),
-          data: action.payload.data
-            && action.payload.data.length
-            && action.payload.data.map(item => {
-              const data = {
-                ...item,
-                ...item.region
-              }
-
-              return data
-            })
+          data: items,
+          options: items.map(data => ({ label: data.region_name, value: data.region_id }))
         }
       }
     case failureListRegion.type:
