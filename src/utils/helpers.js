@@ -1,4 +1,5 @@
 import cookie from "react-cookies"
+import { notification } from 'antd'
 
 import config from "../settings/config"
 
@@ -68,4 +69,19 @@ export const buildHeaders = (headers = {}) => {
 export const buildUrl = (endpoint) => {
   const url = config.dev_api + endpoint
   return url
+}
+
+export const notifyError = (
+  type = "error",
+  message = "Internal Server Error",
+  key = "505",
+  onClose = null,
+  placement = "topRight",
+) => {
+  notification[type]({
+    message,
+    placement,
+    key,
+    onClose
+  })
 }
