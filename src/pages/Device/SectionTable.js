@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Space, Table, Modal } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
+import { titleCase } from '../../utils/text'
 import { requestDeleteDevice, requestListDevice } from '../../redux/master/action'
 
 const { confirm } = Modal
@@ -52,6 +53,7 @@ const SectionTable = ({ handleShowModal }) => {
       dataIndex: 'status',
       key: 'status',
       width: 150,
+      render: value => titleCase(value)
     },
     {
       title: 'Action',

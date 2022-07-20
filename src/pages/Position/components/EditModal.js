@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
+import { Modal, Form, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
 import { requestCreatePosition, requestListDevice } from '../../../redux/master/action'
@@ -11,10 +11,13 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
+  useEffect(() => {
+    form.resetFields()
+  }, [visible, form])
+
   const closeModal = useCallback(() => {
-    form.setFieldsValue({})
     onClose()
-  }, [onClose, form])
+  }, [onClose])
 
   useEffect(() => {
     Master.reload && closeModal()

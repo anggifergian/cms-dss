@@ -11,10 +11,13 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
+  useEffect(() => {
+    form.resetFields()
+  }, [visible, form])
+
   const closeModal = useCallback(() => {
-    form.setFieldsValue({})
     onClose()
-  }, [onClose, form])
+  }, [onClose])
 
   useEffect(() => {
     Master.reload && closeModal()

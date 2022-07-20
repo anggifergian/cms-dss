@@ -46,13 +46,13 @@ const SectionTable = ({ handleShowModal }) => {
       dataIndex: 'region_name',
       key: 'region_name',
       width: 150,
-      render: value => titleCase(value)
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 150,
+      render: value => titleCase(value)
     },
     {
       title: 'Action',
