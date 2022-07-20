@@ -30,9 +30,9 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/resource/addNewResource',
       data: {
         ...values,
-        thumbnail: fileList[0].name,
-        file: fileList[0].name,
-        type: fileList[0].type,
+        thumbnail: fileList[0] ? fileList[0].name : '',
+        file: fileList[0] ? fileList[0].name : '',
+        type: fileList[0] ? fileList[0].type : '',
         user_token: Auth.token,
       }
     }
