@@ -50,11 +50,41 @@ const SectionTable = ({ handleShowModal }) => {
       width: 150,
     },
     {
+      title: 'Address',
+      dataIndex: 'company_address',
+      key: 'company_address',
+      width: 150,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'company_email',
+      key: 'company_email',
+      width: 150,
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'company_phone',
+      key: 'company_phone',
+      width: 150,
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 150,
       render: value => titleCase(value)
+    },
+    {
+      title: 'Create by',
+      dataIndex: 'created_by',
+      key: 'created_by',
+      width: 150,
+    },
+    {
+      title: 'Create Date',
+      dataIndex: 'created_date',
+      key: 'created_date',
+      width: 150,
     },
     {
       title: 'Action',
@@ -100,6 +130,7 @@ const SectionTable = ({ handleShowModal }) => {
     <Table
       rowKey='company_id'
       columns={columns}
+      scroll={{ x: 800 }}
       dataSource={Master.company.data}
       loading={Master.company.isLoading}
     />

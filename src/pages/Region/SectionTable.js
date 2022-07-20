@@ -55,6 +55,18 @@ const SectionTable = ({ handleShowModal }) => {
       render: value => titleCase(value)
     },
     {
+      title: 'Create by',
+      dataIndex: 'created_by',
+      key: 'created_by',
+      width: 150,
+    },
+    {
+      title: 'Create Date',
+      dataIndex: 'created_date',
+      key: 'created_date',
+      width: 150,
+    },
+    {
       title: 'Action',
       key: 'action',
       fixed: 'right',
@@ -98,6 +110,7 @@ const SectionTable = ({ handleShowModal }) => {
     <Table
       rowKey='region_id'
       columns={columns}
+      scroll={{ x: 800 }}
       dataSource={Master.region.data}
       loading={Master.region.isLoading}
     />
