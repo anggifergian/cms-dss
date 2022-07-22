@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Select, Radio, Upload, message, InputNumber } from 'antd'
+import { Modal, Form, Input, Row, Col, Button, Select, Radio, Upload, message, InputNumber, Space } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
+import { toBase64 } from '../../../utils/file'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -12,12 +13,26 @@ const CreateModal = ({ visible, onClose }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [fileList, setFileList] = useState([])
+  const [media, setMedia] = useState({
+    fileList: [],
+    base64: ''
+  })
+
+  const resetState = useCallback(() => {
+    setMedia({
+      fileList: [],
+      base64: ''
+    })
+  }, [setMedia])
+
+  useEffect(() => {
+    form.resetFields()
+    resetState()
+  }, [form, visible, resetState])
 
   const closeModal = useCallback(() => {
-    form.resetFields()
     onClose()
-  }, [onClose, form])
+  }, [onClose])
 
   useEffect(() => {
     Master.reload && closeModal()
@@ -30,9 +45,9 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/resource/addNewResource',
       data: {
         ...values,
-        thumbnail: fileList[0] ? fileList[0].name : '',
-        file: fileList[0] ? fileList[0].name : '',
-        type: fileList[0] ? fileList[0].type : '',
+        thumbnail: media.fileList[0] ? media.fileList[0].name : '',
+        file: media.fileList[0] ? media.fileList[0].name : '',
+        type: media.fileList[0] ? media.fileList[0].type : '',
         user_token: Auth.token,
       }
     }
@@ -48,21 +63,25 @@ const CreateModal = ({ visible, onClose }) => {
   }
 
   const uploadProps = {
-    fileList: fileList,
+    fileList: media.fileList,
     maxCount: 1,
-    beforeUpload: (file) => {
+    beforeUpload: async (file) => {
       const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
 
       if (!isImage) {
         message.error(`${file.name} is not a image file`);
       } else {
-        setFileList([file]);
+        const base64 = await toBase64(file)
+        setMedia({
+          base64,
+          fileList: [file]
+        })
       }
 
       return false
     },
     onRemove: (file) => {
-      setFileList([])
+      resetState()
     }
   }
 
@@ -88,12 +107,24 @@ const CreateModal = ({ visible, onClose }) => {
             <Col span={4}>
               <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>File:</p>
             </Col>
-            <Col span={12}>
-              <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
-                  Click to Upload
-                </Button>
-              </Upload>
+            <Col span={20}>
+              <Space direction='vertical'>
+                <Upload {...uploadProps}>
+                  <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
+                    Click to Upload
+                  </Button>
+                </Upload>
+
+                {media.fileList.length > 0 && (
+                  <div className='pl-4'>
+                    <img
+                      alt="file"
+                      src={media.base64}
+                      className="h-24 transition-opacity ease-in-out duration-200 object-cover"
+                    />
+                  </div>
+                )}
+              </Space>
             </Col>
           </Row>
         </Form.Item>

@@ -28,7 +28,7 @@ const EditModal = ({ visible, onClose, data }) => {
       start_date: moment(data.promo.start_date),
       end_date: moment(data.promo.end_date)
     })
-  }, [])
+  }, [data.promo.start_date, data.promo.end_date])
 
   useEffect(() => {
     Master.reload && closeModal()

@@ -48,12 +48,12 @@ function Sidebar({ isCollapsed }) {
         left: 0,
         top: 0,
         bottom: 0,
+        paddingTop: 80
       }}
     >
-      <div className='flex justify-center items-center my-8'>
-        <h3 className='text-lg font-bold text-blue-600'>CMS DSS</h3>
+      <div className='pl-6 pb-2 text-sm font-semibold text-gray-400'>
+        <span>Navigation</span>
       </div>
-
       <Menu
         onClick={handleClick}
         mode="inline"

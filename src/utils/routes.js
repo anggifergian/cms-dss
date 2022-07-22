@@ -10,6 +10,7 @@ import Resource from "../pages/Resource"
 import Login from "../pages/Login"
 import Promo from "../pages/Promo"
 import Playlist from "../pages/Playlist";
+import User from "../pages/User"
 
 export const publicRoutes = [
   {
@@ -100,5 +101,13 @@ export const privateRoutes = [
     title: 'Playlist',
     sidebar: true,
     icon: <PlayCircleOutlined />,
+  },
+  {
+    key: 'profile',
+    path: '/profile',
+    component: User,
+    title: 'User',
+    sidebar: false,
+    icon: '',
   },
 ]

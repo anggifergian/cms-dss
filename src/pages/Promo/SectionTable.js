@@ -53,7 +53,7 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'No Urut',
       dataIndex: 'promo_id',
       key: 'promo_id',
-      width: 120,
+      width: 80,
     },
     {
       title: 'Branch',
@@ -71,13 +71,13 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Start date',
       dataIndex: 'start_date',
       key: 'start_date',
-      width: 150,
+      width: 110,
     },
     {
       title: 'End date',
       dataIndex: 'end_date',
       key: 'end_date',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Status',
@@ -90,19 +90,19 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Create by',
       dataIndex: 'created_by',
       key: 'created_by',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Create Date',
       dataIndex: 'created_date',
       key: 'created_date',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Action',
       key: 'action',
       fixed: 'right',
-      width: 150,
+      width: 140,
       render: (data) => {
         return (
           <Space wrap>

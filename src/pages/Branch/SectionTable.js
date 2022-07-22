@@ -64,19 +64,19 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Create by',
       dataIndex: 'created_by',
       key: 'created_by',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Create Date',
       dataIndex: 'created_date',
       key: 'created_date',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Action',
       key: 'action',
       fixed: 'right',
-      width: 150,
+      width: 140,
       render: (data) => {
         return (
           <Space wrap>

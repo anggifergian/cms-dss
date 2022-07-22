@@ -61,16 +61,11 @@ const SectionTable = ({ handleShowModal }) => {
       width: 100,
     },
     {
-      title: 'X',
-      dataIndex: 'x_pos',
-      key: 'x_pos',
-      width: 80,
-    },
-    {
-      title: 'Y',
-      dataIndex: 'y_pos',
-      key: 'y_pos',
-      width: 80,
+      title: '(x, y)',
+      dataIndex: 'x_y_pos',
+      key: 'x_y_pos',
+      width: 100,
+      render: (value, record) => <span>({record['x_pos']}, {record['y_pos']})</span>
     },
     {
       title: 'Width',
@@ -88,7 +83,7 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'UOM',
       dataIndex: 'measurement',
       key: 'measurement',
-      width: 100,
+      width: 80,
     },
     {
       title: 'Status',
@@ -101,19 +96,19 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Create by',
       dataIndex: 'created_by',
       key: 'created_by',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Create Date',
       dataIndex: 'created_date',
       key: 'created_date',
-      width: 150,
+      width: 110,
     },
     {
       title: 'Action',
       key: 'action',
       fixed: 'right',
-      width: 150,
+      width: 140,
       render: (data) => {
         return (
           <Space wrap>

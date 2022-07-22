@@ -40,7 +40,7 @@ const Resource = () => {
         </Button>
       </Row>
 
-      <div className='w-full rounded bg-white p-6'>
+      <div className='w-full bg-white p-4 rounded-md shadow-sm'>
         <Content>
           <SectionModal
             modalType={state.typeModal}
