@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Row, Col, Button, Select } from 'antd'
+import { Modal, Form, Row, Col, Button, Select, Input } from 'antd'
 
 import { Title } from '../../../containers'
 import { requestCreatePosition, requestListDevice } from '../../../redux/master/action'
@@ -86,6 +86,54 @@ const CreateModal = ({ visible, onClose }) => {
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
+            showSearch
+            allowClear
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="box"
+          label="Box"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="x_pos"
+          label="X Pos"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="y_pos"
+          label="Y Pos"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="width"
+          label="Width"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="height"
+          label="Height"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="measurement"
+          label="Measurement"
+        >
+          <Select
+            options={[
+              { value: 'cm', label: 'cm' }
+            ]}
             showSearch
             allowClear
           />

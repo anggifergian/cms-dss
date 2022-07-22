@@ -1,17 +1,14 @@
-import CreateModal from "./components/CreateModal"
-import EditModal from "./components/EditModal"
+import CreateModal from "./components/CreateModal";
 
 const SectionModal = ({
   modalType,
   handleCloseModal,
   visible,
-  data = {},
+  data = {}
 }) => {
   switch (modalType) {
     case 'create':
       return <CreateModal visible={visible} onClose={handleCloseModal} />
-    case 'edit':
-      return <EditModal visible={visible} onClose={handleCloseModal} data={data} />
     default:
       return <></>
   }

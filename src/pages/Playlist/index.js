@@ -7,7 +7,7 @@ import SectionTable from './SectionTable'
 
 const { Content } = Layout
 
-const Position = () => {
+const Playlist = () => {
   const [state, setState] = useState({
     visible: false,
     typeModal: '',
@@ -30,13 +30,13 @@ const Position = () => {
         justify="space-between"
         style={{ marginBottom: 20 }}
       >
-        <Title label="Position" />
+        <Title label="Playlist" />
 
         <Button
           type='primary'
           onClick={() => handleShowModal('create')}
         >
-          Add Position
+          Add Playlist
         </Button>
       </Row>
 
@@ -55,4 +55,4 @@ const Position = () => {
   )
 }
 
-export default Position
+export default Playlist

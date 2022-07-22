@@ -2,13 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePicker } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
+import moment from 'moment'
 
 import { Title } from '../../../containers'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 
-const { RangePicker } = DatePicker;
-
-const CreateModal = ({ visible, onClose }) => {
+const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
@@ -18,21 +17,28 @@ const CreateModal = ({ visible, onClose }) => {
 
   useEffect(() => {
     form.resetFields()
-  }, [visible])
+  }, [visible, form])
 
   const closeModal = useCallback(() => {
-    setFileList([])
     onClose()
-  }, [onClose, form])
+  }, [onClose])
+
+  useEffect(() => {
+    console.log({
+      start_date: moment(data.promo.start_date),
+      end_date: moment(data.promo.end_date)
+    })
+  }, [])
 
   useEffect(() => {
     Master.reload && closeModal()
   }, [Master.reload, closeModal])
 
   const fetchCreate = query => dispatch(requestCreatePromo(query))
-  const fetchBranch = query => dispatch(requestListBranch(query))
 
-  const initOption = () => {
+  const fetchBranch = useCallback(query => dispatch(requestListBranch(query)), [dispatch])
+
+  useEffect(() => {
     const query = {
       "branch_name": "",
       "region_id": "",
@@ -42,19 +48,11 @@ const CreateModal = ({ visible, onClose }) => {
       "user_token": Auth.token
     }
 
-    fetchBranch(query)
-  }
+    visible && fetchBranch(query)
+  }, [visible, Auth.token, fetchBranch])
 
   const handleSubmit = (values) => {
-    const payload = {
-      ...values,
-      start_date: values.start_date.format('YYYY-MM-DD'),
-      end_date: values.end_date.format('YYYY-MM-DD'),
-      file: fileList[0] ? fileList[0].name : '',
-      user_token: Auth.token,
-    }
-
-    fetchCreate(payload)
+    console.log(values)
   }
 
   const formItemLayout = {
@@ -92,14 +90,8 @@ const CreateModal = ({ visible, onClose }) => {
     }
   }
 
-  return (
-    <Modal
-      title={<Title label="Form Promo" />}
-      visible={visible}
-      onCancel={closeModal}
-      width={600}
-      footer={null}
-    >
+  const EditForm = ({ data }) => {
+    return (
       <Form
         {...formItemLayout}
         form={form}
@@ -107,13 +99,13 @@ const CreateModal = ({ visible, onClose }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
+        initialValues={data}
       >
         <Form.Item
           name="branch_id"
           label="Branch"
         >
           <Select
-            onFocus={() => !Master.branch.options && initOption()}
             options={Master.branch.options}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -148,7 +140,7 @@ const CreateModal = ({ visible, onClose }) => {
           <Input />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="start_date"
           label="Start Date"
           {...dateConfig}
@@ -162,7 +154,7 @@ const CreateModal = ({ visible, onClose }) => {
           {...dateConfig}
         >
           <DatePicker format='YYYY-MM-DD' />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
           name="description"
@@ -199,8 +191,20 @@ const CreateModal = ({ visible, onClose }) => {
           </Row>
         </Form.Item>
       </Form>
+    )
+  }
+
+  return (
+    <Modal
+      title={<Title label="Edit Promo" />}
+      visible={visible}
+      onCancel={closeModal}
+      width={600}
+      footer={null}
+    >
+      <EditForm data={data} />
     </Modal>
   )
 }
 
-export default CreateModal
+export default EditModal

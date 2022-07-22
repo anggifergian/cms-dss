@@ -1,4 +1,4 @@
-import { AppstoreOutlined, DashboardOutlined, DollarCircleOutlined } from "@ant-design/icons"
+import { AppstoreOutlined, DashboardOutlined, DollarCircleOutlined, PlayCircleOutlined } from "@ant-design/icons"
 
 import Dashboard from "../pages/Dashboard"
 import Company from "../pages/Company"
@@ -9,6 +9,7 @@ import Position from "../pages/Position"
 import Resource from "../pages/Resource"
 import Login from "../pages/Login"
 import Promo from "../pages/Promo"
+import Playlist from "../pages/Playlist";
 
 export const publicRoutes = [
   {
@@ -91,5 +92,13 @@ export const privateRoutes = [
     title: 'Promo',
     sidebar: true,
     icon: <DollarCircleOutlined />,
+  },
+  {
+    key: 'playlist',
+    path: '/playlist',
+    component: Playlist,
+    title: 'Playlist',
+    sidebar: true,
+    icon: <PlayCircleOutlined />,
   },
 ]

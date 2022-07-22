@@ -3,37 +3,40 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Space, Table, Modal } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
+import { requestDeletePlaylist, requestListPlaylist } from '../../redux/playlist/action'
 import { titleCase } from '../../utils/text'
-import { requestDeleteResource, requestListResource } from '../../redux/master/action'
 
 const { confirm } = Modal
 
 const SectionTable = ({ handleShowModal }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
-  const Master = useSelector(state => state.Master)
+  const Playlist = useSelector(state => state.Playlist)
 
   const fetchList = useCallback((query) => {
-    dispatch(requestListResource(query))
+    dispatch(requestListPlaylist(query))
   }, [dispatch])
 
-  const handleDelete = (query) => dispatch(requestDeleteResource(query))
+  const handleDelete = (query) => dispatch(requestDeletePlaylist(query))
 
   const initFetch = useCallback(() => {
     const query = {
-      "resource_name": "",
-      "type": "",
-      "thumbnail": "",
-      "file": "",
-      "duration": "",
-      "stretch": "",
-      "order": "",
-      "status": "",
-      "created_by": "",
-      "created_date": "",
-      "updated_by": "",
-      "updated_date": "",
-      "user_token": Auth.token
+      endpoint: '/playlist/getPlaylist',
+      data: {
+        "playlist_name": "",
+        "branch_id": "",
+        "position_id": "",
+        "resource_id": "",
+        "start_date": "",
+        "end_date": "",
+        "sort": "",
+        "status": "",
+        "created_by": "",
+        "created_date": "",
+        "updated_by": "",
+        "updated_date": "",
+        "user_token": Auth.token
+      }
     }
 
     fetchList(query)
@@ -44,27 +47,21 @@ const SectionTable = ({ handleShowModal }) => {
   }, [initFetch])
 
   useEffect(() => {
-    Master.reload && initFetch()
-  }, [Master.reload, initFetch])
+    Playlist.reload && initFetch()
+  }, [Playlist.reload, initFetch])
 
   const columns = [
     {
-      title: 'Recourse',
-      dataIndex: 'resource_name',
-      key: 'resource_name',
+      title: 'Playlist',
+      dataIndex: 'playlist_name',
+      key: 'playlist_name',
       width: 150,
     },
     {
-      title: 'File',
-      dataIndex: 'file',
-      key: 'file',
+      title: 'Branch',
+      dataIndex: 'branch_name',
+      key: 'branch_name',
       width: 150,
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
-      key: 'duration',
-      width: 100,
     },
     {
       title: 'Status',
@@ -116,9 +113,9 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Are you sure want to delete?',
       onOk() {
         const payload = {
-          endpoint: '/resource/deleteResource',
+          endpoint: '/playlist/deletePlaylist',
           data: {
-            "resource_id": data['resource_id'],
+            "playlist_id": data['playlist_id'],
             "user_token": Auth.token
           }
         }
@@ -130,11 +127,11 @@ const SectionTable = ({ handleShowModal }) => {
 
   return (
     <Table
-      rowKey='resource_id'
+      rowKey='playlist_id'
       columns={columns}
       scroll={{ x: 800 }}
-      dataSource={Master.resource.data}
-      loading={Master.resource.isLoading}
+      dataSource={Playlist.list.data}
+      loading={Playlist.list.isLoading}
     />
   )
 }

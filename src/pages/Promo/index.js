@@ -10,14 +10,16 @@ const { Content } = Layout
 const Promo = () => {
   const [state, setState] = useState({
     visible: false,
-    typeModal: ''
+    typeModal: '',
+    data: {}
   })
 
-  const handleShowModal = (typeModal = '') => {
+  const handleShowModal = (typeModal = '', data = {}) => {
     setState({
       ...state,
       visible: !state.visible,
       typeModal,
+      data,
     })
   }
 
@@ -43,6 +45,7 @@ const Promo = () => {
           <SectionModal
             modalType={state.typeModal}
             visible={state.visible}
+            data={state.data}
             handleCloseModal={() => setState({ ...state, visible: false })}
           />
           <SectionTable handleShowModal={handleShowModal} />

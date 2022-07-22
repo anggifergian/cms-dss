@@ -55,10 +55,46 @@ const SectionTable = ({ handleShowModal }) => {
       width: 150,
     },
     {
+      title: 'Box',
+      dataIndex: 'box',
+      key: 'box',
+      width: 100,
+    },
+    {
+      title: 'X',
+      dataIndex: 'x_pos',
+      key: 'x_pos',
+      width: 80,
+    },
+    {
+      title: 'Y',
+      dataIndex: 'y_pos',
+      key: 'y_pos',
+      width: 80,
+    },
+    {
+      title: 'Width',
+      dataIndex: 'width',
+      key: 'width',
+      width: 80,
+    },
+    {
+      title: 'Height',
+      dataIndex: 'height',
+      key: 'height',
+      width: 80,
+    },
+    {
+      title: 'UOM',
+      dataIndex: 'measurement',
+      key: 'measurement',
+      width: 100,
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      width: 150,
+      width: 100,
       render: value => titleCase(value)
     },
     {

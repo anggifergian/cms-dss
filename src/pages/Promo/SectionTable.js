@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Space, Table, Modal } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
+import { titleCase } from '../../utils/text'
 import { requestDeletePromo, requestListPromo } from '../../redux/master/action'
 
 const { confirm } = Modal
@@ -50,9 +51,9 @@ const SectionTable = ({ handleShowModal }) => {
   const columns = [
     {
       title: 'No Urut',
-      dataIndex: 'no_urut',
-      key: 'no_urut',
-      width: 150,
+      dataIndex: 'promo_id',
+      key: 'promo_id',
+      width: 120,
     },
     {
       title: 'Branch',
@@ -82,6 +83,19 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      width: 100,
+      render: value => titleCase(value)
+    },
+    {
+      title: 'Create by',
+      dataIndex: 'created_by',
+      key: 'created_by',
+      width: 150,
+    },
+    {
+      title: 'Create Date',
+      dataIndex: 'created_date',
+      key: 'created_date',
       width: 150,
     },
     {

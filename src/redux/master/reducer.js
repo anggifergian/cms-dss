@@ -181,11 +181,13 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListResource.type:
+      const resources = action.payload.data
       return {
         ...state,
         resource: {
           ...finishLoading(state.position),
-          data: action.payload.data
+          data: resources,
+          options: resources.map(data => ({ label: data.resource_name, value: data.resource_id }))
         }
       }
     case failureListResource.type:
@@ -263,7 +265,8 @@ const masterReducer = (state = initialState, action) => {
         ...state,
         position: {
           ...finishLoading(state.position),
-          data: positions
+          data: positions,
+          options: positions.map(data => ({ label: data.device_name, value: data.position_id }))
         }
       }
     case failureListPosition.type:
@@ -396,20 +399,20 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successListBranch.type:
+      const branches = action.payload.data.map(item => {
+        const data = {
+          ...item,
+          ...item.branch
+        }
+
+        return data
+      })
       return {
         ...state,
         branch: {
           ...finishLoading(state.branch),
-          data: action.payload.data
-            && action.payload.data.length
-            && action.payload.data.map(item => {
-              const data = {
-                ...item,
-                ...item.branch
-              }
-
-              return data
-            })
+          data: branches,
+          options: branches.map(data => ({ label: data.branch_name, value: data.branch_id }))
         }
       }
     case failureListBranch.type:
