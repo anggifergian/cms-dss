@@ -29,6 +29,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const initOptionBranch = () => {
     const query = {
+      "branch_id": Auth.user.branch_id,
       "branch_name": "",
       "region_id": "",
       "status": "active",

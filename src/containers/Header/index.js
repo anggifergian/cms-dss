@@ -6,6 +6,7 @@ import { DownOutlined } from '@ant-design/icons'
 import { titleCase } from '../../utils/text'
 import { logout } from '../../redux/auth/action'
 import { Link } from 'react-router-dom'
+import { isAdmin } from '../../utils/helpers'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
@@ -13,9 +14,11 @@ const AppHeader = () => {
 
   const content = (
     <div className='flex flex-col gap-y-4'>
-      <Link to='/profile' className='w-28'>
-        <span className='text-gray-600 hover:text-gray-500'>User</span>
-      </Link>
+      {isAdmin() && (
+        <Link to='/profile' className='w-28'>
+          <span className='text-gray-600 hover:text-gray-500'>User</span>
+        </Link>
+      )}
       <div onClick={() => dispatch(logout())} className='w-28'>
         <span className='text-gray-600 hover:text-gray-500'>Sign Out</span>
       </div>

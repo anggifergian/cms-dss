@@ -68,6 +68,15 @@ import {
   requestDeleteResource,
   successDeleteResource,
   failureDeleteResource,
+  requestListUser,
+  successListUser,
+  failureListUser,
+  requestDeleteUser,
+  successDeleteUser,
+  failureDeleteUser,
+  requestCreateUser,
+  successCreateUser,
+  failureCreateUser,
 } from './action'
 
 const initialState = {
@@ -92,11 +101,81 @@ const initialState = {
   },
   promo: {
     data: []
+  },
+  user: {
+    data: []
   }
 }
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestListUser.type:
+      return {
+        ...state,
+        reload: false,
+        user: {
+          ...startLoading(state.user)
+        }
+      }
+    case successListUser.type:
+      return {
+        ...state,
+        user: {
+          ...finishLoading(state.user),
+          data: action.payload.data
+        }
+      }
+    case failureListUser.type:
+      return {
+        ...state,
+        user: {
+          ...errorLoading(state.user)
+        }
+      }
+    case requestDeleteUser.type:
+      return {
+        ...state,
+        user: {
+          ...startLoading(state.user)
+        }
+      }
+    case successDeleteUser.type:
+      return {
+        ...state,
+        reload: true,
+        user: {
+          ...finishLoading(state.user)
+        }
+      }
+    case failureDeleteUser.type:
+      return {
+        ...state,
+        user: {
+          ...errorLoading(state.user)
+        }
+      }
+    case requestCreateUser.type:
+      return {
+        ...state,
+        user: {
+          ...startLoading(state.user)
+        }
+      }
+    case successCreateUser.type:
+      return {
+        ...state,
+        reload: true,
+        user: {
+          ...finishLoading(state.user)
+        }
+      }
+    case failureCreateUser.type:
+      return {
+        ...state,
+        user: {
+          ...errorLoading(state.user)
+        }
+      }
     case requestListPromo.type:
       return {
         ...state,

@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePicker } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
-import moment from 'moment'
+import { Form, Modal, Select, Input, Row, Col, Button } from 'antd'
 
 import { Title } from '../../../containers'
-import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
+import { requestCreateUser, requestListBranch } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -13,29 +11,19 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [fileList, setFileList] = useState([])
-
   useEffect(() => {
     form.resetFields()
-  }, [visible, form])
+  }, [form, visible])
 
   const closeModal = useCallback(() => {
     onClose()
   }, [onClose])
 
   useEffect(() => {
-    console.log({
-      start_date: moment(data.promo.start_date),
-      end_date: moment(data.promo.end_date)
-    })
-  }, [data.promo.start_date, data.promo.end_date])
+    Master.reload && onClose()
+  }, [Master.reload, onClose])
 
-  useEffect(() => {
-    Master.reload && closeModal()
-  }, [Master.reload, closeModal])
-
-  const fetchCreate = query => dispatch(requestCreatePromo(query))
-
+  const fetchCreate = (query) => dispatch(requestCreateUser(query))
   const fetchBranch = useCallback(query => dispatch(requestListBranch(query)), [dispatch])
 
   useEffect(() => {
@@ -53,7 +41,15 @@ const EditModal = ({ visible, onClose, data }) => {
   }, [visible, Auth.token, Auth.user.branch_id, fetchBranch])
 
   const handleSubmit = (values) => {
-    console.log(values)
+    const payload = {
+      endpoint: '/Users/updateUsers',
+      data: {
+        ...values,
+        user_token: Auth.token,
+      }
+    }
+
+    fetchCreate(payload)
   }
 
   const formItemLayout = {
@@ -63,32 +59,13 @@ const EditModal = ({ visible, onClose, data }) => {
     },
   }
 
-  const dateConfig = {
+  const itemConfig = {
     rules: [
       {
         required: true,
-        message: 'Please select time!',
+        message: 'Input required'
       },
     ],
-  }
-
-  const uploadProps = {
-    fileList: fileList,
-    maxCount: 1,
-    beforeUpload: (file) => {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
-
-      if (!isImage) {
-        message.error(`${file.name} is not a image file`);
-      } else {
-        setFileList([file]);
-      }
-
-      return false
-    },
-    onRemove: (file) => {
-      setFileList([])
-    }
   }
 
   const EditForm = ({ data }) => {
@@ -96,7 +73,7 @@ const EditModal = ({ visible, onClose, data }) => {
       <Form
         {...formItemLayout}
         form={form}
-        name='promoCreateModal'
+        name='userEditModal'
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
@@ -105,6 +82,7 @@ const EditModal = ({ visible, onClose, data }) => {
         <Form.Item
           name="branch_id"
           label="Branch"
+        // {...itemConfig}
         >
           <Select
             options={Master.branch.options}
@@ -116,66 +94,39 @@ const EditModal = ({ visible, onClose, data }) => {
           />
         </Form.Item>
 
-        <Form.Item>
-          <Row align='middle'>
-            <Col span={6}>
-              <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>Upload File:</p>
-            </Col>
-            <Col span={12}>
-              <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
-                  Click to Upload
-                </Button>
-              </Upload>
-            </Col>
-          </Row>
-        </Form.Item>
-
         <Form.Item
-          name="tittle"
-          label="Promo name"
-          rules={[
-            { required: true, message: 'Required' }
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        {/* <Form.Item
-          name="start_date"
-          label="Start Date"
-          {...dateConfig}
-        >
-          <DatePicker format='YYYY-MM-DD' />
-        </Form.Item>
-
-        <Form.Item
-          name="end_date"
-          label="End Date"
-          {...dateConfig}
-        >
-          <DatePicker format='YYYY-MM-DD' />
-        </Form.Item> */}
-
-        <Form.Item
-          name="description"
-          label="Description"
+          name='user_name'
+          label='Username'
+          {...itemConfig}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          name="popup"
-          label="Popup"
+          name='user_full_name'
+          label='Fullname'
+          {...itemConfig}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          name="popup_description"
-          label="Popup Description"
+          name='user_email'
+          label='Email'
+          {...itemConfig}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item
+          name='user_password'
+          label='Password'
+          {...itemConfig}
+        >
+          <Input.Password
+            size="large"
+            placeholder="Password"
+          />
         </Form.Item>
 
         <Form.Item noStyle>
@@ -197,7 +148,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
   return (
     <Modal
-      title={<Title label="Edit Promo" />}
+      title={<Title label="Form User" />}
       visible={visible}
       onCancel={closeModal}
       width={600}

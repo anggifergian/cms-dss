@@ -72,7 +72,34 @@ import {
   failureCreatePosition,
   successCreateDevice,
   failureCreateDevice,
+  requestCreateUser,
+  requestDeleteUser,
+  requestListUser,
+  successCreateUser,
+  failureCreateUser,
+  successDeleteUser,
+  failureDeleteUser,
+  successListUser,
+  failureListUser,
 } from './action'
+
+function* callApi(url, body, method = 'POST') {
+  const headers = yield call(buildHeaders)
+
+  const { response, timeout } = yield race({
+    response: call(fetch, url, {
+      method,
+      headers,
+      body,
+    }),
+    timeout: call(delay, 10000),
+  })
+
+  return {
+    response,
+    timeout,
+  }
+}
 
 function* getListResource() {
   yield takeEvery(requestListResource.type, function* ({ payload }) {
@@ -743,6 +770,103 @@ function* deletePromo() {
   })
 }
 
+function* addUser() {
+  yield takeEvery(requestCreateUser.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreateUser(payload))
+        notifyError('success', 'User created!')
+      } else {
+        yield put(failureCreateUser(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreateUser(error))
+      notifyError('error', error)
+    }
+  })
+}
+
+function* deleteUser() {
+  yield takeEvery(requestDeleteUser.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeleteUser(payload))
+        notifyError('success', 'User deleted!')
+      } else {
+        yield put(failureDeleteUser(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeleteUser(error))
+      notifyError('error', error)
+    }
+  })
+}
+
+function* getListUser() {
+  yield takeEvery(requestListUser.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successListUser(payload))
+      } else {
+        yield put(failureListUser(timeout))
+      }
+    } catch (error) {
+      yield put(failureListUser(error))
+    }
+  })
+}
+
 export default function* rootSaga() {
   yield all([
     fork(addCompany),
@@ -752,6 +876,7 @@ export default function* rootSaga() {
     fork(addDevice),
     fork(addPosition),
     fork(addResource),
+    fork(addUser),
     fork(deleteCompany),
     fork(deleteRegion),
     fork(deletePromo),
@@ -759,6 +884,7 @@ export default function* rootSaga() {
     fork(deleteDevice),
     fork(deletePosition),
     fork(deleteResource),
+    fork(deleteUser),
     fork(getListCompany),
     fork(getListRegion),
     fork(getListBranch),
@@ -766,5 +892,6 @@ export default function* rootSaga() {
     fork(getListPosition),
     fork(getListResource),
     fork(getListPromo),
+    fork(getListUser),
   ])
 }

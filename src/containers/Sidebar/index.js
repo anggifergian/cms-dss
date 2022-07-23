@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
-import { Layout, Menu } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Layout, Menu } from 'antd'
 
 import { privateRoutes } from "../../utils/routes"
 import { changeCurrentRoute } from '../../redux/app/action'
@@ -21,6 +21,11 @@ function Sidebar({ isCollapsed }) {
 
   useEffect(() => {
     if (App.current.length && !originalCurrentLocation) return
+
+    console.log({
+      cur: App.current[0],
+      ori: originalCurrentLocation[originalCurrentLocation.length - 1]
+    })
 
     if (App.current[0] !== originalCurrentLocation[originalCurrentLocation.length - 1]) {
       changeCurrentPage([originalCurrentLocation[originalCurrentLocation.length - 1]])
@@ -51,9 +56,12 @@ function Sidebar({ isCollapsed }) {
         paddingTop: 80
       }}
     >
-      <div className='pl-6 pb-2 text-sm font-semibold text-gray-400'>
-        <span>Navigation</span>
-      </div>
+      {!isCollapsed && (
+        <div className='pl-6 pb-2 text-sm font-semibold text-gray-400'>
+          <span>Navigation</span>
+        </div>
+      )}
+
       <Menu
         onClick={handleClick}
         mode="inline"
@@ -63,35 +71,37 @@ function Sidebar({ isCollapsed }) {
         {routes.map(item => (
           item.sidebar ? (
             item.submenu ? (
-              <SubMenu
-                key={item.key}
-                title={item.title}
-                icon={item.icon}
-              >
-                {item.submenu.map(subItem => (
-                  <Menu.Item
-                    key={subItem.key}
-                    icon={subItem.icon}
-                    className={subItem.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
-                  >
-                    <Link id={`menu-${subItem.key}`} to={subItem.path}>
-                      {subItem.title}
-                    </Link>
-                  </Menu.Item>
-                ))}
-              </SubMenu>
+              (item.isAdmin && (
+                <SubMenu
+                  key={item.key}
+                  title={item.title}
+                  icon={item.icon}
+                >
+                  {item.submenu.map(subItem => (
+                    <Menu.Item
+                      key={subItem.key}
+                      icon={subItem.icon}
+                      className={subItem.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
+                    >
+                      <Link id={`menu-${subItem.key}`} to={subItem.path}>
+                        {subItem.title}
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              ))
             ) : (
               <Menu.Item
                 key={item.key}
                 icon={item.icon}
                 className={item.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
               >
-                <Link id={`menu-${item.key}`} to={item.path}>
+                <Link id={`menu-${item.key}`} to={item.path} className='hover:text-blue-500'>
                   {item.title}
                 </Link>
               </Menu.Item>
             )
-          ) : (<></>)
+          ) : (<React.Fragment key={item.key} />)
         ))}
       </Menu>
     </Sider>

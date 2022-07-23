@@ -43,6 +43,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const initOption = () => {
     const query = {
+      "branch_id": Auth.user.branch_id,
       "branch_name": "",
       "region_id": "",
       "status": "active",
@@ -59,7 +60,8 @@ const CreateModal = ({ visible, onClose }) => {
       ...values,
       start_date: values.start_date.format('YYYY-MM-DD'),
       end_date: values.end_date.format('YYYY-MM-DD'),
-      file: media.fileList[0] ? media.fileList[0].name : '',
+      file: media.base64.split(',')[1],
+      file_name: media.fileList[0] ? media.fileList[0].name : '',
       user_token: Auth.token,
     }
 

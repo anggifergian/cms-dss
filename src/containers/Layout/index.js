@@ -15,7 +15,7 @@ function BaseLayout({ children }) {
       <Layout hasSider>
         <Sidebar isCollapsed={state.sidebarCollapsed} />
 
-        <Layout style={{ marginLeft: 250 }}>
+        <Layout style={{ marginLeft: state.sidebarCollapsed ? 100 : 250 }}>
           <div className='w-full px-6 md:px-10 pt-20 pb-10 lg:mx-auto lg:max-w-screen-2xl'>
             {children}
           </div>

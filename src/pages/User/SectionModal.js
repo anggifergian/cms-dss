@@ -1,5 +1,5 @@
-import CreateModal from "./components/CreateModal";
-import EditModal from "./components/EditModal";
+import CreateModal from "./components/CreateModal"
+import EditModal from "./components/EditModal"
 
 const SectionModal = ({
   modalType,

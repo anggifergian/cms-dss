@@ -1,9 +1,28 @@
-import { Row } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
+import { Row, Button, Layout } from 'antd'
 
 import { BaseLayout, Title } from '../../containers'
+import SectionModal from './SectionModal'
+import SectionTable from './SectionTable'
+
+const { Content } = Layout
 
 const User = () => {
+  const [state, setState] = useState({
+    visible: false,
+    typeModal: '',
+    data: {}
+  })
+
+  const handleShowModal = (typeModal = '', data = {}) => {
+    setState({
+      ...state,
+      visible: !state.visible,
+      typeModal,
+      data,
+    })
+  }
+
   return (
     <BaseLayout>
       <Row
@@ -12,10 +31,25 @@ const User = () => {
         style={{ marginBottom: 20 }}
       >
         <Title label="User" />
+
+        <Button
+          type='primary'
+          onClick={() => handleShowModal('create')}
+        >
+          Add user
+        </Button>
       </Row>
 
       <div className='w-full bg-white p-4 rounded-md shadow-sm'>
-        /app/user
+        <Content>
+          <SectionModal
+            modalType={state.typeModal}
+            visible={state.visible}
+            data={state.data}
+            handleCloseModal={() => setState({ ...state, visible: false })}
+          />
+          <SectionTable handleShowModal={handleShowModal} />
+        </Content>
       </div>
     </BaseLayout>
   )

@@ -16,7 +16,8 @@ const initialState = {
   token: null,
   user: {
     profile: {},
-    role: {}
+    role: {},
+    branch: ''
   }
 }
 

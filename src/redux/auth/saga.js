@@ -74,7 +74,8 @@ function* loginRequest() {
           role: {
             id: data.user_role[0].role_id,
             name: data.user_role[0].role_name
-          }
+          },
+          branch_id: data.user_data[0].branch_id
         }
 
         yield put(successLogin(token))

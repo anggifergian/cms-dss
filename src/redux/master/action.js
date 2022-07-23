@@ -1,5 +1,18 @@
 import { createAction } from '@reduxjs/toolkit'
 
+// User
+export const requestListUser = createAction('[Request] LIST User')
+export const successListUser = createAction('[Success] LIST User')
+export const failureListUser = createAction('[Error] LIST User')
+
+export const requestCreateUser = createAction('[Request] CREATE User')
+export const successCreateUser = createAction('[Success] CREATE User')
+export const failureCreateUser = createAction('[Error] CREATE User')
+
+export const requestDeleteUser = createAction('[Request] DELETE User')
+export const successDeleteUser = createAction('[Success] DELETE User')
+export const failureDeleteUser = createAction('[Error] DELETE User')
+
 // Promo
 export const requestListPromo = createAction('[Request] LIST PROMO')
 export const successListPromo = createAction('[Success] LIST PROMO')

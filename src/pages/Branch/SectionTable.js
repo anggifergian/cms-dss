@@ -21,6 +21,7 @@ const SectionTable = ({ handleShowModal }) => {
 
   const initFetch = useCallback(() => {
     const query = {
+      "branch_id": Auth.user.branch_id,
       "branch_name": "",
       "region_id": "",
       "status": "",
@@ -30,7 +31,7 @@ const SectionTable = ({ handleShowModal }) => {
     }
 
     fetchList(query)
-  }, [Auth.token, fetchList])
+  }, [Auth.token, Auth.user.branch_id, fetchList])
 
   useEffect(() => {
     initFetch()

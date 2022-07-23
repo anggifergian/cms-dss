@@ -4,7 +4,7 @@ import { Button, Space, Table, Modal } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
 import { titleCase } from '../../utils/text'
-import { requestDeletePromo, requestListPromo } from '../../redux/master/action'
+import { requestDeleteUser, requestListUser } from '../../redux/master/action'
 
 const { confirm } = Modal
 
@@ -13,32 +13,29 @@ const SectionTable = ({ handleShowModal }) => {
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
 
-  const fetchList = useCallback(query => {
-    dispatch(requestListPromo(query))
+  const fetchList = useCallback((query) => {
+    dispatch(requestListUser(query))
   }, [dispatch])
 
-  const handleDelete = (query) => dispatch(requestDeletePromo(query))
+  const handleDelete = (query) => dispatch(requestDeleteUser(query))
 
   const initFetch = useCallback(() => {
-    const query = {
-      "branch_id": Auth.user.branch_id,
-      "tittle": "",
-      "file": "",
-      "description": "",
-      "popup": "",
-      "popup_description": "",
-      "start_date": "",
-      "end_date": "",
-      "status": "",
-      "created_date": "",
-      "created_by": "",
-      "updated_date": "",
-      "updated_by": "",
-      "user_token": Auth.token
+    const payload = {
+      endpoint: '/Users/getUsers',
+      data: {
+        "user_name": "",
+        "user_email": "",
+        "branch_id": "",
+        "user_full_name": "",
+        "status": "",
+        "created_by": "",
+        "updated_by": "",
+        "user_token": Auth.token
+      }
     }
 
-    fetchList(query)
-  }, [Auth.token, Auth.user.branch_id, fetchList])
+    fetchList(payload)
+  }, [Auth.token, fetchList])
 
   useEffect(() => {
     initFetch()
@@ -50,34 +47,22 @@ const SectionTable = ({ handleShowModal }) => {
 
   const columns = [
     {
-      title: 'No Urut',
-      dataIndex: 'promo_id',
-      key: 'promo_id',
-      width: 80,
+      title: 'Username',
+      dataIndex: 'user_name',
+      key: 'user_name',
+      width: 100,
     },
     {
-      title: 'Branch',
-      dataIndex: 'branch_name',
-      key: 'branch_name',
+      title: 'Fullname',
+      dataIndex: 'user_full_name',
+      key: 'user_full_name',
       width: 150,
     },
     {
-      title: 'Title',
-      dataIndex: 'tittle',
-      key: 'tittle',
+      title: 'Email',
+      dataIndex: 'user_email',
+      key: 'user_email',
       width: 150,
-    },
-    {
-      title: 'Start date',
-      dataIndex: 'start_date',
-      key: 'start_date',
-      width: 110,
-    },
-    {
-      title: 'End date',
-      dataIndex: 'end_date',
-      key: 'end_date',
-      width: 110,
     },
     {
       title: 'Status',
@@ -108,7 +93,11 @@ const SectionTable = ({ handleShowModal }) => {
           <Space wrap>
             <Button
               type='primary'
-              onClick={() => handleShowModal('edit', data)}
+              onClick={() => {
+                const row = { ...data };
+                row.user_password = '';
+                handleShowModal('edit', row)
+              }}
             >
               <EditOutlined />
             </Button>
@@ -129,8 +118,11 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Are you sure want to delete?',
       onOk() {
         const payload = {
-          "promo_id": data['promo_id'],
-          "user_token": Auth.token
+          endpoint: '/Users/deleteUsers',
+          data: {
+            "user_id": data['user_id'],
+            "user_token": Auth.token
+          }
         }
 
         handleDelete(payload)
@@ -140,11 +132,11 @@ const SectionTable = ({ handleShowModal }) => {
 
   return (
     <Table
-      rowKey='promo_id'
+      rowKey='user_id'
       columns={columns}
       scroll={{ x: 800 }}
-      dataSource={Master.promo.data}
-      loading={Master.promo.isLoading}
+      dataSource={Master.user.data}
+      loading={Master.user.isLoading}
     />
   )
 }

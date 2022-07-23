@@ -23,8 +23,8 @@ const SectionTable = ({ handleShowModal }) => {
     const query = {
       endpoint: '/playlist/getPlaylist',
       data: {
+        "branch_id": Auth.user.branch_id,
         "playlist_name": "",
-        "branch_id": "",
         "position_id": "",
         "resource_id": "",
         "start_date": "",
@@ -40,7 +40,7 @@ const SectionTable = ({ handleShowModal }) => {
     }
 
     fetchList(query)
-  }, [Auth.token, fetchList])
+  }, [Auth.token, Auth.user.branch_id, fetchList])
 
   useEffect(() => {
     initFetch()

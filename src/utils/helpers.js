@@ -2,9 +2,16 @@ import cookie from "react-cookies"
 import { notification } from 'antd'
 
 import config from "../settings/config"
+import { store } from "../redux/store"
 
 export const APP_TOKEN = "token_dss"
 export const APP_USER = "user_dss"
+
+export const isAdmin = () => {
+  const { Auth } = store.getState()
+  const checkAdmin = Auth.user.branch_id === 0
+  return checkAdmin
+}
 
 export const clearToken = () => {
   cookie.remove(APP_TOKEN, { path: "/" });
