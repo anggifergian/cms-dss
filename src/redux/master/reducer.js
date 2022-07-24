@@ -80,6 +80,9 @@ import {
   requestChangePassword,
   successChangePassword,
   failureChangePassword,
+  requestFileImage,
+  successFileImage,
+  failureFileImage,
 } from './action'
 
 const initialState = {
@@ -107,11 +110,36 @@ const initialState = {
   },
   user: {
     data: []
+  },
+  file: {
+    data: ''
   }
 }
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestFileImage.type:
+      return {
+        ...state,
+        file: {
+          ...startLoading(state.file)
+        }
+      }
+    case successFileImage.type:
+      console.log('image', action.payload)
+      return {
+        ...state,
+        file: {
+          ...finishLoading(state.file)
+        }
+      }
+    case failureFileImage.type:
+      return {
+        ...state,
+        file: {
+          ...errorLoading(state.file)
+        }
+      }
     case requestChangePassword.type:
       return {
         ...state,

@@ -84,7 +84,41 @@ import {
   requestChangePassword,
   successChangePassword,
   failureChangePassword,
+  requestFileImage,
+  successFileImage,
+  failureFileImage,
 } from './action'
+
+function* getFile() {
+  yield takeEvery(requestFileImage.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successFileImage(payload))
+      } else {
+        yield put(failureFileImage(timeout))
+      }
+    } catch (error) {
+      yield put(failureFileImage(error))
+    }
+  })
+}
 
 function* changePassword() {
   yield takeEvery(requestChangePassword.type, function* ({ payload }) {
@@ -913,5 +947,6 @@ export default function* rootSaga() {
     fork(getListResource),
     fork(getListPromo),
     fork(getListUser),
+    fork(getFile),
   ])
 }
