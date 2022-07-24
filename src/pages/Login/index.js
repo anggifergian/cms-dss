@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Password } from '../../components'
 import { requestLogin } from '../../redux/auth/action'
 
 function Login() {
   const dispatch = useDispatch()
+  const Auth = useSelector(state => state.Auth)
+
   const [query, setQuery] = useState({
     username: '',
     password: ''
@@ -41,7 +43,7 @@ function Login() {
               <input
                 type="email"
                 className="w-full p-4 pr-12 text-sm border border-gray-200 rounded-lg shadow-sm"
-                placeholder="Enter email"
+                placeholder="Enter username/email"
                 value={query.username}
                 onChange={e => setQuery({ ...query, username: e.target.value })}
               />
@@ -79,7 +81,7 @@ function Login() {
               className="w-full md:w-28 inline-block px-5 py-3 text-sm font-medium text-white bg-blue-500 rounded-lg"
               onClick={handleLogin}
             >
-              Sign in
+              {Auth.isLoading ? 'Signing...' : 'Sign in'}
             </button>
           </div>
         </form>

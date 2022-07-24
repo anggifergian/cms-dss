@@ -45,6 +45,7 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/Users/updateUsers',
       data: {
         ...values,
+        user_id: values['user_id'],
         user_token: Auth.token,
       }
     }

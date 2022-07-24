@@ -1,5 +1,3 @@
-import { store } from '../redux/store'
-
 import {
   AppstoreOutlined,
   DashboardOutlined,
@@ -18,8 +16,6 @@ import Login from "../pages/Login"
 import Promo from "../pages/Promo"
 import Playlist from "../pages/Playlist";
 import User from "../pages/User"
-
-const { Auth } = store.getState()
 
 export const publicRoutes = [
   {
@@ -43,14 +39,12 @@ export const privateRoutes = [
     component: Dashboard,
     title: 'Dashboard',
     sidebar: true,
-    isAdmin: Auth.user.branch_id === 0,
     icon: <DashboardOutlined />,
   },
   {
     key: 'master_data',
     title: 'Master Data',
     sidebar: true,
-    isAdmin: Auth.user.branch_id === 0,
     icon: <AppstoreOutlined />,
     submenu: [
       {
@@ -103,7 +97,6 @@ export const privateRoutes = [
     component: Promo,
     title: 'Promo',
     sidebar: true,
-    isAdmin: Auth.user.branch_id === 0,
     icon: <DollarCircleOutlined />,
   },
   {
@@ -112,7 +105,6 @@ export const privateRoutes = [
     component: Playlist,
     title: 'Playlist',
     sidebar: true,
-    isAdmin: Auth.user.branch_id === 0,
     icon: <PlayCircleOutlined />,
   },
   {
@@ -120,7 +112,6 @@ export const privateRoutes = [
     path: '/profile',
     component: User,
     title: 'User',
-    isAdmin: Auth.user.branch_id === 0,
     sidebar: false,
     icon: '',
   },

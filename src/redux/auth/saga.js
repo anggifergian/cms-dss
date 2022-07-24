@@ -71,11 +71,14 @@ function* loginRequest() {
             email: data.user_data[0].user_email,
             status: data.user_data[0].status,
           },
-          role: {
+          branch_id: data.user_data[0].branch_id
+        }
+
+        if (data.user_role.length) {
+          user.role = {
             id: data.user_role[0].role_id,
             name: data.user_role[0].role_name
-          },
-          branch_id: data.user_data[0].branch_id
+          }
         }
 
         yield put(successLogin(token))

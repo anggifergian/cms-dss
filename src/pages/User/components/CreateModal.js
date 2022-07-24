@@ -87,7 +87,7 @@ const CreateModal = ({ visible, onClose }) => {
         <Form.Item
           name="branch_id"
           label="Branch"
-          // {...itemConfig}
+          {...itemConfig}
         >
           <Select
             onFocus={() => !Master.branch.options && initOption()}

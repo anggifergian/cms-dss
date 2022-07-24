@@ -83,24 +83,6 @@ import {
   failureListUser,
 } from './action'
 
-function* callApi(url, body, method = 'POST') {
-  const headers = yield call(buildHeaders)
-
-  const { response, timeout } = yield race({
-    response: call(fetch, url, {
-      method,
-      headers,
-      body,
-    }),
-    timeout: call(delay, 10000),
-  })
-
-  return {
-    response,
-    timeout,
-  }
-}
-
 function* getListResource() {
   yield takeEvery(requestListResource.type, function* ({ payload }) {
     try {

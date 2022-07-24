@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
@@ -12,6 +12,7 @@ const { SubMenu } = Menu
 function Sidebar({ isCollapsed }) {
   const dispatch = useDispatch()
   const App = useSelector(state => state.App)
+  const Auth = useSelector(state => state.Auth)
 
   const originalCurrentLocation = window && window.location.pathname.split("/")
 
@@ -36,7 +37,15 @@ function Sidebar({ isCollapsed }) {
     changeCurrentPage([e.key])
   }
 
-  const routes = privateRoutes
+  const routes = useMemo(() => {
+    let base = [...privateRoutes]
+
+    if (Auth.user.branch_id !== 0) {
+      base = base.filter(item => item.key !== 'master_data')
+    }
+
+    return base
+  }, [Auth.user.branch_id])
 
   return (
     <Sider
@@ -71,25 +80,24 @@ function Sidebar({ isCollapsed }) {
         {routes.map(item => (
           item.sidebar ? (
             item.submenu ? (
-              (item.isAdmin && (
-                <SubMenu
-                  key={item.key}
-                  title={item.title}
-                  icon={item.icon}
-                >
-                  {item.submenu.map(subItem => (
-                    <Menu.Item
-                      key={subItem.key}
-                      icon={subItem.icon}
-                      className={subItem.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
-                    >
-                      <Link id={`menu-${subItem.key}`} to={subItem.path}>
-                        {subItem.title}
-                      </Link>
-                    </Menu.Item>
-                  ))}
-                </SubMenu>
-              ))
+              <SubMenu
+
+                key={item.key}
+                title={item.title}
+                icon={item.icon}
+              >
+                {item.submenu.map(subItem => (
+                  <Menu.Item
+                    key={subItem.key}
+                    icon={subItem.icon}
+                    className={subItem.key !== App.current[0] ? 'text-gray-500' : 'text-blue-500'}
+                  >
+                    <Link id={`menu-${subItem.key}`} to={subItem.path}>
+                      {subItem.title}
+                    </Link>
+                  </Menu.Item>
+                ))}
+              </SubMenu>
             ) : (
               <Menu.Item
                 key={item.key}
