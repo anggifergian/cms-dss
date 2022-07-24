@@ -86,8 +86,8 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/playlist/addNewPlaylist',
       data: {
         ...values,
-        start_date: values.start_date.format('YYYY-MM-DD'),
-        end_date: values.end_date.format('YYYY-MM-DD'),
+        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
+        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
         user_token: Auth.token,
       }
     }
@@ -184,7 +184,10 @@ const CreateModal = ({ visible, onClose }) => {
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
         </Form.Item>
 
         <Form.Item
@@ -192,7 +195,10 @@ const CreateModal = ({ visible, onClose }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
         </Form.Item>
 
         <Form.Item noStyle>

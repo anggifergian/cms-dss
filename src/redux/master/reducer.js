@@ -77,6 +77,9 @@ import {
   requestCreateUser,
   successCreateUser,
   failureCreateUser,
+  requestChangePassword,
+  successChangePassword,
+  failureChangePassword,
 } from './action'
 
 const initialState = {
@@ -109,6 +112,28 @@ const initialState = {
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestChangePassword.type:
+      return {
+        ...state,
+        user: {
+          ...startLoading(state.user)
+        }
+      }
+    case successChangePassword.type:
+      return {
+        ...state,
+        reload: true,
+        user: {
+          ...finishLoading(state.user)
+        }
+      }
+    case failureChangePassword.type:
+      return {
+        ...state,
+        user: {
+          ...errorLoading(state.user, action.payload.message)
+        }
+      }
     case requestListUser.type:
       return {
         ...state,

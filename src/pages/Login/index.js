@@ -36,6 +36,15 @@ function Login() {
         </div>
 
         <form action="" className="max-w-md mx-auto mt-8 mb-0 space-y-4">
+          {Auth.hasError && (
+            <div
+              class="p-4 border rounded text-amber-700 bg-amber-50 border-amber-900/10"
+              role="alert"
+            >
+              <strong class="text-sm font-medium">{Auth.error}</strong>
+            </div>
+          )}
+
           <div>
             <label htmlFor="email" className="sr-only">Email</label>
 

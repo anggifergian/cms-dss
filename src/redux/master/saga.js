@@ -81,7 +81,43 @@ import {
   failureDeleteUser,
   successListUser,
   failureListUser,
+  requestChangePassword,
+  successChangePassword,
+  failureChangePassword,
 } from './action'
+
+function* changePassword() {
+  yield takeEvery(requestChangePassword.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successChangePassword(payload))
+        notifyError('success', 'Password updated!')
+      } else {
+        yield put(failureChangePassword(timeout))
+      }
+    } catch (error) {
+      yield put(failureChangePassword(error))
+      notifyError('error', error.message)
+    }
+  })
+}
 
 function* getListResource() {
   yield takeEvery(requestListResource.type, function* ({ payload }) {
@@ -691,8 +727,9 @@ function* getListPromo() {
 function* addPromo() {
   yield takeEvery(requestCreatePromo.type, function* ({ payload }) {
     try {
-      const body = JSON.stringify(payload)
-      const url = yield call(buildUrl, '/promo/addNewPromo')
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
       const headers = yield call(buildHeaders)
 
       const { response, timeout } = yield race({
@@ -851,6 +888,7 @@ function* getListUser() {
 
 export default function* rootSaga() {
   yield all([
+    fork(changePassword),
     fork(addCompany),
     fork(addRegion),
     fork(addPromo),

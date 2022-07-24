@@ -23,11 +23,6 @@ function Sidebar({ isCollapsed }) {
   useEffect(() => {
     if (App.current.length && !originalCurrentLocation) return
 
-    console.log({
-      cur: App.current[0],
-      ori: originalCurrentLocation[originalCurrentLocation.length - 1]
-    })
-
     if (App.current[0] !== originalCurrentLocation[originalCurrentLocation.length - 1]) {
       changeCurrentPage([originalCurrentLocation[originalCurrentLocation.length - 1]])
     }

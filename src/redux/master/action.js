@@ -13,6 +13,10 @@ export const requestDeleteUser = createAction('[Request] DELETE User')
 export const successDeleteUser = createAction('[Success] DELETE User')
 export const failureDeleteUser = createAction('[Error] DELETE User')
 
+export const requestChangePassword = createAction('[Request] Change Password')
+export const successChangePassword = createAction('[Success] Change Password')
+export const failureChangePassword = createAction('[Error] Change Password')
+
 // Promo
 export const requestListPromo = createAction('[Request] LIST PROMO')
 export const successListPromo = createAction('[Success] LIST PROMO')

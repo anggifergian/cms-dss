@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePicker } from 'antd'
+import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePicker, Space } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
 import { Title } from '../../../containers'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
+import { toBase64 } from '../../../utils/file'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -13,7 +14,17 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [fileList, setFileList] = useState([])
+  const [media, setMedia] = useState({
+    fileList: [],
+    base64: ''
+  })
+
+  const resetState = useCallback(() => {
+    setMedia({
+      fileList: [],
+      base64: ''
+    })
+  }, [setMedia])
 
   useEffect(() => {
     form.resetFields()
@@ -22,13 +33,6 @@ const EditModal = ({ visible, onClose, data }) => {
   const closeModal = useCallback(() => {
     onClose()
   }, [onClose])
-
-  useEffect(() => {
-    console.log({
-      start_date: moment(data.promo.start_date),
-      end_date: moment(data.promo.end_date)
-    })
-  }, [data.promo.start_date, data.promo.end_date])
 
   useEffect(() => {
     Master.reload && closeModal()
@@ -53,7 +57,21 @@ const EditModal = ({ visible, onClose, data }) => {
   }, [visible, Auth.token, Auth.user.branch_id, fetchBranch])
 
   const handleSubmit = (values) => {
-    console.log(values)
+    const payload = {
+      endpoint: '/promo/updatePromo',
+      data: {
+        ...values,
+        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
+        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
+        file: media.base64.split(',')[1],
+        file_name: media.fileList[0] ? media.fileList[0].name : '',
+        status: data['status'],
+        promo_id: data['promo_id'],
+        user_token: Auth.token,
+      }
+    }
+
+    fetchCreate(payload)
   }
 
   const formItemLayout = {
@@ -73,25 +91,33 @@ const EditModal = ({ visible, onClose, data }) => {
   }
 
   const uploadProps = {
-    fileList: fileList,
+    fileList: media.fileList,
     maxCount: 1,
-    beforeUpload: (file) => {
+    beforeUpload: async (file) => {
       const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
 
       if (!isImage) {
         message.error(`${file.name} is not a image file`);
       } else {
-        setFileList([file]);
+        const base64 = await toBase64(file)
+        setMedia({
+          base64,
+          fileList: [file]
+        })
       }
 
       return false
     },
     onRemove: (file) => {
-      setFileList([])
+      resetState()
     }
   }
 
   const EditForm = ({ data }) => {
+    const copyData = { ...data }
+    copyData.start_date = moment(data.promo.start_date);
+    copyData.end_date = moment(data.promo.end_date);
+
     return (
       <Form
         {...formItemLayout}
@@ -100,7 +126,7 @@ const EditModal = ({ visible, onClose, data }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
-        initialValues={data}
+        initialValues={copyData}
       >
         <Form.Item
           name="branch_id"
@@ -122,11 +148,23 @@ const EditModal = ({ visible, onClose, data }) => {
               <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>Upload File:</p>
             </Col>
             <Col span={12}>
-              <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
-                  Click to Upload
-                </Button>
-              </Upload>
+              <Space direction='vertical'>
+                <Upload {...uploadProps}>
+                  <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
+                    Click to Upload
+                  </Button>
+                </Upload>
+
+                {media.fileList.length > 0 && (
+                  <div className='pl-4'>
+                    <img
+                      alt="profile"
+                      src={media.base64}
+                      className="h-24 transition-opacity ease-in-out duration-200 object-cover"
+                    />
+                  </div>
+                )}
+              </Space>
             </Col>
           </Row>
         </Form.Item>
@@ -141,12 +179,15 @@ const EditModal = ({ visible, onClose, data }) => {
           <Input />
         </Form.Item>
 
-        {/* <Form.Item
+        <Form.Item
           name="start_date"
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
         </Form.Item>
 
         <Form.Item
@@ -154,8 +195,11 @@ const EditModal = ({ visible, onClose, data }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
-        </Form.Item> */}
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
+        </Form.Item>
 
         <Form.Item
           name="description"

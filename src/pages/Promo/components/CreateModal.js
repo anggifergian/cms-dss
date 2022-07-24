@@ -57,12 +57,15 @@ const CreateModal = ({ visible, onClose }) => {
 
   const handleSubmit = (values) => {
     const payload = {
-      ...values,
-      start_date: values.start_date.format('YYYY-MM-DD'),
-      end_date: values.end_date.format('YYYY-MM-DD'),
-      file: media.base64.split(',')[1],
-      file_name: media.fileList[0] ? media.fileList[0].name : '',
-      user_token: Auth.token,
+      endpoint: '/promo/addNewPromo',
+      data: {
+        ...values,
+        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
+        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
+        file: media.base64.split(',')[1],
+        file_name: media.fileList[0] ? media.fileList[0].name : '',
+        user_token: Auth.token,
+      }
     }
 
     fetchCreate(payload)
@@ -180,7 +183,10 @@ const CreateModal = ({ visible, onClose }) => {
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
         </Form.Item>
 
         <Form.Item
@@ -188,7 +194,10 @@ const CreateModal = ({ visible, onClose }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker format='YYYY-MM-DD' />
+          <DatePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+          />
         </Form.Item>
 
         <Form.Item

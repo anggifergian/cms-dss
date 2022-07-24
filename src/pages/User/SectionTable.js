@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Space, Table, Modal } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, KeyOutlined } from '@ant-design/icons'
 
 import { titleCase } from '../../utils/text'
 import { requestDeleteUser, requestListUser } from '../../redux/master/action'
@@ -87,7 +87,7 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Action',
       key: 'action',
       fixed: 'right',
-      width: 140,
+      width: 180,
       render: (data) => {
         return (
           <Space wrap>
@@ -100,6 +100,11 @@ const SectionTable = ({ handleShowModal }) => {
               }}
             >
               <EditOutlined />
+            </Button>
+            <Button
+              onClick={() => handleShowModal('change_password', data)}
+            >
+              <KeyOutlined />
             </Button>
             <Button
               danger
