@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Space, Table, Modal } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Button, Space, Table, Modal, Input } from 'antd'
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 
 import { requestDeletePlaylist, requestListPlaylist } from '../../redux/playlist/action'
 import { titleCase } from '../../utils/text'
@@ -13,6 +13,24 @@ const SectionTable = ({ handleShowModal }) => {
   const Auth = useSelector(state => state.Auth)
   const Playlist = useSelector(state => state.Playlist)
 
+  const [state, setState] = useState({
+    query: {
+      "branch_id": Auth.user.branch_id,
+      "playlist_name": "",
+      "position_id": "",
+      "resource_id": "",
+      "start_date": "",
+      "end_date": "",
+      "sort": "",
+      "status": "",
+      "created_by": "",
+      "created_date": "",
+      "updated_by": "",
+      "updated_date": "",
+      "user_token": Auth.token
+    }
+  })
+
   const fetchList = useCallback((query) => {
     dispatch(requestListPlaylist(query))
   }, [dispatch])
@@ -22,25 +40,11 @@ const SectionTable = ({ handleShowModal }) => {
   const initFetch = useCallback(() => {
     const query = {
       endpoint: '/playlist/getPlaylist',
-      data: {
-        "branch_id": Auth.user.branch_id,
-        "playlist_name": "",
-        "position_id": "",
-        "resource_id": "",
-        "start_date": "",
-        "end_date": "",
-        "sort": "",
-        "status": "",
-        "created_by": "",
-        "created_date": "",
-        "updated_by": "",
-        "updated_date": "",
-        "user_token": Auth.token
-      }
+      data: state.query
     }
 
     fetchList(query)
-  }, [Auth.token, Auth.user.branch_id, fetchList])
+  }, [state.query, fetchList])
 
   useEffect(() => {
     initFetch()
@@ -50,12 +54,74 @@ const SectionTable = ({ handleShowModal }) => {
     Playlist.reload && initFetch()
   }, [Playlist.reload, initFetch])
 
+  const getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div className='p-4'>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters, dataIndex, confirm)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+  })
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm()
+    setState({
+      ...state,
+      query: {
+        ...state.query,
+        [dataIndex]: selectedKeys[0]
+      }
+    })
+  }
+
+  const handleReset = (clearFilters, dataIndex, confirm) => {
+    clearFilters()
+    confirm()
+    setState({
+      ...state,
+      query: {
+        ...state.query,
+        [dataIndex]: ''
+      }
+    })
+  }
+
+
   const columns = [
     {
       title: 'Playlist',
       dataIndex: 'playlist_name',
       key: 'playlist_name',
       width: 150,
+      ...getColumnSearchProps('playlist_name')
     },
     {
       title: 'Branch',
