@@ -41,7 +41,7 @@ const PreviewModal = ({ visible, onClose, data }) => {
       ) : (
         <img
           alt='promo'
-          className='w-full object-cover h-96'
+          className='w-full object-cover h-96 rounded'
           src={`data:image/jpeg;base64,${Master.file.data}`}
         />
       ) }

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Space, Table, Modal } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Button, Space, Table, Modal, Col, Input } from 'antd'
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 
 import { titleCase } from '../../utils/text'
 import { requestDeletePromo, requestListPromo } from '../../redux/master/action'
@@ -13,14 +13,8 @@ const SectionTable = ({ handleShowModal }) => {
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
 
-  const fetchList = useCallback(query => {
-    dispatch(requestListPromo(query))
-  }, [dispatch])
-
-  const handleDelete = (query) => dispatch(requestDeletePromo(query))
-
-  const initFetch = useCallback(() => {
-    const query = {
+  const [state, setState] = useState({
+    query: {
       "branch_id": Auth.user.branch_id,
       "tittle": "",
       "file": "",
@@ -36,9 +30,17 @@ const SectionTable = ({ handleShowModal }) => {
       "updated_by": "",
       "user_token": Auth.token
     }
+  })
 
-    fetchList(query)
-  }, [Auth.token, Auth.user.branch_id, fetchList])
+  const fetchList = useCallback(query => {
+    dispatch(requestListPromo(query))
+  }, [dispatch])
+
+  const handleDelete = (query) => dispatch(requestDeletePromo(query))
+
+  const initFetch = useCallback(() => {
+    fetchList(state.query)
+  }, [state.query, fetchList])
 
   useEffect(() => {
     initFetch()
@@ -47,6 +49,66 @@ const SectionTable = ({ handleShowModal }) => {
   useEffect(() => {
     Master.reload && initFetch()
   }, [Master.reload, initFetch])
+
+  const getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div className='p-4'>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters, dataIndex, confirm)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+  })
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm()
+    setState({
+      ...state,
+      query: {
+        ...state.query,
+        [dataIndex]: selectedKeys[0]
+      }
+    })
+  }
+
+  const handleReset = (clearFilters, dataIndex, confirm) => {
+    clearFilters()
+    confirm()
+    setState({
+      ...state,
+      query: {
+        ...state.query,
+        [dataIndex]: ''
+      }
+    })
+  }
 
   const columns = [
     {
@@ -66,6 +128,7 @@ const SectionTable = ({ handleShowModal }) => {
       dataIndex: 'tittle',
       key: 'tittle',
       width: 150,
+      ...getColumnSearchProps('tittle'),
       render: (value, record) => {
         return (
           <div>
