@@ -4,8 +4,8 @@ import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePick
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
-import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 import { toBase64 } from '../../../utils/file'
+import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -13,22 +13,29 @@ const CreateModal = ({ visible, onClose }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [media, setMedia] = useState({
-    fileList: [],
-    base64: ''
+  const [state, setState] = useState({
+    form: {
+      isPopup: ''
+    },
+    media: {
+      fileList: [],
+      base64: ''
+    }
   })
 
   const resetState = useCallback(() => {
-    setMedia({
-      fileList: [],
-      base64: ''
+    setState({
+      ...state,
+      media: {
+        fileList: [],
+        base64: ''
+      }
     })
-  }, [setMedia])
+  }, [setState, state])
 
   useEffect(() => {
     form.resetFields()
-    resetState()
-  }, [visible, form, resetState])
+  }, [visible, form])
 
   const closeModal = useCallback(() => {
     onClose()
@@ -62,8 +69,8 @@ const CreateModal = ({ visible, onClose }) => {
         ...values,
         start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
         end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
-        file: media.base64.split(',')[1],
-        file_name: media.fileList[0] ? media.fileList[0].name : '',
+        file: state.media.base64.split(',')[1],
+        file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         user_token: Auth.token,
       }
     }
@@ -88,7 +95,7 @@ const CreateModal = ({ visible, onClose }) => {
   }
 
   const uploadProps = {
-    fileList: media.fileList,
+    fileList: state.media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
       const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
@@ -97,9 +104,12 @@ const CreateModal = ({ visible, onClose }) => {
         message.error(`${file.name} is not a image file`);
       } else {
         const base64 = await toBase64(file)
-        setMedia({
-          base64,
-          fileList: [file]
+        setState({
+          ...state,
+          media: {
+            base64,
+            fileList: [file]
+          }
         })
       }
 
@@ -125,6 +135,7 @@ const CreateModal = ({ visible, onClose }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
+        initialValues={{ popup: 'yes' }}
       >
         <Form.Item
           name="branch_id"
@@ -154,11 +165,11 @@ const CreateModal = ({ visible, onClose }) => {
                   </Button>
                 </Upload>
 
-                {media.fileList.length > 0 && (
+                {state.media.fileList.length > 0 && (
                   <div className='pl-4'>
                     <img
                       alt="profile"
-                      src={media.base64}
+                      src={state.media.base64}
                       className="h-24 transition-opacity ease-in-out duration-200 object-cover"
                     />
                   </div>
@@ -213,8 +224,8 @@ const CreateModal = ({ visible, onClose }) => {
         >
           <Select
             options={[
-              {label: 'Yes', value: 'yes'},
-              {label: 'No', value: 'no'}
+              { label: 'Yes', value: 'yes' },
+              { label: 'No', value: 'no' }
             ]}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -224,12 +235,18 @@ const CreateModal = ({ visible, onClose }) => {
           />
         </Form.Item>
 
-
         <Form.Item
-          name="popup_description"
-          label="Popup Description"
+          noStyle
+          shouldUpdate={(prev, curr) => prev.popup !== curr.popup}
         >
-          <Input />
+          {({ getFieldValue }) => getFieldValue('popup') === 'yes' ? (
+            <Form.Item
+              name="popup_description"
+              label="Popup Description"
+            >
+              <Input />
+            </Form.Item>
+          ) : null}
         </Form.Item>
 
         <Form.Item noStyle>

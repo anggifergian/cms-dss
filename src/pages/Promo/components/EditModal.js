@@ -14,17 +14,25 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [media, setMedia] = useState({
-    fileList: [],
-    base64: ''
+  const [state, setState] = useState({
+    form: {
+      isPopup: ''
+    },
+    media: {
+      fileList: [],
+      base64: ''
+    }
   })
 
   const resetState = useCallback(() => {
-    setMedia({
-      fileList: [],
-      base64: ''
+    setState({
+      ...state,
+      media: {
+        fileList: [],
+        base64: ''
+      }
     })
-  }, [setMedia])
+  }, [setState, state])
 
   useEffect(() => {
     form.resetFields()
@@ -63,8 +71,8 @@ const EditModal = ({ visible, onClose, data }) => {
         ...values,
         start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
         end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
-        file: media.base64.split(',')[1],
-        file_name: media.fileList[0] ? media.fileList[0].name : '',
+        file: state.media.base64.split(',')[1],
+        file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         status: data['status'],
         promo_id: data['promo_id'],
         user_token: Auth.token,
@@ -91,7 +99,7 @@ const EditModal = ({ visible, onClose, data }) => {
   }
 
   const uploadProps = {
-    fileList: media.fileList,
+    fileList: state.media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
       const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
@@ -100,9 +108,12 @@ const EditModal = ({ visible, onClose, data }) => {
         message.error(`${file.name} is not a image file`);
       } else {
         const base64 = await toBase64(file)
-        setMedia({
-          base64,
-          fileList: [file]
+        setState({
+          ...state,
+          media: {
+            base64,
+            fileList: [file]
+          }
         })
       }
 
@@ -155,11 +166,11 @@ const EditModal = ({ visible, onClose, data }) => {
                   </Button>
                 </Upload>
 
-                {media.fileList.length > 0 && (
+                {state.media.fileList.length > 0 && (
                   <div className='pl-4'>
                     <img
                       alt="profile"
-                      src={media.base64}
+                      src={state.media.base64}
                       className="h-24 transition-opacity ease-in-out duration-200 object-cover"
                     />
                   </div>
@@ -212,14 +223,31 @@ const EditModal = ({ visible, onClose, data }) => {
           name="popup"
           label="Popup"
         >
-          <Input />
+          <Select
+            options={[
+              { label: 'Yes', value: 'yes' },
+              { label: 'No', value: 'no' }
+            ]}
+            filterOption={(input, option) =>
+              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item
-          name="popup_description"
-          label="Popup Description"
+          noStyle
+          shouldUpdate={(prev, curr) => prev.popup !== curr.popup}
         >
-          <Input />
+          {({ getFieldValue }) => getFieldValue('popup') === 'yes' ? (
+            <Form.Item
+              name="popup_description"
+              label="Popup Description"
+            >
+              <Input />
+            </Form.Item>
+          ) : null}
         </Form.Item>
 
         <Form.Item noStyle>
