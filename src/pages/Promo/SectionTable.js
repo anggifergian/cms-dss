@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Space, Table, Modal, Col, Input } from 'antd'
+import { Button, Space, Table, Modal, Input } from 'antd'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 
 import { titleCase } from '../../utils/text'
