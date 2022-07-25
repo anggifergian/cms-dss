@@ -126,11 +126,11 @@ const masterReducer = (state = initialState, action) => {
         }
       }
     case successFileImage.type:
-      console.log('image', action.payload)
       return {
         ...state,
         file: {
-          ...finishLoading(state.file)
+          ...finishLoading(state.file),
+          data: action.payload.data.file_base64
         }
       }
     case failureFileImage.type:
@@ -232,6 +232,7 @@ const masterReducer = (state = initialState, action) => {
     case requestListPromo.type:
       return {
         ...state,
+        reload: false,
         promo: {
           ...startLoading(state.promo)
         }

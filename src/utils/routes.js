@@ -16,6 +16,7 @@ import Login from "../pages/Login"
 import Promo from "../pages/Promo"
 import Playlist from "../pages/Playlist";
 import User from "../pages/User"
+import ForgotPassword from "../pages/Password"
 
 export const publicRoutes = [
   {
@@ -106,6 +107,14 @@ export const privateRoutes = [
     title: 'Playlist',
     sidebar: true,
     icon: <PlayCircleOutlined />,
+  },
+  {
+    key: 'change-password',
+    path: '/change-password',
+    component: ForgotPassword,
+    title: 'Change Password',
+    sidebar: false,
+    icon: '',
   },
   {
     key: 'profile',

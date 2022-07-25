@@ -211,8 +211,19 @@ const CreateModal = ({ visible, onClose }) => {
           name="popup"
           label="Popup"
         >
-          <Input />
+          <Select
+            options={[
+              {label: 'Yes', value: 'yes'},
+              {label: 'No', value: 'no'}
+            ]}
+            filterOption={(input, option) =>
+              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            showSearch
+            allowClear
+          />
         </Form.Item>
+
 
         <Form.Item
           name="popup_description"

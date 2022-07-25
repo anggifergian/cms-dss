@@ -15,12 +15,17 @@ const AppHeader = () => {
   const content = (
     <div className='flex flex-col gap-y-4'>
       {isAdmin() && (
-        <Link to='/profile' className='w-28'>
+        <Link to='/profile' className='w-32'>
           <span className='text-gray-600 hover:text-gray-500'>User</span>
         </Link>
       )}
-      <div onClick={() => dispatch(logout())} className='w-28'>
-        <span className='text-gray-600 hover:text-gray-500'>Sign Out</span>
+      <Link to='/change-password' className='w-32'>
+        <span className='text-gray-600 hover:text-gray-500'>
+          Change Password
+        </span>
+      </Link>
+      <div onClick={() => dispatch(logout())} className='w-32'>
+        <span className='text-gray-600 hover:text-gray-500 cursor-pointer'>Sign Out</span>
       </div>
     </div>
   )
