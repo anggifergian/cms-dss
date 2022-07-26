@@ -4,9 +4,13 @@ import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePick
 import { UploadOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
+import { EditorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+
 import { Title } from '../../../containers'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 import { toBase64 } from '../../../utils/file'
+import { TextEditor } from '../../../components'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -21,8 +25,24 @@ const EditModal = ({ visible, onClose, data }) => {
     media: {
       fileList: [],
       base64: ''
+    },
+    richText: {
+      editorState: EditorState.createEmpty(),
+      htmlValue: ''
     }
   })
+
+  const onEditorStateChange = (editorState) => {
+    const htmlValue = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+
+    setState({
+      ...state,
+      richText: {
+        editorState,
+        htmlValue,
+      }
+    })
+  }
 
   const resetState = useCallback(() => {
     setState({
@@ -69,6 +89,7 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/promo/updatePromo',
       data: {
         ...values,
+        popup_description: values.popup === 'yes' ? state.richText.htmlValue : '',
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
         file: state.media.base64.split(',')[1],
@@ -235,12 +256,18 @@ const EditModal = ({ visible, onClose, data }) => {
           shouldUpdate={(prev, curr) => prev.popup !== curr.popup}
         >
           {({ getFieldValue }) => getFieldValue('popup') === 'yes' ? (
-            <Form.Item
-              name="popup_description"
-              label="Popup Description"
-            >
-              <Input />
-            </Form.Item>
+            <Row>
+              <Col style={{ marginBottom: 10 }}><span className='mb-4'>Popup description</span></Col>
+              <Col sm={24}>
+                <div>
+                  <TextEditor
+                    initialContent={copyData.popup_description}
+                    editorState={state.richText.editorState}
+                    onEditorStateChange={onEditorStateChange}
+                  />
+                </div>
+              </Col>
+            </Row>
           ) : null}
         </Form.Item>
 

@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
-import { Editor, EditorState } from 'draft-js';
-import 'draft-js/dist/Draft.css'
+import React from 'react'
+import { Editor } from "react-draft-wysiwyg";
+import { convertFromRaw } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const TextEditor = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+import htmlToDraft from 'html-to-draftjs';
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState)
-  }
+const TextEditor = ({ initialContent, editorState, onEditorStateChange }) => {
 
   return (
     <Editor
+      initialContentState={htmlToDraft(initialContent)}
       editorState={editorState}
       onEditorStateChange={onEditorStateChange}
+      editorStyle={{
+        border: '1px solid #f0f0f0',
+        paddingRight: 16,
+        paddingLeft: 16
+      }}
+      wrapperStyle={{
+        marginBottom: 10
+      }}
     />
   )
 }
