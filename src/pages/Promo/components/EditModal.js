@@ -69,8 +69,8 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/promo/updatePromo',
       data: {
         ...values,
-        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
-        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
+        start_date: values.start_date.format('YYYY-MM-DD'),
+        end_date: values.end_date.format('YYYY-MM-DD'),
         file: state.media.base64.split(',')[1],
         file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         status: data['status'],
@@ -195,10 +195,7 @@ const EditModal = ({ visible, onClose, data }) => {
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item
@@ -206,10 +203,7 @@ const EditModal = ({ visible, onClose, data }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item

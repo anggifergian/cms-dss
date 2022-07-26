@@ -67,8 +67,8 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/promo/addNewPromo',
       data: {
         ...values,
-        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
-        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
+        start_date: values.start_date.format('YYYY-MM-DD'),
+        end_date: values.end_date.format('YYYY-MM-DD'),
         file: state.media.base64.split(',')[1],
         file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         user_token: Auth.token,
@@ -194,10 +194,7 @@ const CreateModal = ({ visible, onClose }) => {
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item
@@ -205,10 +202,7 @@ const CreateModal = ({ visible, onClose }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item
