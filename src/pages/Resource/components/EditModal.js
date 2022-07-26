@@ -136,7 +136,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
         <Form.Item
           name='order'
-          label='How much?'
+          label='Order?'
         >
           <InputNumber min={1} max={5} />
         </Form.Item>

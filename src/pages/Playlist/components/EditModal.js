@@ -90,8 +90,8 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/playlist/updatePlaylist',
       data: {
         ...values,
-        start_date: values.start_date.format('YYYY-MM-DD HH:mm'),
-        end_date: values.end_date.format('YYYY-MM-DD HH:mm'),
+        start_date: values.start_date.format('YYYY-MM-DD'),
+        end_date: values.end_date.format('YYYY-MM-DD'),
         status: data['status'],
         playlist_id: data['playlist_id'],
         user_token: Auth.token,
@@ -186,10 +186,7 @@ const EditModal = ({ visible, onClose, data }) => {
           label="Start Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item
@@ -197,10 +194,7 @@ const EditModal = ({ visible, onClose, data }) => {
           label="End Date"
           {...dateConfig}
         >
-          <DatePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-          />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item noStyle>

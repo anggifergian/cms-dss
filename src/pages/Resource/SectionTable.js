@@ -49,7 +49,7 @@ const SectionTable = ({ handleShowModal }) => {
 
   const columns = [
     {
-      title: 'Recourse',
+      title: 'Resource',
       dataIndex: 'resource_name',
       key: 'resource_name',
       width: 150,
