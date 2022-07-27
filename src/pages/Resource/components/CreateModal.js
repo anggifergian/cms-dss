@@ -46,7 +46,8 @@ const CreateModal = ({ visible, onClose }) => {
       data: {
         ...values,
         thumbnail: media.fileList[0] ? media.fileList[0].name : '',
-        file: media.fileList[0] ? media.fileList[0].name : '',
+        file: media.base64.split(',')[1],
+        file_name: media.fileList[0] ? media.fileList[0].name : '',
         type: media.fileList[0] ? media.fileList[0].type : '',
         user_token: Auth.token,
       }

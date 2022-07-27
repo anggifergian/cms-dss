@@ -59,6 +59,21 @@ const SectionTable = ({ handleShowModal }) => {
       dataIndex: 'file',
       key: 'file',
       width: 150,
+      render: (value, record) => {
+        return (
+          <div>
+            <p>{value}</p>
+            {record['file'] && (
+              <button
+                onClick={() => handleShowModal('preview', { file_name: record['file'] })}
+                className='text-left underline hover:text-blue-400'
+              >
+                <span>Preview</span>
+              </button>
+            )}
+          </div>
+        )
+      }
     },
     {
       title: 'Duration',
