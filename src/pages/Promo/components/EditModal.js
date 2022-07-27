@@ -4,8 +4,9 @@ import { Modal, Form, Input, Row, Col, Button, Upload, message, Select, DatePick
 import { UploadOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import { stateFromHTML } from 'draft-js-import-html'
 
 import { Title } from '../../../containers'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
@@ -31,6 +32,23 @@ const EditModal = ({ visible, onClose, data }) => {
       htmlValue: ''
     }
   })
+
+  useState(() => {
+    if (!data.popup_description) {
+      return
+    }
+
+    const popup = stateFromHTML(data.popup_description)
+    const editorState = EditorState.createWithContent(popup)
+
+    setState({
+      ...state,
+      richText: {
+        ...state.richText,
+        editorState
+      }
+    })
+  }, [ContentState, EditorState, setState, state, data.popup_description])
 
   const onEditorStateChange = (editorState) => {
     const htmlValue = draftToHtml(convertToRaw(editorState.getCurrentContent()))
