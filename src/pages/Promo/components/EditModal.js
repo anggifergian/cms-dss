@@ -25,7 +25,8 @@ const EditModal = ({ visible, onClose, data }) => {
     },
     media: {
       fileList: [],
-      base64: ''
+      base64: '',
+      type: '',
     },
     richText: {
       editorState: EditorState.createEmpty(),
@@ -67,7 +68,8 @@ const EditModal = ({ visible, onClose, data }) => {
       ...state,
       media: {
         fileList: [],
-        base64: ''
+        base64: '',
+        type: '',
       }
     })
   }, [setState, state])
@@ -110,12 +112,17 @@ const EditModal = ({ visible, onClose, data }) => {
         popup_description: values.popup === 'yes' ? state.richText.htmlValue : '',
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
-        file: state.media.base64.split(',')[1],
-        file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         status: data['status'],
         promo_id: data['promo_id'],
         user_token: Auth.token,
       }
+    }
+
+    if (state.media.fileList.length) {
+      payload.data.file = state.media.base64.split(',')[1]
+      payload.data.file_name = state.media.fileList[0].name
+    } else {
+      payload.data.file = data.file
     }
 
     fetchCreate(payload)
@@ -141,9 +148,10 @@ const EditModal = ({ visible, onClose, data }) => {
     fileList: state.media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
+      const isValid = validTypes.includes(file.type)
 
-      if (!isImage) {
+      if (!isValid) {
         message.error(`${file.name} is not a image file`);
       } else {
         const base64 = await toBase64(file)
@@ -151,7 +159,8 @@ const EditModal = ({ visible, onClose, data }) => {
           ...state,
           media: {
             base64,
-            fileList: [file]
+            fileList: [file],
+            type: file.type,
           }
         })
       }
@@ -206,12 +215,23 @@ const EditModal = ({ visible, onClose, data }) => {
                 </Upload>
 
                 {state.media.fileList.length > 0 && (
-                  <div className='pl-4'>
-                    <img
-                      alt="profile"
-                      src={state.media.base64}
-                      className="h-24 transition-opacity ease-in-out duration-200 object-cover"
-                    />
+                  <div>
+                    {state.media.type.indexOf('image') > -1 && (
+                      <img
+                        alt="profile"
+                        src={state.media.base64}
+                        className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                      />
+                    )}
+
+                    {state.media.type.indexOf('video') > -1 && (
+                      <video
+                        controls
+                        alt='file'
+                        src={state.media.base64}
+                        className='h-32 transition-opacity ease-in-out duration-200 object-cover'
+                      />
+                    )}
                   </div>
                 )}
               </Space>
@@ -296,6 +316,7 @@ const EditModal = ({ visible, onClose, data }) => {
                 id="btn-create-submit"
                 type="primary"
                 htmlType="submit"
+                loading={Master.promo.isLoading}
               >
                 Submit
               </Button>

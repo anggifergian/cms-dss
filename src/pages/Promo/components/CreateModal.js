@@ -23,7 +23,8 @@ const CreateModal = ({ visible, onClose }) => {
     },
     media: {
       fileList: [],
-      base64: ''
+      base64: '',
+      type: '',
     },
     richText: {
       editorState: EditorState.createEmpty(),
@@ -48,7 +49,8 @@ const CreateModal = ({ visible, onClose }) => {
       ...state,
       media: {
         fileList: [],
-        base64: ''
+        base64: '',
+        type: '',
       }
     })
   }, [setState, state])
@@ -119,9 +121,10 @@ const CreateModal = ({ visible, onClose }) => {
     fileList: state.media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
+      const isValid = validTypes.includes(file.type)
 
-      if (!isImage) {
+      if (!isValid) {
         message.error(`${file.name} is not a image file`);
       } else {
         const base64 = await toBase64(file)
@@ -129,7 +132,8 @@ const CreateModal = ({ visible, onClose }) => {
           ...state,
           media: {
             base64,
-            fileList: [file]
+            fileList: [file],
+            type: file.type,
           }
         })
       }
@@ -187,12 +191,23 @@ const CreateModal = ({ visible, onClose }) => {
                 </Upload>
 
                 {state.media.fileList.length > 0 && (
-                  <div className='pl-4'>
-                    <img
-                      alt="profile"
-                      src={state.media.base64}
-                      className="h-24 transition-opacity ease-in-out duration-200 object-cover"
-                    />
+                  <div>
+                    {state.media.type.indexOf('image') > -1 && (
+                      <img
+                        alt="profile"
+                        src={state.media.base64}
+                        className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                      />
+                    )}
+
+                    {state.media.type.indexOf('video') > -1 && (
+                      <video
+                        controls
+                        alt='file'
+                        src={state.media.base64}
+                        className='h-32 transition-opacity ease-in-out duration-200 object-cover'
+                      />
+                    )}
                   </div>
                 )}
               </Space>
@@ -276,6 +291,7 @@ const CreateModal = ({ visible, onClose }) => {
                 id="btn-create-submit"
                 type="primary"
                 htmlType="submit"
+                loading={Master.promo.isLoading}
               >
                 Submit
               </Button>

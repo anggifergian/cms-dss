@@ -15,13 +15,15 @@ const CreateModal = ({ visible, onClose }) => {
 
   const [media, setMedia] = useState({
     fileList: [],
-    base64: ''
+    base64: '',
+    type: ''
   })
 
   const resetState = useCallback(() => {
     setMedia({
       fileList: [],
-      base64: ''
+      base64: '',
+      type: ''
     })
   }, [setMedia])
 
@@ -41,10 +43,13 @@ const CreateModal = ({ visible, onClose }) => {
   const fetchCreate = query => dispatch(requestCreateResource(query))
 
   const handleSubmit = (values) => {
+    const copyValues = { ...values }
+    delete copyValues.type
+
     const payload = {
       endpoint: '/resource/addNewResource',
       data: {
-        ...values,
+        ...copyValues,
         thumbnail: media.fileList[0] ? media.fileList[0].name : '',
         file: media.base64.split(',')[1],
         file_name: media.fileList[0] ? media.fileList[0].name : '',
@@ -67,15 +72,17 @@ const CreateModal = ({ visible, onClose }) => {
     fileList: media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg"
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
+      const isValid = validTypes.includes(file.type)
 
-      if (!isImage) {
-        message.error(`${file.name} is not a image file`);
+      if (!isValid) {
+        message.error(`${file.name} is not a media file`);
       } else {
         const base64 = await toBase64(file)
         setMedia({
           base64,
-          fileList: [file]
+          fileList: [file],
+          type: file.type,
         })
       }
 
@@ -117,12 +124,23 @@ const CreateModal = ({ visible, onClose }) => {
                 </Upload>
 
                 {media.fileList.length > 0 && (
-                  <div className='pl-4'>
-                    <img
-                      alt="file"
-                      src={media.base64}
-                      className="h-24 transition-opacity ease-in-out duration-200 object-cover"
-                    />
+                  <div>
+                    {media.type.indexOf('image') > -1 && (
+                      <img
+                        alt="file"
+                        src={media.base64}
+                        className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                      />
+                    )}
+
+                    {media.type.indexOf('video') > -1 && (
+                      <video
+                        controls
+                        alt="file"
+                        src={media.base64}
+                        className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                      />
+                    )}
                   </div>
                 )}
               </Space>
