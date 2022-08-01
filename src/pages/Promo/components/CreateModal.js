@@ -7,9 +7,9 @@ import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 
 import { Title } from '../../../containers'
-import { toBase64 } from '../../../utils/file'
-import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 import { TextEditor } from '../../../components'
+import { toBase64, validFileTypes } from '../../../utils/file'
+import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -121,8 +121,7 @@ const CreateModal = ({ visible, onClose }) => {
     fileList: state.media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
-      const isValid = validTypes.includes(file.type)
+      const isValid = validFileTypes.includes(file.type)
 
       if (!isValid) {
         message.error(`${file.name} is not a image file`);

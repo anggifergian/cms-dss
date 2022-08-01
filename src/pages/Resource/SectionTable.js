@@ -53,12 +53,6 @@ const SectionTable = ({ handleShowModal }) => {
       dataIndex: 'resource_name',
       key: 'resource_name',
       width: 150,
-    },
-    {
-      title: 'File',
-      dataIndex: 'file',
-      key: 'file',
-      width: 150,
       render: (value, record) => {
         return (
           <div>

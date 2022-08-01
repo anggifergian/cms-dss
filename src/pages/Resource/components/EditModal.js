@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
-import { toBase64 } from '../../../utils/file'
+import { toBase64, validFileTypes } from '../../../utils/file'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -79,8 +79,7 @@ const EditModal = ({ visible, onClose, data }) => {
     fileList: media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
-      const isValid = validTypes.includes(file.type)
+      const isValid = validFileTypes.includes(file.type)
 
       if (!isValid) {
         message.error(`${file.name} is not a image file`);
