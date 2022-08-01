@@ -92,9 +92,11 @@ const CreateModal = ({ visible, onClose }) => {
         popup_description: values.popup === 'yes' ? state.richText.htmlValue : '',
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
-        file: state.media.base64.split(',')[1],
+        file: state.media.fileList[0] ? state.media.base64.split(',')[1] : '',
         file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
       }
     }
 

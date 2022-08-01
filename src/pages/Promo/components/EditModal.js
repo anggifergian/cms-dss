@@ -9,8 +9,8 @@ import draftToHtml from 'draftjs-to-html';
 import { stateFromHTML } from 'draft-js-import-html'
 
 import { Title } from '../../../containers'
-import { toBase64, validFileTypes } from '../../../utils/file'
 import { TextEditor } from '../../../components'
+import { toBase64, validFileTypes } from '../../../utils/file'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
@@ -115,6 +115,8 @@ const EditModal = ({ visible, onClose, data }) => {
         status: data['status'],
         promo_id: data['promo_id'],
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
       }
     }
 

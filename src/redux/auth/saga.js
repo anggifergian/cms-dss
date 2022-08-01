@@ -71,7 +71,9 @@ function* loginRequest() {
             email: data.user_data[0].user_email,
             status: data.user_data[0].status,
           },
-          branch_id: data.user_data[0].branch_id
+          branch_id: data.user_data[0].branch_id,
+          company_id: data.user_data[0].company_id,
+          region_id: data.user_data[0].region_id,
         }
 
         if (data.user_role.length) {

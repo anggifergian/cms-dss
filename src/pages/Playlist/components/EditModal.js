@@ -95,6 +95,8 @@ const EditModal = ({ visible, onClose, data }) => {
         status: data['status'],
         playlist_id: data['playlist_id'],
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
       }
     }
 

@@ -16,6 +16,8 @@ const SectionTable = ({ handleShowModal }) => {
   const [state, setState] = useState({
     query: {
       "branch_id": Auth.user.branch_id,
+      "company_id": Auth.user.company_id,
+      "region_id": Auth.user.region_id,
       "playlist_name": "",
       "position_id": "",
       "resource_id": "",

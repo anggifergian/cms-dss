@@ -89,6 +89,9 @@ const CreateModal = ({ visible, onClose }) => {
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
+        resource_list: []
       }
     }
 
