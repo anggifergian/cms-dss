@@ -8,7 +8,7 @@ import draftToHtml from 'draftjs-to-html';
 
 import { Title } from '../../../containers'
 import { TextEditor } from '../../../components'
-import { toBase64, validImageTypes } from '../../../utils/file'
+import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 import { requestCreatePromo, requestListBranch } from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
