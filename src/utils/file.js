@@ -5,10 +5,13 @@ export const toBase64 = file => new Promise((resolve, reject) => {
   reader.onerror = error => reject(error);
 })
 
-export const validFileTypes = [
+export const validImageTypes = [
   'image/jpeg',
   'image/jpg',
   'image/png',
+]
+
+export const validVideoTypes = [
   'video/mp4',
   'video/webm',
   'video/ogg',
