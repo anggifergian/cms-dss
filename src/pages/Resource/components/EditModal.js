@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Row, Col, Button, Select, Radio, InputNumber, Input, Upload, message, Space } from 'antd'
+import { Modal, Form, Row, Col, Button, Select, Radio, Input, Upload, message, Space } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
@@ -85,7 +85,7 @@ const EditModal = ({ visible, onClose, data }) => {
         : validVideoTypes.includes(file.type)
 
       if (!isValid) {
-        message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`);
+        message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`)
       } else {
         const base64 = await toBase64(file)
         setMedia({

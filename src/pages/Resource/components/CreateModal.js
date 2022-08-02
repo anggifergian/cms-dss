@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Select, Radio, Upload, message, InputNumber, Space } from 'antd'
+import { Modal, Form, Input, Row, Col, Button, Select, Radio, Upload, message, Space } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
