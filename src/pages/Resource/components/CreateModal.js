@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
-import { toBase64, validFileTypes } from '../../../utils/file'
+import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -46,8 +46,6 @@ const CreateModal = ({ visible, onClose }) => {
     const copyValues = { ...values }
     delete copyValues.type
 
-    console.log(media.base64)
-
     const payload = {
       endpoint: '/resource/addNewResource',
       data: {
@@ -74,10 +72,13 @@ const CreateModal = ({ visible, onClose }) => {
     fileList: media.fileList,
     maxCount: 1,
     beforeUpload: async (file) => {
-      const isValid = validFileTypes.includes(file.type)
+      const mediaType = form.getFieldValue('resource_type')
+      const isValid = mediaType === 'image'
+        ? validImageTypes.includes(file.type)
+        : validVideoTypes.includes(file.type)
 
       if (!isValid) {
-        message.error(`${file.name} is not a media file`);
+        message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`);
       } else {
         const base64 = await toBase64(file)
         setMedia({
@@ -91,6 +92,15 @@ const CreateModal = ({ visible, onClose }) => {
     },
     onRemove: (file) => {
       resetState()
+    }
+  }
+
+  const handleRadioChange = file => {
+    if (media.fileList.length) {
+      const value = file.target.value
+      const typeIndex = media.type.indexOf(value)
+
+      typeIndex < 0 && resetState()
     }
   }
 
@@ -109,62 +119,96 @@ const CreateModal = ({ visible, onClose }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
-        initialValues={{ order: 1, resource_type: 'media' }}
+        initialValues={{
+          order: 1,
+          resource_type: 'image'
+        }}
       >
         <Form.Item name="resource_type" label="Type">
-          <Radio.Group>
-            <Radio value="media">Media</Radio>
+          <Radio.Group onChange={handleRadioChange}>
+            <Radio value="image">Image</Radio>
+            <Radio value="video">Video</Radio>
             <Radio value="url">Url</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
           noStyle
-          shouldUpdate={(prev, curr) => prev.resource_type !== curr.resource_type}
+          shouldUpdate
         >
-          {({ getFieldValue }) => getFieldValue('resource_type') === 'url' ? (
-            <Form.Item name='url_resource' label='Url'>
-              <Input placeholder="Input Url" />
-            </Form.Item>
-          ) : (
-            <Form.Item>
-              <Row align='middle'>
-                <Col span={4}>
-                  <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>File:</p>
-                </Col>
-                <Col span={20}>
-                  <Space direction='vertical'>
-                    <Upload {...uploadProps}>
-                      <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
-                        Click to Upload
-                      </Button>
-                    </Upload>
+          {({ getFieldValue }) => {
+            const resource_type = getFieldValue('resource_type')
 
-                    {media.fileList.length > 0 && (
-                      <div>
-                        {media.type.indexOf('image') > -1 && (
-                          <img
-                            alt="file"
-                            src={media.base64}
-                            className="h-32 transition-opacity ease-in-out duration-200 object-cover"
-                          />
-                        )}
+            switch (resource_type) {
+              case "url":
+                return (
+                  <Form.Item name='url_resource' label='Url'>
+                    <Input placeholder="Input Url" />
+                  </Form.Item>
+                )
+              case "image":
+                return (
+                  <Form.Item>
+                    <Row align='middle'>
+                      <Col span={4}>
+                        <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>Image:</p>
+                      </Col>
+                      <Col span={20}>
+                        <Space direction='vertical'>
+                          <Upload {...uploadProps}>
+                            <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
+                              Click to Upload
+                            </Button>
+                          </Upload>
 
-                        {media.type.indexOf('video') > -1 && (
-                          <video
-                            controls
-                            alt="file"
-                            src={media.base64}
-                            className="h-32 transition-opacity ease-in-out duration-200 object-cover"
-                          />
-                        )}
-                      </div>
-                    )}
-                  </Space>
-                </Col>
-              </Row>
-            </Form.Item>
-          )}
+                          {(media.fileList.length > 0 && media.type.indexOf('image') > -1) && (
+                            <div>
+                              <img
+                                alt="file"
+                                src={media.base64}
+                                className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                              />
+                            </div>
+                          )}
+                        </Space>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                )
+              case "video":
+                return (
+                  <Form.Item>
+                    <Row align='middle'>
+                      <Col span={4}>
+                        <p style={{ textAlign: 'right', paddingRight: 8, marginBottom: 0 }}>Video:</p>
+                      </Col>
+                      <Col span={20}>
+                        <Space direction='vertical'>
+                          <Upload {...uploadProps}>
+                            <Button icon={<UploadOutlined style={{ marginRight: 6 }} />}>
+                              Click to Upload
+                            </Button>
+                          </Upload>
+
+                          {(media.fileList.length > 0 && media.type.indexOf('video') > -1) && (
+                            <div>
+                              <video
+                                controls
+                                alt="file"
+                                src={media.base64}
+                                className="h-32 transition-opacity ease-in-out duration-200 object-cover"
+                              />
+                            </div>
+                          )}
+                        </Space>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                )
+              default:
+                return null
+            }
+          }}
         </Form.Item>
 
         <Form.Item
@@ -200,13 +244,6 @@ const CreateModal = ({ visible, onClose }) => {
             showSearch
             allowClear
           />
-        </Form.Item>
-
-        <Form.Item
-          name='order'
-          label='Order?'
-        >
-          <InputNumber min={1} max={5} />
         </Form.Item>
 
         <Form.Item noStyle>

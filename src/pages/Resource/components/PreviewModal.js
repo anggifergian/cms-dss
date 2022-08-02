@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Spin } from 'antd'
 
@@ -8,10 +8,6 @@ import { Title } from '../../../containers'
 const PreviewModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Master = useSelector(state => state.Master)
-
-  const [state, setState] = useState({
-    isImage: false
-  })
 
   const fetchImage = useCallback(query => dispatch(requestFileImage(query)), [dispatch])
 
@@ -27,14 +23,16 @@ const PreviewModal = ({ visible, onClose, data }) => {
     fetchImage(payload)
   }, [fetchImage, data])
 
-  useEffect(() => {
+  const isImage = useMemo(() => {
     if (data) {
       const splited = data.file_name.split('.')
       const validImages = ['jpeg', 'jpg', 'png']
       const isImage = validImages.includes(splited[1])
-      setState({ ...state, isImage })
+      return isImage
     }
-  }, [data, state, setState])
+
+    return false
+  }, [data])
 
   const closeModal = useCallback(() => {
     onClose()
@@ -52,7 +50,7 @@ const PreviewModal = ({ visible, onClose, data }) => {
         <div className='flex justify-center'>
           <Spin />
         </div>
-      ) : (state.isImage ? (
+      ) : (isImage ? (
         <img
           alt='promo'
           className='w-full object-cover h-96 rounded'
