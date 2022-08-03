@@ -47,6 +47,8 @@ const EditModal = ({ visible, onClose, data }) => {
         ...values,
         user_id: values['user_id'],
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
       }
     }
 

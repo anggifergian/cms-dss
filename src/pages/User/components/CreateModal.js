@@ -46,6 +46,8 @@ const CreateModal = ({ visible, onClose }) => {
       data: {
         ...values,
         user_token: Auth.token,
+        region_id: Auth.user.region_id,
+        company_id: Auth.user.company_id,
       }
     }
 
