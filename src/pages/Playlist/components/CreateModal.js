@@ -2,10 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input, Modal, Select, Row, Col, Button, DatePicker } from 'antd'
 
+import AddResource from './AddResource'
 import { Title } from '../../../containers'
 import { requestCreatePlaylist } from '../../../redux/playlist/action'
-import { requestListBranch, requestListPosition, } from '../../../redux/master/action'
-import AddResource from './AddResource'
+import {
+  requestListBranch,
+  requestListCompany,
+  requestListPosition,
+  requestListRegion,
+} from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -20,8 +25,6 @@ const CreateModal = ({ visible, onClose }) => {
   })
 
   const handleCloseModal = (data) => {
-    console.log('resource_list', data)
-
     setState({
       ...state,
       isModalVisible: false,
@@ -56,6 +59,8 @@ const CreateModal = ({ visible, onClose }) => {
   const fetchCreate = query => dispatch(requestCreatePlaylist(query))
   const fetchBranch = query => dispatch(requestListBranch(query))
   const fetchPosition = query => dispatch(requestListPosition(query))
+  const fetchCompany = query => dispatch(requestListCompany(query))
+  const fetchRegion = query => dispatch(requestListRegion(query))
 
   const initOptionBranch = () => {
     const query = {
@@ -91,6 +96,34 @@ const CreateModal = ({ visible, onClose }) => {
     fetchPosition(query)
   }
 
+  const initOptionCompany = () => {
+    const query = {
+      "company_name": "",
+      "company_address": "",
+      "company_phone": "",
+      "company_email": "",
+      "status": "",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchCompany(query)
+  }
+
+  const initOptionRegion = () => {
+    const query = {
+      "region_name": "",
+      "company_id": "",
+      "status": "active",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchRegion(query)
+  }
+
   const handleSubmit = (values) => {
     const payload = {
       endpoint: '/playlist/addNewPlaylist',
@@ -100,7 +133,7 @@ const CreateModal = ({ visible, onClose }) => {
         end_date: values.end_date.format('YYYY-MM-DD'),
         user_token: Auth.token,
         region_id: Auth.user.region_id,
-        company_id: Auth.user.company_id,
+        company_id: Auth.user.company_id || values.company_id,
         resource_list: []
       }
     }
@@ -150,6 +183,62 @@ const CreateModal = ({ visible, onClose }) => {
           layout='horizontal'
           autoComplete='off'
         >
+          <Form.Item
+            noStyle
+            shouldUpdate
+          >
+            {() => {
+              if (Auth.user.company_id) {
+                return
+              }
+
+              return (
+                <Form.Item
+                  name='company_id'
+                  label='Company'
+                >
+                  <Select
+                    onFocus={() => !Master.company.options && initOptionCompany()}
+                    options={Master.company.options}
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    showSearch
+                    allowClear
+                  />
+                </Form.Item>
+              )
+            }}
+          </Form.Item>
+
+          <Form.Item
+            noStyle
+            shouldUpdate
+          >
+            {() => {
+              if (Auth.user.region_id) {
+                return
+              }
+
+              return (
+                <Form.Item
+                  name='region_id'
+                  label='Region'
+                >
+                  <Select
+                    onFocus={() => !Master.region.options && initOptionRegion()}
+                    options={Master.region.options}
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    showSearch
+                    allowClear
+                  />
+                </Form.Item>
+              )
+            }}
+          </Form.Item>
+
           <Form.Item
             name='branch_id'
             label='Branch'
@@ -205,7 +294,7 @@ const CreateModal = ({ visible, onClose }) => {
                 {state.resource_list.length ? (
                   <div className='pt-4 grid grid-cols-1 gap-2'>
                     {state.resource_list.map((item, index) => (
-                      <div className='py-1 pl-3 px-2 rounded border border-opacity-40'>
+                      <div key={index} className='py-1 pl-3 px-2 rounded border border-opacity-40'>
                         <span className='pr-2'>{index + 1}</span>
                         <span>{item.label}</span>
                       </div>

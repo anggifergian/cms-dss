@@ -5,7 +5,12 @@ import moment from 'moment'
 
 import { Title } from '../../../containers'
 import { requestCreatePlaylist } from '../../../redux/playlist/action'
-import { requestListBranch, requestListPosition, requestListResource } from '../../../redux/master/action'
+import {
+  requestListBranch,
+  requestListCompany,
+  requestListPosition,
+  requestListRegion,
+} from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -29,7 +34,8 @@ const EditModal = ({ visible, onClose, data }) => {
   const fetchCreate = query => dispatch(requestCreatePlaylist(query))
   const fetchBranch = useCallback(query => dispatch(requestListBranch(query)), [dispatch])
   const fetchPosition = useCallback(query => dispatch(requestListPosition(query)), [dispatch])
-  const fetchResource = useCallback(query => dispatch(requestListResource(query)), [dispatch])
+  const fetchCompany = useCallback(query => dispatch(requestListCompany(query)), [dispatch])
+  const fetchRegion = useCallback(query => dispatch(requestListRegion(query)), [dispatch])
 
   useEffect(() => {
     const query = {
@@ -67,23 +73,31 @@ const EditModal = ({ visible, onClose, data }) => {
 
   useEffect(() => {
     const query = {
-      "resource_name": "",
-      "type": "",
-      "thumbnail": "",
-      "file": "",
-      "duration": "",
-      "stretch": "",
-      "order": "",
-      "status": "active",
+      "company_name": "",
+      "company_address": "",
+      "company_phone": "",
+      "company_email": "",
+      "status": "",
       "created_by": "",
       "created_date": "",
-      "updated_by": "",
-      "updated_date": "",
       "user_token": Auth.token
     }
 
-    fetchResource(query)
-  }, [fetchResource, Auth.token])
+    fetchCompany(query)
+  }, [fetchCompany, Auth.token])
+
+  useEffect(() => {
+    const query = {
+      "region_name": "",
+      "company_id": "",
+      "status": "active",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchRegion(query)
+  }, [fetchRegion, Auth.token])
 
   const handleSubmit = (values) => {
     const payload = {
@@ -94,6 +108,7 @@ const EditModal = ({ visible, onClose, data }) => {
         end_date: values.end_date.format('YYYY-MM-DD'),
         status: data['status'],
         playlist_id: data['playlist_id'],
+        resource_list: data['resource_list'],
         user_token: Auth.token,
         region_id: Auth.user.region_id,
         company_id: Auth.user.company_id,
@@ -154,20 +169,6 @@ const EditModal = ({ visible, onClose, data }) => {
         >
           <Select
             options={Master.position.options}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            showSearch
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item
-          name='resource_id'
-          label='Resource'
-        >
-          <Select
-            options={Master.resource.options}
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
