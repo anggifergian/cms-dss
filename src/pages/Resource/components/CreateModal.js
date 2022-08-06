@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
-import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
+import { compressFile, toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -14,6 +14,7 @@ const CreateModal = ({ visible, onClose }) => {
   const [form] = Form.useForm()
 
   const [media, setMedia] = useState({
+    compressedFile: '',
     fileList: [],
     base64: '',
     type: ''
@@ -21,6 +22,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const resetState = useCallback(() => {
     setMedia({
+      compressedFile: '',
       fileList: [],
       base64: '',
       type: ''
@@ -50,7 +52,7 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/resource/addNewResource',
       data: {
         ...copyValues,
-        thumbnail: media.fileList[0] ? media.fileList[0].name : '',
+        thumbnail: media.fileList[0] ? media.compressedFile.split(',')[1] : '',
         file: media.fileList[0] ? media.base64.split(',')[1] : '',
         file_name: media.fileList[0] ? media.fileList[0].name : '',
         type: media.fileList[0] ? media.fileList[0].type : '',
@@ -80,11 +82,15 @@ const CreateModal = ({ visible, onClose }) => {
       if (!isValid) {
         message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`);
       } else {
+        const compressedFile = await compressFile(file)
         const base64 = await toBase64(file)
+        const base64CompressedFile = await toBase64(compressedFile)
+
         setMedia({
           base64,
           fileList: [file],
           type: file.type,
+          compressedFile: base64CompressedFile
         })
       }
 
@@ -253,6 +259,7 @@ const CreateModal = ({ visible, onClose }) => {
                 id="btn-create-submit"
                 type="primary"
                 htmlType="submit"
+                loading={Master.resource.isLoading}
               >
                 Submit
               </Button>

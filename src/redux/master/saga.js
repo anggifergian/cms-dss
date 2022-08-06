@@ -197,7 +197,7 @@ function* addResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {

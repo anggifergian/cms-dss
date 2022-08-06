@@ -1,3 +1,17 @@
+import imageCompression from 'browser-image-compression'
+
+export async function compressFile(file, maxSizeMB = 0.5) {
+  const options = {
+    maxSizeMB,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true
+  }
+
+  const compressedFile = await imageCompression(file, options)
+
+  return compressedFile
+}
+
 export const toBase64 = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);

@@ -540,12 +540,15 @@ const masterReducer = (state = initialState, action) => {
 
         return data
       })
+
       return {
         ...state,
         branch: {
           ...finishLoading(state.branch),
           data: branches,
-          options: branches.map(data => ({ label: data.branch_name, value: data.branch_id }))
+          options: branches && branches.length
+            ? branches.map(data => ({ label: data.branch_name, value: data.branch_id }))
+            : []
         }
       }
     case failureListBranch.type:
@@ -624,7 +627,9 @@ const masterReducer = (state = initialState, action) => {
         region: {
           ...finishLoading(state.region),
           data: regions,
-          options: regions.map(data => ({ label: data.region_name, value: data.region_id }))
+          options: regions && regions.length
+            ? regions.map(data => ({ label: data.region_name, value: data.region_id }))
+            : []
         }
       }
     case failureListRegion.type:
