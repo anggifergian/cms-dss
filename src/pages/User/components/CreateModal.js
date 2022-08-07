@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Form, Input, Modal, Select, Row, Col, Button } from 'antd'
 
 import { Title } from '../../../containers'
-import { requestCreateUser, requestListBranch } from '../../../redux/master/action'
+import { requestCreateUser, requestListBranch, requestListCompany, requestListRegion } from '../../../redux/master/action'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -24,13 +24,43 @@ const CreateModal = ({ visible, onClose }) => {
   }, [Master.reload, closeModal])
 
   const fetchCreate = (query) => dispatch(requestCreateUser(query))
+  const fetchCompany = query => dispatch(requestListCompany(query))
+  const fetchRegion = query => dispatch(requestListRegion(query))
   const fetchBranch = (query) => dispatch(requestListBranch(query))
 
-  const initOption = () => {
+  const initOptionCompany = () => {
+    const query = {
+      "company_name": "",
+      "company_address": "",
+      "company_phone": "",
+      "company_email": "",
+      "status": "",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchCompany(query)
+  }
+
+  const initOptionRegion = (company_id = '') => {
+    const query = {
+      "region_name": "",
+      "company_id": company_id,
+      "status": "active",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    fetchRegion(query)
+  }
+
+  const initOptionBranch = (region_id = '') => {
     const query = {
       "branch_id": Auth.user.branch_id,
       "branch_name": "",
-      "region_id": "",
+      "region_id": region_id,
       "status": "active",
       "created_by": "",
       "created_date": "",
@@ -46,8 +76,6 @@ const CreateModal = ({ visible, onClose }) => {
       data: {
         ...values,
         user_token: Auth.token,
-        region_id: Auth.user.region_id,
-        company_id: Auth.user.company_id,
       }
     }
 
@@ -70,6 +98,20 @@ const CreateModal = ({ visible, onClose }) => {
     ],
   }
 
+  const resetForm = (fieldType) => {
+    const resetedFields = { branch_id: '' }
+
+    if (fieldType === 'company') {
+      resetedFields['region_id'] = ''
+    }
+
+    form.setFieldsValue(resetedFields)
+  }
+
+  const onFilterOption = (input, option) => {
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+
   return (
     <Modal
       title={<Title label="Form User" />}
@@ -87,19 +129,63 @@ const CreateModal = ({ visible, onClose }) => {
         autoComplete='off'
       >
         <Form.Item
-          name="branch_id"
-          label="Branch"
+          name='company_id'
+          label='Company'
           {...itemConfig}
         >
           <Select
-            onFocus={() => !Master.branch.options && initOption()}
-            options={Master.branch.options}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
             showSearch
             allowClear
+            options={Master.company.options}
+            filterOption={onFilterOption}
+            onChange={() => resetForm('company')}
+            onFocus={() => !Master.company.options && initOptionCompany()}
           />
+        </Form.Item>
+
+        <Form.Item
+          noStyle
+          shouldUpdate
+        >
+          {({ getFieldValue }) => (
+            <Form.Item
+              name='region_id'
+              label='Region'
+              {...itemConfig}
+            >
+              <Select
+                showSearch
+                allowClear
+                options={Master.region.options}
+                filterOption={onFilterOption}
+                disabled={!getFieldValue('company_id')}
+                onChange={resetForm}
+                onFocus={() => initOptionRegion(getFieldValue('company_id'))}
+              />
+            </Form.Item>
+          )}
+        </Form.Item>
+
+        <Form.Item
+          noStyle
+          shouldUpdate
+        >
+          {({ getFieldValue }) => (
+            <Form.Item
+              name="branch_id"
+              label="Branch"
+              {...itemConfig}
+            >
+              <Select
+                showSearch
+                allowClear
+                options={Master.branch.options}
+                filterOption={onFilterOption}
+                disabled={!getFieldValue('region_id')}
+                onFocus={() => initOptionBranch(getFieldValue('region_id'))}
+              />
+            </Form.Item>
+          )}
         </Form.Item>
 
         <Form.Item

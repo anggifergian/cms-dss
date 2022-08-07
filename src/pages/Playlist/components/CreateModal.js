@@ -15,13 +15,17 @@ import {
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
-  const Playlist = useSelector(state => state.Playlist)
   const Master = useSelector(state => state.Master)
+  const Playlist = useSelector(state => state.Playlist)
   const [form] = Form.useForm()
 
   const [state, setState] = useState({
     isModalVisible: false,
-    resource_list: []
+    resource_list: [],
+    form: {
+      company_id: '',
+      region_id: '',
+    }
   })
 
   const handleCloseModal = (data) => {
@@ -42,14 +46,18 @@ const CreateModal = ({ visible, onClose }) => {
   const resetState = useCallback(() => {
     setState({
       isModalVisible: false,
-      resource_list: []
+      resource_list: [],
+      form: {
+        company_id: '',
+        region_id: '',
+      }
     })
   }, [setState])
 
   const closeModal = useCallback(() => {
+    onClose()
     resetState()
     form.resetFields()
-    onClose()
   }, [onClose, form, resetState])
 
   useEffect(() => {
@@ -62,11 +70,11 @@ const CreateModal = ({ visible, onClose }) => {
   const fetchCompany = query => dispatch(requestListCompany(query))
   const fetchRegion = query => dispatch(requestListRegion(query))
 
-  const initOptionBranch = () => {
+  const initOptionBranch = (region_id = '') => {
     const query = {
       "branch_id": Auth.user.branch_id,
       "branch_name": "",
-      "region_id": "",
+      "region_id": region_id,
       "status": "active",
       "created_by": "",
       "created_date": "",
@@ -111,10 +119,10 @@ const CreateModal = ({ visible, onClose }) => {
     fetchCompany(query)
   }
 
-  const initOptionRegion = () => {
+  const initOptionRegion = (company_id = '') => {
     const query = {
       "region_name": "",
-      "company_id": "",
+      "company_id": company_id,
       "status": "active",
       "created_by": "",
       "created_date": "",
@@ -132,8 +140,6 @@ const CreateModal = ({ visible, onClose }) => {
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
         user_token: Auth.token,
-        region_id: Auth.user.region_id,
-        company_id: Auth.user.company_id || values.company_id,
         resource_list: []
       }
     }
@@ -166,6 +172,20 @@ const CreateModal = ({ visible, onClose }) => {
     ],
   }
 
+  const resetForm = (fieldType) => {
+    const resetedFields = { branch_id: '' }
+
+    if (fieldType === 'company') {
+      resetedFields['region_id'] = ''
+    }
+
+    form.setFieldsValue(resetedFields)
+  }
+
+  const onFilterOption = (input, option) => {
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+
   return (
     <>
       <Modal
@@ -184,74 +204,60 @@ const CreateModal = ({ visible, onClose }) => {
           autoComplete='off'
         >
           <Form.Item
-            noStyle
-            shouldUpdate
-          >
-            {() => {
-              if (Auth.user.company_id) {
-                return
-              }
-
-              return (
-                <Form.Item
-                  name='company_id'
-                  label='Company'
-                >
-                  <Select
-                    onFocus={() => !Master.company.options && initOptionCompany()}
-                    options={Master.company.options}
-                    filterOption={(input, option) =>
-                      option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    showSearch
-                    allowClear
-                  />
-                </Form.Item>
-              )
-            }}
-          </Form.Item>
-
-          <Form.Item
-            noStyle
-            shouldUpdate
-          >
-            {() => {
-              if (Auth.user.region_id) {
-                return
-              }
-
-              return (
-                <Form.Item
-                  name='region_id'
-                  label='Region'
-                >
-                  <Select
-                    onFocus={() => !Master.region.options && initOptionRegion()}
-                    options={Master.region.options}
-                    filterOption={(input, option) =>
-                      option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    showSearch
-                    allowClear
-                  />
-                </Form.Item>
-              )
-            }}
-          </Form.Item>
-
-          <Form.Item
-            name='branch_id'
-            label='Branch'
+            name='company_id'
+            label='Company'
           >
             <Select
-              onFocus={() => !Master.branch.options && initOptionBranch()}
-              options={Master.branch.options}
-              filterOption={(input, option) =>
-                option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+              onFocus={() => !Master.company.options && initOptionCompany()}
+              onChange={() => resetForm('company')}
+              options={Master.company.options}
+              filterOption={onFilterOption}
               showSearch
               allowClear
             />
+          </Form.Item>
+
+          <Form.Item
+            noStyle
+            shouldUpdate
+          >
+            {({ getFieldValue }) => (
+              <Form.Item
+                name='region_id'
+                label='Region'
+              >
+                <Select
+                  disabled={!getFieldValue('company_id')}
+                  onChange={resetForm}
+                  onFocus={() => initOptionRegion(getFieldValue('company_id'))}
+                  options={Master.region.options}
+                  filterOption={onFilterOption}
+                  showSearch
+                  allowClear
+                />
+              </Form.Item>
+            )}
+          </Form.Item>
+
+          <Form.Item
+            noStyle
+            shouldUpdate
+          >
+            {({ getFieldValue }) => (
+              <Form.Item
+                name='branch_id'
+                label='Branch'
+              >
+                <Select
+                  disabled={!getFieldValue('region_id')}
+                  onFocus={() => initOptionBranch(getFieldValue('region_id'))}
+                  options={Master.branch.options}
+                  filterOption={onFilterOption}
+                  showSearch
+                  allowClear
+                />
+              </Form.Item>
+            )}
           </Form.Item>
 
           <Form.Item
@@ -261,9 +267,7 @@ const CreateModal = ({ visible, onClose }) => {
             <Select
               onFocus={() => !Master.position.options && initOptionPosition()}
               options={Master.position.options}
-              filterOption={(input, option) =>
-                option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+              filterOption={onFilterOption}
               showSearch
               allowClear
             />

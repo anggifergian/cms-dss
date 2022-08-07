@@ -125,8 +125,6 @@ const CreateModal = ({ visible, onClose }) => {
         file: state.media.fileList[0] ? state.media.base64.split(',')[1] : '',
         file_name: state.media.fileList[0] ? state.media.fileList[0].name : '',
         user_token: Auth.token,
-        region_id: Auth.user.region_id,
-        company_id: Auth.user.company_id,
       }
     }
 
@@ -218,7 +216,7 @@ const CreateModal = ({ visible, onClose }) => {
         layout='horizontal'
         autoComplete='off'
         initialValues={{
-          popup: 'yes',
+          popup: 'no',
           resource_type: 'image'
         }}
       >

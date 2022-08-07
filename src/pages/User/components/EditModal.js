@@ -1,15 +1,22 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Modal, Select, Input, Row, Col, Button } from 'antd'
 
 import { Title } from '../../../containers'
-import { requestCreateUser, requestListBranch } from '../../../redux/master/action'
+import { requestCreateUser, requestListBranch, requestListCompany, requestListRegion } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
+
+  const [state, setState] = useState({
+    form: {
+      company_id: '',
+      region_id: '',
+    }
+  })
 
   useEffect(() => {
     form.resetFields()
@@ -24,21 +31,60 @@ const EditModal = ({ visible, onClose, data }) => {
   }, [Master.reload, onClose])
 
   const fetchCreate = (query) => dispatch(requestCreateUser(query))
-  const fetchBranch = useCallback(query => dispatch(requestListBranch(query)), [dispatch])
 
-  useEffect(() => {
+  const initOptionCompany = useCallback(() => {
     const query = {
-      "branch_id": Auth.user.branch_id,
-      "branch_name": "",
-      "region_id": "",
+      "company_name": "",
+      "company_address": "",
+      "company_phone": "",
+      "company_email": "",
+      "status": "",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    dispatch(requestListCompany(query))
+  }, [dispatch, Auth.token])
+
+  const initOptionRegion = useCallback((company_id = '') => {
+    const query = {
+      "region_name": "",
+      "company_id": company_id,
       "status": "active",
       "created_by": "",
       "created_date": "",
       "user_token": Auth.token
     }
 
-    visible && fetchBranch(query)
-  }, [visible, Auth.token, Auth.user.branch_id, fetchBranch])
+    dispatch(requestListRegion(query))
+  }, [dispatch, Auth.token])
+
+  const initOptionBranch = useCallback((region_id = '') => {
+    const query = {
+      "branch_id": Auth.user.branch_id,
+      "branch_name": "",
+      "region_id": region_id,
+      "status": "active",
+      "created_by": "",
+      "created_date": "",
+      "user_token": Auth.token
+    }
+
+    dispatch(requestListBranch(query))
+  }, [dispatch, Auth.token, Auth.user.branch_id])
+
+  useEffect(() => {
+    initOptionCompany()
+    initOptionRegion(data.company_id)
+    initOptionBranch(data.region_id)
+  }, [
+    initOptionCompany,
+    initOptionRegion,
+    initOptionBranch,
+    data.company_id,
+    data.region_id,
+  ])
 
   const handleSubmit = (values) => {
     const payload = {
@@ -71,6 +117,20 @@ const EditModal = ({ visible, onClose, data }) => {
     ],
   }
 
+  const resetForm = (fieldType) => {
+    const resetedFields = { branch_id: '' }
+
+    if (fieldType === 'company') {
+      resetedFields['region_id'] = ''
+    }
+
+    form.setFieldsValue(resetedFields)
+  }
+
+  const onFilterOption = (input, option) => {
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+
   const EditForm = ({ data }) => {
     return (
       <Form
@@ -83,18 +143,66 @@ const EditModal = ({ visible, onClose, data }) => {
         initialValues={data}
       >
         <Form.Item
-          name="branch_id"
-          label="Branch"
-        // {...itemConfig}
+          name='company_id'
+          label='Company'
+          {...itemConfig}
         >
           <Select
-            options={Master.branch.options}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
             showSearch
             allowClear
+            options={Master.company.options}
+            filterOption={onFilterOption}
+            onChange={(value) => {
+              resetForm('company')
+              initOptionRegion(value)
+            }}
           />
+        </Form.Item>
+
+        <Form.Item
+          noStyle
+          shouldUpdate
+        >
+          {({ getFieldValue }) => (
+            <Form.Item
+              name="region_id"
+              label="Region"
+              {...itemConfig}
+            >
+              <Select
+                showSearch
+                allowClear
+                options={Master.region.options}
+                filterOption={onFilterOption}
+                disabled={!getFieldValue('company_id')}
+                onChange={(value) => {
+                  resetForm()
+                  initOptionBranch(value)
+                }}
+              />
+            </Form.Item>
+          )}
+        </Form.Item>
+
+        <Form.Item
+          noStyle
+          shouldUpdate
+        >
+          {({ getFieldValue }) => (
+            <Form.Item
+              name="branch_id"
+              label="Branch"
+              {...itemConfig}
+            >
+              <Select
+                showSearch
+                allowClear
+                options={Master.branch.options}
+                filterOption={onFilterOption}
+                disabled={!getFieldValue('region_id')}
+              />
+            </Form.Item>
+          )}
         </Form.Item>
 
         <Form.Item
@@ -124,7 +232,6 @@ const EditModal = ({ visible, onClose, data }) => {
         <Form.Item
           name='user_password'
           label='Password'
-          {...itemConfig}
         >
           <Input.Password
             size="large"
