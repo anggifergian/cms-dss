@@ -11,13 +11,6 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const [form] = Form.useForm()
 
-  const [state, setState] = useState({
-    form: {
-      company_id: '',
-      region_id: '',
-    }
-  })
-
   useEffect(() => {
     form.resetFields()
   }, [form, visible])
