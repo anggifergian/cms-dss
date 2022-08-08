@@ -132,7 +132,7 @@ const CreateModal = ({ visible, onClose }) => {
         >
           <Select
             options={[
-              { value: 'cm', label: 'cm' }
+              { value: 'pixels', label: 'pixels' }
             ]}
             showSearch
             allowClear

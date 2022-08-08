@@ -132,7 +132,7 @@ const EditModal = ({ visible, onClose, data }) => {
         >
           <Select
             options={[
-              { value: 'cm', label: 'cm' }
+              { value: 'pixels', label: 'pixels' }
             ]}
             showSearch
             allowClear
