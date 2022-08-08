@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Input, Row, Col, Button, Select, Radio, Upload, message, Space } from 'antd'
+import { Modal, Form, Input, Row, Col, Button, Radio, Upload, message, Space, InputNumber } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
@@ -82,16 +82,21 @@ const CreateModal = ({ visible, onClose }) => {
       if (!isValid) {
         message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`);
       } else {
-        const compressedFile = await compressFile(file)
         const base64 = await toBase64(file)
-        const base64CompressedFile = await toBase64(compressedFile)
 
-        setMedia({
+        let base64_compFile;
+        if (mediaType === 'image') {
+          const compressedFile = await compressFile(file)
+          base64_compFile = await toBase64(compressedFile)
+        }
+
+        setMedia(prev => ({
+          ...prev,
           base64,
           fileList: [file],
           type: file.type,
-          compressedFile: base64CompressedFile
-        })
+          compressedFile: base64_compFile
+        }))
       }
 
       return false
@@ -235,21 +240,24 @@ const CreateModal = ({ visible, onClose }) => {
         </Form.Item>
 
         <Form.Item
-          name="duration"
-          label="Duration"
+          noStyle
+          shouldUpdate
         >
-          <Select
-            options={[
-              { label: '30s', value: 30 },
-              { label: '40s', value: 40 },
-              { label: '50s', value: 50 },
-            ]}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            showSearch
-            allowClear
-          />
+          {({ getFieldValue }) => {
+            const isVideo = getFieldValue('resource_type') === 'video'
+
+            return !isVideo && (
+              <Form.Item
+                name="duration"
+                label="Duration"
+              >
+                <Space>
+                  <InputNumber min={0} />
+                  <span>second(s)</span>
+                </Space>
+              </Form.Item>
+            )
+          }}
         </Form.Item>
 
         <Form.Item noStyle>

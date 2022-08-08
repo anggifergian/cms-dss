@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Row, Col, Button, Select, Radio, Input, Upload, message, Space } from 'antd'
+import { Modal, Form, Row, Col, Button, Radio, Input, Upload, message, Space, InputNumber } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
-import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
+import { compressFile, toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -14,6 +14,7 @@ const EditModal = ({ visible, onClose, data }) => {
   const [form] = Form.useForm()
 
   const [media, setMedia] = useState({
+    compressedFile: '',
     fileList: [],
     base64: '',
     type: ''
@@ -21,6 +22,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
   const resetState = useCallback(() => {
     setMedia({
+      compressedFile: '',
       fileList: [],
       base64: '',
       type: ''
@@ -52,7 +54,7 @@ const EditModal = ({ visible, onClose, data }) => {
         ...copyValues,
         status: data['status'],
         resource_id: data['resource_id'],
-        thumbnail: media.fileList[0] ? media.fileList[0].name : '',
+        thumbnail: media.fileList[0] ? media.compressedFile.split(',')[1] : '',
         type: media.fileList[0] ? media.fileList[0].type : '',
         user_token: Auth.token,
       }
@@ -88,11 +90,20 @@ const EditModal = ({ visible, onClose, data }) => {
         message.error(`${file.name} is not a ${mediaType === 'image' ? 'Image' : 'Video'} file`)
       } else {
         const base64 = await toBase64(file)
-        setMedia({
+
+        let base64_compFile;
+        if (mediaType === 'image') {
+          const compressedFile = await compressFile(file)
+          base64_compFile = await toBase64(compressedFile)
+        }
+
+        setMedia(prev => ({
+          ...prev,
           base64,
           fileList: [file],
           type: file.type,
-        })
+          compressedFile: base64_compFile
+        }))
       }
 
       return false
@@ -230,21 +241,24 @@ const EditModal = ({ visible, onClose, data }) => {
         </Form.Item>
 
         <Form.Item
-          name="duration"
-          label="Duration"
+          noStyle
+          shouldUpdate
         >
-          <Select
-            options={[
-              { label: '30s', value: 30 },
-              { label: '40s', value: 40 },
-              { label: '50s', value: 50 },
-            ]}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            showSearch
-            allowClear
-          />
+          {({ getFieldValue }) => {
+            const isVideo = getFieldValue('resource_type') === 'video'
+
+            return !isVideo && (
+              <Form.Item
+                name="duration"
+                label="Duration"
+              >
+                <Space>
+                  <InputNumber min={0} />
+                  <span>second(s)</span>
+                </Space>
+              </Form.Item>
+            )
+          }}
         </Form.Item>
 
         <Form.Item noStyle>
