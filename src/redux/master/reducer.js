@@ -541,13 +541,19 @@ const masterReducer = (state = initialState, action) => {
         return data
       })
 
+      const branchOptions = branches.map(data => ({ label: data.branch_name, value: data.branch_id }))
+
+      if (branchOptions.length) {
+        branchOptions.unshift({ label: 'All', value: 'all' })
+      }
+
       return {
         ...state,
         branch: {
           ...finishLoading(state.branch),
           data: branches,
           options: branches && branches.length
-            ? branches.map(data => ({ label: data.branch_name, value: data.branch_id }))
+            ? branchOptions
             : []
         }
       }
@@ -622,13 +628,19 @@ const masterReducer = (state = initialState, action) => {
           return data
         })
 
+      const regionOptions = regions.map(data => ({ label: data.region_name, value: data.region_id }))
+
+      if (regionOptions.length) {
+        regionOptions.unshift({ label: 'All', value: 'all' })
+      }
+
       return {
         ...state,
         region: {
           ...finishLoading(state.region),
           data: regions,
           options: regions && regions.length
-            ? regions.map(data => ({ label: data.region_name, value: data.region_id }))
+            ? regionOptions
             : []
         }
       }

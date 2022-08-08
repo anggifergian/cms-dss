@@ -132,6 +132,16 @@ const CreateModal = ({ visible, onClose }) => {
     fetchRegion(query)
   }
 
+  const checkAllOption = (data, fields) => {
+    fields.forEach(field => {
+      if (data[field] === 'all') {
+        data[field] = 0
+      }
+    })
+
+    return data
+  }
+
   const handleSubmit = (values) => {
     const payload = {
       endpoint: '/playlist/addNewPlaylist',
@@ -153,6 +163,8 @@ const CreateModal = ({ visible, onClose }) => {
       payload.data.resource_list = resourceMap
     }
 
+    payload.data = checkAllOption(payload.data, ['region_id', 'branch_id'])
+
     fetchCreate(payload)
   }
 
@@ -172,11 +184,15 @@ const CreateModal = ({ visible, onClose }) => {
     ],
   }
 
-  const resetForm = (fieldType) => {
+  const resetForm = (value, fieldType) => {
     const resetedFields = { branch_id: '' }
 
     if (fieldType === 'company') {
       resetedFields['region_id'] = ''
+    }
+
+    if (fieldType === 'region' && value === 'all') {
+      resetedFields.branch_id = 'all'
     }
 
     form.setFieldsValue(resetedFields)
@@ -209,7 +225,7 @@ const CreateModal = ({ visible, onClose }) => {
           >
             <Select
               onFocus={() => !Master.company.options && initOptionCompany()}
-              onChange={() => resetForm('company')}
+              onChange={(value) => resetForm(value, 'company')}
               options={Master.company.options}
               filterOption={onFilterOption}
               showSearch
@@ -228,7 +244,7 @@ const CreateModal = ({ visible, onClose }) => {
               >
                 <Select
                   disabled={!getFieldValue('company_id')}
-                  onChange={resetForm}
+                  onChange={(value) => resetForm(value, 'region')}
                   onFocus={() => initOptionRegion(getFieldValue('company_id'))}
                   options={Master.region.options}
                   filterOption={onFilterOption}

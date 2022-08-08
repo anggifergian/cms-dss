@@ -109,6 +109,16 @@ const EditModal = ({ visible, onClose, data }) => {
     initOptionPosition,
   ])
 
+  const checkAllOption = (data, fields) => {
+    fields.forEach(field => {
+      if (data[field] === 'all') {
+        data[field] = 0
+      }
+    })
+
+    return data
+  }
+
   const handleSubmit = (values) => {
     const payload = {
       endpoint: '/playlist/updatePlaylist',
@@ -124,6 +134,8 @@ const EditModal = ({ visible, onClose, data }) => {
         company_id: Auth.user.company_id,
       }
     }
+
+    payload.data = checkAllOption(payload.data, ['region_id', 'branch_id'])
 
     fetchCreate(payload)
   }
@@ -144,11 +156,15 @@ const EditModal = ({ visible, onClose, data }) => {
     ],
   }
 
-  const resetForm = (fieldType) => {
+  const resetForm = (value, fieldType) => {
     const resetedFields = { branch_id: '' }
 
     if (fieldType === 'company') {
       resetedFields['region_id'] = ''
+    }
+
+    if (fieldType === 'region' && value === 'all') {
+      resetedFields.branch_id = 'all'
     }
 
     form.setFieldsValue(resetedFields)
@@ -183,7 +199,7 @@ const EditModal = ({ visible, onClose, data }) => {
             options={Master.company.options}
             filterOption={onFilterOption}
             onChange={(value) => {
-              resetForm('company')
+              resetForm(value, 'company')
               initOptionRegion(value)
             }}
           />
@@ -205,7 +221,7 @@ const EditModal = ({ visible, onClose, data }) => {
                 filterOption={onFilterOption}
                 disabled={!getFieldValue('company_id')}
                 onChange={(value) => {
-                  resetForm()
+                  resetForm(value, 'region')
                   initOptionBranch(value)
                 }}
               />
