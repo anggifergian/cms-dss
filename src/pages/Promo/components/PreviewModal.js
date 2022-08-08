@@ -27,7 +27,7 @@ const PreviewModal = ({ visible, onClose, data }) => {
     if (data) {
       const splited = data.file_name.split('.')
       const validImages = ['jpeg', 'jpg', 'png']
-      const isImage = validImages.includes(splited[1])
+      const isImage = validImages.includes(splited[1].toLowerCase())
       return isImage
     }
 
