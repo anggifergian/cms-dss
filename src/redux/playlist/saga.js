@@ -17,8 +17,42 @@ import {
   failureCreatePlaylist,
   requestDeletePlaylist,
   successDeletePlaylist,
-  failureDeletePlaylist
+  failureDeletePlaylist,
+  requestListPlaylistResource,
+  successListPlaylistResource,
+  failureListPlaylistResource
 } from './action'
+
+function* getListResources() {
+  yield takeEvery(requestListPlaylistResource.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successListPlaylistResource(payload))
+      } else {
+        yield put(failureListPlaylistResource(timeout))
+      }
+    } catch (error) {
+      yield put(failureListPlaylistResource(error))
+    }
+  })
+}
 
 function* deletePlaylist() {
   yield takeEvery(requestDeletePlaylist.type, function* ({ payload }) {
@@ -121,6 +155,7 @@ export default function* rootSaga() {
   yield all([
     fork(deletePlaylist),
     fork(createPlaylist),
-    fork(getListPlaylist)
+    fork(getListPlaylist),
+    fork(getListResources),
   ])
 }

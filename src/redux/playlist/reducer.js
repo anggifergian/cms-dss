@@ -8,25 +8,57 @@ import { failureDeleteBranch } from '../master/action';
 import {
   failureCreatePlaylist,
   failureListPlaylist,
+  failureListPlaylistResource,
   requestCreatePlaylist,
   requestDeletePlaylist,
   requestListPlaylist,
+  requestListPlaylistResource,
   successCreatePlaylist,
   successDeletePlaylist,
   successListPlaylist,
+  successListPlaylistResource,
 } from "./action";
 
 const initialState = {
   reload: false,
+  create: {},
+  delete: {},
   list: {
     data: []
   },
-  create: {},
-  delete: {},
+  resource: {
+    data: []
+  },
 }
 
 const playlistReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestListPlaylistResource.type: {
+      return {
+        ...state,
+        resource: {
+          ...startLoading(state.resource)
+        }
+      }
+    }
+    case successListPlaylistResource.type: {
+      console.log('data', action.payload)
+
+      return {
+        ...state,
+        resource: {
+          ...finishLoading(state.resource)
+        }
+      }
+    }
+    case failureListPlaylistResource.type: {
+      return {
+        ...state,
+        resource: {
+          ...errorLoading(state.resource, action.payload.message)
+        }
+      }
+    }
     case requestDeletePlaylist.type: {
       return {
         ...state,
@@ -78,7 +110,7 @@ const playlistReducer = (state = initialState, action) => {
       }
     }
     case requestListPlaylist.type:
-      return  {
+      return {
         ...state,
         reload: false,
         list: {
@@ -88,9 +120,8 @@ const playlistReducer = (state = initialState, action) => {
     case successListPlaylist.type:
       const items = action.payload.data.map(item => {
         const data = {
-          ...item,
+          ...item.branch,
           ...item.playlist,
-          ...item.branch
         }
 
         return data

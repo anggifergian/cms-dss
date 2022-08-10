@@ -11,3 +11,9 @@ export const failureCreatePlaylist = createAction('[Error] CREATE PLAYLIST')
 export const requestDeletePlaylist = createAction('[Request] DELETE PLAYLIST')
 export const successDeletePlaylist = createAction('[Success] DELETE PLAYLIST')
 export const failureDeletePlaylist = createAction('[Error] DELETE PLAYLIST')
+
+// Playlist Resource
+export const requestListPlaylistResource = createAction('[Request] Playlist Resource')
+export const successListPlaylistResource = createAction('[Success] Playlist Resource')
+export const failureListPlaylistResource = createAction('[Error] Playlist Resource')
+
