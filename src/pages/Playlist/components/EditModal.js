@@ -4,7 +4,7 @@ import { Form, Modal, Select, Input, Row, Col, Button, DatePicker } from 'antd'
 import moment from 'moment'
 
 import { Title } from '../../../containers'
-import { requestCreatePlaylist } from '../../../redux/playlist/action'
+import { requestCreatePlaylist, requestListPlaylistResource } from '../../../redux/playlist/action'
 import {
   requestListBranch,
   requestListCompany,
@@ -97,7 +97,21 @@ const EditModal = ({ visible, onClose, data }) => {
     dispatch(requestListPosition(query))
   }, [dispatch, Auth.token])
 
+  const initResources = useCallback(() => {
+    const query = {
+      "playlist_id": data.playlist_id
+    }
+
+    const payload = {
+      endpoint: '/playlistResource/getPlaylistResource',
+      data: query
+    }
+
+    dispatch(requestListPlaylistResource(payload))
+  }, [dispatch, data])
+
   useEffect(() => {
+    initResources()
     initOptionCompany()
     initOptionPosition()
     initOptionBranch(data.region_id)
@@ -105,6 +119,7 @@ const EditModal = ({ visible, onClose, data }) => {
   }, [
     data.region_id,
     data.company_id,
+    initResources,
     initOptionBranch,
     initOptionRegion,
     initOptionCompany,
@@ -176,10 +191,18 @@ const EditModal = ({ visible, onClose, data }) => {
     return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
 
+  const mapData = (data) => {
+    data.start_date = moment(data.start_date)
+    data.end_date = moment(data.end_date)
+    
+    data.region_id = data.region_id === 0 ? 'all' : data.region_id
+    data.branch_id = data.branch_id === 0 ? 'all' :data.branch_id
+
+    return data
+  }
+
   const EditForm = ({ data }) => {
-    const copyData = { ...data }
-    copyData.start_date = moment(data.start_date);
-    copyData.end_date = moment(data.end_date);
+    const dataMapped = mapData(data)
 
     return (
       <Form
@@ -189,7 +212,7 @@ const EditModal = ({ visible, onClose, data }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
-        initialValues={copyData}
+        initialValues={dataMapped}
       >
         <Form.Item
           name='company_id'
@@ -198,6 +221,7 @@ const EditModal = ({ visible, onClose, data }) => {
           <Select
             showSearch
             allowClear
+            loading={Master.company.isLoading}
             options={Master.company.options}
             filterOption={onFilterOption}
             onChange={(value) => {
@@ -219,6 +243,7 @@ const EditModal = ({ visible, onClose, data }) => {
               <Select
                 showSearch
                 allowClear
+                loading={Master.region.isLoading}
                 options={Master.region.options}
                 filterOption={onFilterOption}
                 disabled={!getFieldValue('company_id')}
@@ -243,6 +268,7 @@ const EditModal = ({ visible, onClose, data }) => {
               <Select
                 showSearch
                 allowClear
+                loading={Master.branch.isLoading}
                 options={Master.branch.options}
                 filterOption={onFilterOption}
                 disabled={!getFieldValue('region_id')}

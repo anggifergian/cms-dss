@@ -19,7 +19,7 @@ const SectionTable = ({ handleShowModal }) => {
       "company_id": Auth.user.company_id,
       "region_id": Auth.user.region_id,
       "playlist_name": "",
-      "position_id": "",
+      "position_id": 0,
       "resource_id": "",
       "start_date": "",
       "end_date": "",

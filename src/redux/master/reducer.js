@@ -246,7 +246,7 @@ const masterReducer = (state = initialState, action) => {
             && action.payload.data.length
             && action.payload.data.map(item => {
               let data = {
-                ...item,
+                ...item.branch,
                 ...item.promo,
               }
 

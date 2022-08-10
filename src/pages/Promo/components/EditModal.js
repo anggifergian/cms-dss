@@ -263,10 +263,18 @@ const EditModal = ({ visible, onClose, data }) => {
     return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
 
+  const mapData = (data) => {
+    data.start_date = moment(data.start_date)
+    data.end_date = moment(data.end_date)
+
+    data.region_id = data.region_id === 0 ? 'all' : data.region_id
+    data.branch_id = data.branch_id === 0 ? 'all' :data.branch_id
+
+    return data
+  }
+
   const EditForm = ({ data }) => {
-    const copyData = { ...data }
-    copyData.start_date = moment(data.promo.start_date);
-    copyData.end_date = moment(data.promo.end_date);
+    const dataMapped = mapData(data)
 
     return (
       <Form
@@ -276,7 +284,7 @@ const EditModal = ({ visible, onClose, data }) => {
         onFinish={handleSubmit}
         layout='horizontal'
         autoComplete='off'
-        initialValues={copyData}
+        initialValues={dataMapped}
       >
         <Form.Item
           name='company_id'
@@ -285,6 +293,7 @@ const EditModal = ({ visible, onClose, data }) => {
           <Select
             showSearch
             allowClear
+            loading={Master.company.isLoading}
             options={Master.company.options}
             filterOption={onFilterOption}
             onChange={(value) => {
@@ -306,6 +315,7 @@ const EditModal = ({ visible, onClose, data }) => {
               <Select
                 showSearch
                 allowClear
+                loading={Master.region.isLoading}
                 options={Master.region.options}
                 filterOption={onFilterOption}
                 disabled={!getFieldValue('company_id')}
@@ -330,6 +340,7 @@ const EditModal = ({ visible, onClose, data }) => {
               <Select
                 showSearch
                 allowClear
+                loading={Master.branch.isLoading}
                 options={Master.branch.options}
                 filterOption={onFilterOption}
                 disabled={!getFieldValue('region_id')}
@@ -485,7 +496,7 @@ const EditModal = ({ visible, onClose, data }) => {
               <Col sm={24}>
                 <div>
                   <TextEditor
-                    initialContent={copyData.popup_description}
+                    initialContent={dataMapped.popup_description}
                     editorState={state.richText.editorState}
                     onEditorStateChange={onEditorStateChange}
                   />
