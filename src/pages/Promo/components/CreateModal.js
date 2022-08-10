@@ -90,6 +90,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const initOptionRegion = (company_id = '') => {
     const query = {
+      "region_id": Auth.user.branch_id,
       "region_name": "",
       "company_id": company_id,
       "status": "active",

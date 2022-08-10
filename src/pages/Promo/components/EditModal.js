@@ -116,6 +116,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
   const initOptionRegion = useCallback((company_id = '') => {
     const query = {
+      "region_id": Auth.user.branch_id,
       "region_name": "",
       "company_id": company_id,
       "status": "active",
@@ -125,7 +126,7 @@ const EditModal = ({ visible, onClose, data }) => {
     }
 
     dispatch(requestListRegion(query))
-  }, [dispatch, Auth.token])
+  }, [dispatch, Auth.token, Auth.user.branch_id])
 
   const initOptionBranch = useCallback((region_id = '') => {
     const query = {
