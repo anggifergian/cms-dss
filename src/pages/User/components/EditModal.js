@@ -27,6 +27,7 @@ const EditModal = ({ visible, onClose, data }) => {
 
   const initOptionCompany = useCallback(() => {
     const query = {
+      "company_id": Auth.user.company_id,
       "company_name": "",
       "company_address": "",
       "company_phone": "",
@@ -38,7 +39,7 @@ const EditModal = ({ visible, onClose, data }) => {
     }
 
     dispatch(requestListCompany(query))
-  }, [dispatch, Auth.token])
+  }, [dispatch, Auth.token, Auth.user.company_id])
 
   const initOptionRegion = useCallback((company_id = '') => {
     const query = {

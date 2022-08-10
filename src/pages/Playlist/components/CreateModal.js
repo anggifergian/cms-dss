@@ -106,6 +106,7 @@ const CreateModal = ({ visible, onClose }) => {
 
   const initOptionCompany = () => {
     const query = {
+      "company_id": Auth.user.company_id,
       "company_name": "",
       "company_address": "",
       "company_phone": "",
