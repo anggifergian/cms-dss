@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Form, Modal, Select, Input, Row, Col, Button, DatePicker } from 'antd'
 import moment from 'moment'
@@ -18,6 +18,10 @@ const EditModal = ({ visible, onClose, data }) => {
   const Master = useSelector(state => state.Master)
   const Playlist = useSelector(state => state.Playlist)
   const [form] = Form.useForm()
+
+  const [state, setState] = useState({
+    isModalVisible: false
+  })
 
   useEffect(() => {
     form.resetFields()
@@ -194,11 +198,18 @@ const EditModal = ({ visible, onClose, data }) => {
   const mapData = (data) => {
     data.start_date = moment(data.start_date)
     data.end_date = moment(data.end_date)
-    
+
     data.region_id = data.region_id === 0 ? 'all' : data.region_id
-    data.branch_id = data.branch_id === 0 ? 'all' :data.branch_id
+    data.branch_id = data.branch_id === 0 ? 'all' : data.branch_id
 
     return data
+  }
+
+  const handleToggleModal = () => {
+    setState(prev => ({
+      ...prev,
+      isModalVisible: !prev.isModalVisible
+    }))
   }
 
   const EditForm = ({ data }) => {
@@ -291,11 +302,31 @@ const EditModal = ({ visible, onClose, data }) => {
           />
         </Form.Item>
 
-        <Form.Item
-          name="playlist_name"
-          label="Playlist Name"
-        >
-          <Input />
+        <Form.Item>
+          <Row align='middle'>
+            <Col span={6}>
+              <p className='mb-0 pr-2 text-right'>Resource:</p>
+            </Col>
+            <Col span={18}>
+              {/* <Button
+                onClick={handleToggleModal}
+                style={{ width: 100 }}
+              >
+                Update
+              </Button> */}
+
+              {(Playlist.resource.data && Playlist.resource.data.length) ? (
+                <div className='pt-4 grid grid-cols-1 gap-2'>
+                  {Playlist.resource.data.map((item, index) => (
+                    <div key={index} className='py-1 pl-3 px-2 rounded border border-opacity-40'>
+                      <span className='pr-2'>{index + 1}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </Col>
+          </Row>
         </Form.Item>
 
         <Form.Item

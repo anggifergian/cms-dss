@@ -42,12 +42,24 @@ const playlistReducer = (state = initialState, action) => {
       }
     }
     case successListPlaylistResource.type: {
-      console.log('data', action.payload)
+      const { data } = action.payload
+
+      let options = []
+      if (data.length) {
+        options = data.map(pyl => {
+          const { resource_id, resource_name } = pyl['resources']
+          return {
+            value: resource_id,
+            label: resource_name
+          }
+        })
+      }
 
       return {
         ...state,
         resource: {
-          ...finishLoading(state.resource)
+          ...finishLoading(state.resource),
+          data: options
         }
       }
     }
