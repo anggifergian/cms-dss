@@ -48,12 +48,17 @@ const playlistReducer = (state = initialState, action) => {
       if (data.length) {
         options = data.map(pyl => {
           const { resource_id, resource_name } = pyl['resources']
+          const { order } = pyl['playlist_resource']
+
           return {
+            order,
             value: resource_id,
             label: resource_name
           }
         })
       }
+
+      // console.log('pyl', options)
 
       return {
         ...state,

@@ -20,8 +20,88 @@ import {
   failureDeletePlaylist,
   requestListPlaylistResource,
   successListPlaylistResource,
-  failureListPlaylistResource
+  failureListPlaylistResource,
+  requestUpdatePlaylistResource,
+  requestDeletePlaylistResource
 } from './action'
+
+function* addNewResource() {
+  yield takeEvery(requestCreatePlaylist.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+
+      }
+    } catch (error) {
+      
+    }
+  })
+}
+
+function* updateResource() {
+  yield takeEvery(requestUpdatePlaylistResource.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+
+      }
+    } catch (error) {
+      
+    }
+  })
+}
+
+function* deleteResource() {
+  yield takeEvery(requestDeletePlaylistResource.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 10000),
+      })
+
+      if (response) {
+
+      }
+    } catch (error) {
+      
+    }
+  })
+}
 
 function* getListResources() {
   yield takeEvery(requestListPlaylistResource.type, function* ({ payload }) {
@@ -157,5 +237,8 @@ export default function* rootSaga() {
     fork(createPlaylist),
     fork(getListPlaylist),
     fork(getListResources),
+    fork(addNewResource),
+    fork(updateResource),
+    fork(deleteResource),
   ])
 }
