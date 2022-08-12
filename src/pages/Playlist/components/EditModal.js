@@ -11,6 +11,7 @@ import {
   requestListPosition,
   requestListRegion,
 } from '../../../redux/master/action'
+import EditResource from './EditResource'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -20,8 +21,13 @@ const EditModal = ({ visible, onClose, data }) => {
   const [form] = Form.useForm()
 
   const [state, setState] = useState({
-    isModalVisible: false
+    isModalVisible: false,
+    resource_list: [],
   })
+
+  useEffect(() => {
+    setState(prev => ({ ...prev, resource_list: Playlist.resource.data }))
+  }, [visible, Playlist.resource.data])
 
   useEffect(() => {
     form.resetFields()
@@ -151,8 +157,6 @@ const EditModal = ({ visible, onClose, data }) => {
         playlist_id: data['playlist_id'],
         resource_list: data['resource_list'],
         user_token: Auth.token,
-        region_id: Auth.user.region_id,
-        company_id: Auth.user.company_id,
       }
     }
 
@@ -205,10 +209,11 @@ const EditModal = ({ visible, onClose, data }) => {
     return data
   }
 
-  const handleToggleModal = () => {
+  const handleToggleModal = (data) => {
     setState(prev => ({
       ...prev,
-      isModalVisible: !prev.isModalVisible
+      resource_list: data && data.length ? data : prev.resource_list,
+      isModalVisible: !prev.isModalVisible,
     }))
   }
 
@@ -308,16 +313,16 @@ const EditModal = ({ visible, onClose, data }) => {
               <p className='mb-0 pr-2 text-right'>Resource:</p>
             </Col>
             <Col span={18}>
-              {/* <Button
+              <Button
                 onClick={handleToggleModal}
                 style={{ width: 100 }}
               >
                 Update
-              </Button> */}
+              </Button>
 
-              {(Playlist.resource.data && Playlist.resource.data.length) ? (
+              {(state.resource_list && state.resource_list.length) ? (
                 <div className='pt-4 grid grid-cols-1 gap-2'>
-                  {Playlist.resource.data.map((item, index) => (
+                  {state.resource_list.map((item, index) => (
                     <div key={index} className='py-1 pl-3 px-2 rounded border border-opacity-40'>
                       <span className='pr-2'>{index + 1}</span>
                       <span>{item.label}</span>
@@ -327,6 +332,13 @@ const EditModal = ({ visible, onClose, data }) => {
               ) : null}
             </Col>
           </Row>
+        </Form.Item>
+
+        <Form.Item
+          name="playlist_name"
+          label="Playlist Name"
+        >
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -363,15 +375,22 @@ const EditModal = ({ visible, onClose, data }) => {
   }
 
   return (
-    <Modal
-      title={<Title label="Edit Playlist" />}
-      visible={visible}
-      onCancel={closeModal}
-      width={600}
-      footer={null}
-    >
-      <EditForm data={data} />
-    </Modal>
+    <>
+      <Modal
+        title={<Title label="Edit Playlist" />}
+        visible={visible}
+        onCancel={closeModal}
+        width={600}
+        footer={null}
+      >
+        <EditForm data={data} />
+      </Modal>
+      <EditResource
+        visible={state.isModalVisible}
+        onClose={handleToggleModal}
+        data={state.resource_list}
+      />
+    </>
   )
 }
 
