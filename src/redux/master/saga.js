@@ -166,7 +166,7 @@ function* getListResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 30000),
       })
 
       if (response) {

@@ -52,6 +52,10 @@ const SectionTable = ({ handleShowModal }) => {
     initFetch()
   }, [initFetch])
 
+  useEffect(() => {
+    Playlist.reload && initFetch()
+  }, [Playlist.reload, initFetch])
+
   const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div className='p-4'>
