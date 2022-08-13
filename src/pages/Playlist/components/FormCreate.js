@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Button, Col, DatePicker, Form, Row, Select, Input } from 'antd'
@@ -27,9 +27,13 @@ const FormCreate = () => {
     }
   })
 
+  const backToPlaylist = useCallback(() => {
+    history.push('/playlist')
+  }, [history])
+
   useEffect(() => {
     Playlist.reload && backToPlaylist()
-  }, [Playlist.reload])
+  }, [Playlist.reload, backToPlaylist])
 
   const fetchCreate = query => dispatch(requestCreatePlaylist(query))
   const fetchBranch = query => dispatch(requestListBranch(query))
@@ -184,10 +188,6 @@ const FormCreate = () => {
       ...state,
       isModalVisible: true
     })
-  }
-
-  const backToPlaylist = () => {
-    history.push('/playlist')
   }
 
   return (

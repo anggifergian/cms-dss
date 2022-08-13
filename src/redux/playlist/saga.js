@@ -23,7 +23,13 @@ import {
   failureListPlaylistResource,
   requestUpdatePlaylistResource,
   requestDeletePlaylistResource,
-  requestAddPlaylistResource
+  requestAddPlaylistResource,
+  successAddPlaylistResource,
+  failureAddPlaylistResource,
+  successUpdatetPlaylistResource,
+  failureUpdatetPlaylistResource,
+  successDeletetPlaylistResource,
+  failureDeletetPlaylistResource
 } from './action'
 
 function* addNewResource() {
@@ -44,10 +50,15 @@ function* addNewResource() {
       })
 
       if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
 
+        yield put(successAddPlaylistResource(payload))
+      } else {
+        yield put(failureAddPlaylistResource(timeout))
       }
     } catch (error) {
-
+      yield put(failureAddPlaylistResource(error))
     }
   })
 }
@@ -70,10 +81,15 @@ function* updateResource() {
       })
 
       if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
 
+        yield put(successUpdatetPlaylistResource(payload))
+      } else {
+        yield put(failureUpdatetPlaylistResource(timeout))
       }
     } catch (error) {
-
+      yield put(failureUpdatetPlaylistResource(error))
     }
   })
 }
@@ -96,10 +112,15 @@ function* deleteResource() {
       })
 
       if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
 
+        yield put(successDeletetPlaylistResource(payload))
+      } else {
+        yield put(failureDeletetPlaylistResource(timeout))
       }
     } catch (error) {
-
+      yield put(failureDeletetPlaylistResource(error))
     }
   })
 }

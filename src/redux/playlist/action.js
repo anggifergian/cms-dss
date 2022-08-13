@@ -18,8 +18,8 @@ export const successListPlaylistResource = createAction('[Success] List Playlist
 export const failureListPlaylistResource = createAction('[Error] List Playlist Resource')
 
 export const requestAddPlaylistResource = createAction('[Request] Add Playlist Resource')
-export const successAddtPlaylistResource = createAction('[Success] Add Playlist Resource')
-export const failureAddtPlaylistResource = createAction('[Error] Add Playlist Resource')
+export const successAddPlaylistResource = createAction('[Success] Add Playlist Resource')
+export const failureAddPlaylistResource = createAction('[Error] Add Playlist Resource')
 
 export const requestUpdatePlaylistResource = createAction('[Request] Update Playlist Resource')
 export const successUpdatetPlaylistResource = createAction('[Success] Update Playlist Resource')
