@@ -76,6 +76,10 @@ const AddResource = ({ visible, onClose, data }) => {
     }
   }
 
+  const onFilterOption = (input, option) => {
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+
   return (
     <Modal
       title={<Title label="Resource" />}
@@ -112,9 +116,9 @@ const AddResource = ({ visible, onClose, data }) => {
             onChange={handleItemChange}
             onFocus={() => !Master.resource.options && initOptionResource()}
             options={Master.resource.options}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
+            filterOption={onFilterOption}
+            loading={Master.resource.isLoading}
+            disabled={Master.resource.isLoading}
             mode='multiple'
             showSearch
             allowClear

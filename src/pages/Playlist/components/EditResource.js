@@ -7,6 +7,8 @@ import { Title } from '../../../containers'
 import { requestListResource } from '../../../redux/master/action'
 import { array_move } from '../../../utils/array'
 
+import _ from 'lodash'
+
 const EditResource = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
   const Auth = useSelector(state => state.Auth)
@@ -73,9 +75,54 @@ const EditResource = ({ visible, onClose, data }) => {
     setState({ ...state, resources: newPositions })
   }
 
+  const checkDelete = (diffs) => {
+    if (!diffs.length)
+      return
+
+    const dels = _.difference(diffs, data)
+
+    if (dels.length === 0) {
+      console.log('yg didelete', diffs)
+    }
+  }
+
+  const checkUpdate = (diffs) => {
+    if (!diffs.length)
+      return
+  }
+
+  function arr_diff(a1, a2) {
+
+    var a = [], diff = [];
+
+    for (var i = 0; i < a1.length; i++) {
+      a[a1[i]] = true;
+    }
+
+    for (var i = 0; i < a2.length; i++) {
+      if (a[a2[i]]) {
+        delete a[a2[i]];
+      } else {
+        a[a2[i]] = true;
+      }
+    }
+
+    for (var k in a) {
+      diff.push(k);
+    }
+
+    return diff;
+  }
+
   const handleApply = () => {
-    console.log('prev', data)
-    console.log('curr', state.resources)
+    const diff = _.differenceBy(data, state.resources, 'value')
+    checkDelete(diff)
+
+    // 1. loop curr array
+    // 2. check whether curr item on prev array or not
+    state.resources.forEach(curr => {
+      console.log(data.find(prev => prev.value === curr.value))
+    })
 
     onClose(state.resources)
   }
@@ -112,6 +159,7 @@ const EditResource = ({ visible, onClose, data }) => {
             allowClear
             mode='multiple'
             onChange={handleItemChange}
+            disabled={Master.resource.isLoading}
             options={Master.resource.options}
             filterOption={onFilterOption}
           />
@@ -161,6 +209,7 @@ const EditResource = ({ visible, onClose, data }) => {
                   <div className='flex flex-col'>
                     {(index > 0) && (
                       <Button
+                        disabled={Master.resource.isLoading}
                         onClick={() => handleMove(index, -1)}
                         icon={<UpOutlined />}
                         size='small'
@@ -169,6 +218,7 @@ const EditResource = ({ visible, onClose, data }) => {
 
                     {(index >= 0 && index !== state.resources.length - 1) && (
                       <Button
+                        disabled={Master.resource.isLoading}
                         onClick={() => handleMove(index, 1)}
                         icon={<DownOutlined />}
                         size='small'

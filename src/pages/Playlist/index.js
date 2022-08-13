@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Row, Layout } from 'antd'
+import { useHistory } from 'react-router-dom'
 
 import { Title, BaseLayout } from '../../containers'
 import SectionModal from './SectionModal'
@@ -8,6 +9,8 @@ import SectionTable from './SectionTable'
 const { Content } = Layout
 
 const Playlist = () => {
+  const history = useHistory()
+
   const [state, setState] = useState({
     visible: false,
     typeModal: '',
@@ -34,7 +37,7 @@ const Playlist = () => {
 
         <Button
           type='primary'
-          onClick={() => handleShowModal('create')}
+          onClick={() => history.push('/playlist/new')}
         >
           Add Playlist
         </Button>

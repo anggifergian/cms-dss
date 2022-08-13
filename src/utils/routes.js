@@ -17,6 +17,7 @@ import Promo from "../pages/Promo"
 import Playlist from "../pages/Playlist";
 import User from "../pages/User"
 import ForgotPassword from "../pages/Password"
+import FormCreate from "../pages/Playlist/components/FormCreate"
 
 export const publicRoutes = [
   {
@@ -41,6 +42,14 @@ export const privateRoutes = [
     title: 'Dashboard',
     sidebar: true,
     icon: <DashboardOutlined />,
+  },
+  {
+    key: 'formPlaylist',
+    path: '/playlist/new',
+    component: FormCreate,
+    title: 'Form Playlist',
+    sidebar: false,
+    icon: '',
   },
   {
     key: 'master_data',
