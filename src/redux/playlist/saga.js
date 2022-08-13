@@ -22,11 +22,12 @@ import {
   successListPlaylistResource,
   failureListPlaylistResource,
   requestUpdatePlaylistResource,
-  requestDeletePlaylistResource
+  requestDeletePlaylistResource,
+  requestAddPlaylistResource
 } from './action'
 
 function* addNewResource() {
-  yield takeEvery(requestCreatePlaylist.type, function* ({ payload }) {
+  yield takeEvery(requestAddPlaylistResource.type, function* ({ payload }) {
     try {
       const { data, endpoint } = payload
       const body = JSON.stringify(data)
@@ -46,7 +47,7 @@ function* addNewResource() {
 
       }
     } catch (error) {
-      
+
     }
   })
 }
@@ -72,7 +73,7 @@ function* updateResource() {
 
       }
     } catch (error) {
-      
+
     }
   })
 }
@@ -98,7 +99,7 @@ function* deleteResource() {
 
       }
     } catch (error) {
-      
+
     }
   })
 }

@@ -1,22 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form, Input, Modal, Select, Row, Col, Button, DatePicker } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { Button, Col, DatePicker, Form, Row, Select, Input } from 'antd'
 
-import AddResource from './AddResource'
-import { Title } from '../../../containers'
+import { BaseLayout, Title } from '../../../containers'
 import { requestCreatePlaylist } from '../../../redux/playlist/action'
-import {
-  requestListBranch,
-  requestListCompany,
-  requestListPosition,
-  requestListRegion,
-} from '../../../redux/master/action'
+import { requestListBranch, requestListCompany, requestListPosition, requestListRegion } from '../../../redux/master/action'
+import AddResource from './AddResource'
 
-const CreateModal = ({ visible, onClose }) => {
+const FormCreate = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
+
   const Auth = useSelector(state => state.Auth)
   const Master = useSelector(state => state.Master)
   const Playlist = useSelector(state => state.Playlist)
+
   const [form] = Form.useForm()
 
   const [state, setState] = useState({
@@ -28,41 +27,9 @@ const CreateModal = ({ visible, onClose }) => {
     }
   })
 
-  const handleCloseModal = (data) => {
-    setState({
-      ...state,
-      isModalVisible: false,
-      resource_list: data || []
-    })
-  }
-
-  const handleOpenModal = () => {
-    setState({
-      ...state,
-      isModalVisible: true
-    })
-  }
-
-  const resetState = useCallback(() => {
-    setState({
-      isModalVisible: false,
-      resource_list: [],
-      form: {
-        company_id: '',
-        region_id: '',
-      }
-    })
-  }, [setState])
-
-  const closeModal = useCallback(() => {
-    onClose()
-    resetState()
-    form.resetFields()
-  }, [onClose, form, resetState])
-
   useEffect(() => {
-    Playlist.reload && closeModal()
-  }, [Playlist.reload, closeModal])
+    Playlist.reload && backToPlaylist()
+  }, [Playlist.reload])
 
   const fetchCreate = query => dispatch(requestCreatePlaylist(query))
   const fetchBranch = query => dispatch(requestListBranch(query))
@@ -173,8 +140,8 @@ const CreateModal = ({ visible, onClose }) => {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 6 },
-    }
+      sm: { span: 4 },
+    },
   }
 
   const dateConfig = {
@@ -204,15 +171,41 @@ const CreateModal = ({ visible, onClose }) => {
     return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
 
+  const handleCloseModal = (data) => {
+    setState({
+      ...state,
+      isModalVisible: false,
+      resource_list: data || []
+    })
+  }
+
+  const handleOpenModal = () => {
+    setState({
+      ...state,
+      isModalVisible: true
+    })
+  }
+
+  const backToPlaylist = () => {
+    history.push('/playlist')
+  }
+
   return (
-    <>
-      <Modal
-        title={<Title label="Form Playlist" />}
-        visible={visible}
-        onCancel={closeModal}
-        width={600}
-        footer={null}
-      >
+    <BaseLayout>
+      <div>
+        <p
+          onClick={backToPlaylist}
+          className='underline inline-block text-gray-500 hover:cursor-pointer hover:text-gray-700'
+        >
+          Back to Playlist
+        </p>
+      </div>
+
+      <div className='w-full bg-white p-4 rounded-md shadow-sm'>
+        <div className='px-4 pb-6 pt-2'>
+          <Title label='Form Playlist' />
+        </div>
+
         <Form
           {...formItemLayout}
           form={form}
@@ -293,7 +286,7 @@ const CreateModal = ({ visible, onClose }) => {
 
           <Form.Item>
             <Row align='middle'>
-              <Col span={6}>
+              <Col span={4}>
                 <p
                   style={{
                     textAlign: 'right',
@@ -364,14 +357,15 @@ const CreateModal = ({ visible, onClose }) => {
             </Row>
           </Form.Item>
         </Form>
-      </Modal>
+      </div>
+
       <AddResource
         visible={state.isModalVisible}
         onClose={handleCloseModal}
         data={state.resource_list}
       />
-    </>
+    </BaseLayout>
   )
 }
 
-export default CreateModal
+export default FormCreate

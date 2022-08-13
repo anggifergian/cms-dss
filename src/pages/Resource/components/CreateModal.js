@@ -139,7 +139,7 @@ const CreateModal = ({ visible, onClose }) => {
           <Radio.Group onChange={handleRadioChange}>
             <Radio value="image">Image</Radio>
             <Radio value="video">Video</Radio>
-            <Radio value="url">Url</Radio>
+            <Radio value="web">Url</Radio>
           </Radio.Group>
         </Form.Item>
 
