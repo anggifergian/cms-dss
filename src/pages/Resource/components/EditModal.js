@@ -14,18 +14,16 @@ const EditModal = ({ visible, onClose, data }) => {
   const [form] = Form.useForm()
 
   const [media, setMedia] = useState({
-    compressedFile: '',
     fileList: [],
     base64: '',
-    type: ''
+    type: '',
   })
 
   const resetState = useCallback(() => {
     setMedia({
-      compressedFile: '',
       fileList: [],
       base64: '',
-      type: ''
+      type: '',
     })
   }, [setMedia])
 
@@ -54,7 +52,6 @@ const EditModal = ({ visible, onClose, data }) => {
         ...copyValues,
         status: data['status'],
         resource_id: data['resource_id'],
-        thumbnail: media.fileList[0] ? media.compressedFile.split(',')[1] : '',
         type: media.fileList[0] ? media.fileList[0].type : '',
         user_token: Auth.token,
       }
@@ -140,7 +137,7 @@ const EditModal = ({ visible, onClose, data }) => {
           <Radio.Group onChange={handleRadioChange}>
             <Radio value="image">Image</Radio>
             <Radio value="video">Video</Radio>
-            <Radio value="url">Url</Radio>
+            <Radio value="web">Url</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -152,7 +149,7 @@ const EditModal = ({ visible, onClose, data }) => {
             const resource_type = getFieldValue('resource_type')
 
             switch (resource_type) {
-              case "url":
+              case "web":
                 return (
                   <Form.Item name='url_resource' label='Url'>
                     <Input placeholder="Input Url" />

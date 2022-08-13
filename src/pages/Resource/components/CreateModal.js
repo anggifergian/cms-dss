@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
-import { compressFile, toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
+import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const CreateModal = ({ visible, onClose }) => {
   const dispatch = useDispatch()
@@ -14,18 +14,16 @@ const CreateModal = ({ visible, onClose }) => {
   const [form] = Form.useForm()
 
   const [media, setMedia] = useState({
-    compressedFile: '',
     fileList: [],
     base64: '',
-    type: ''
+    type: '',
   })
 
   const resetState = useCallback(() => {
     setMedia({
-      compressedFile: '',
       fileList: [],
       base64: '',
-      type: ''
+      type: '',
     })
   }, [setMedia])
 
@@ -52,7 +50,6 @@ const CreateModal = ({ visible, onClose }) => {
       endpoint: '/resource/addNewResource',
       data: {
         ...copyValues,
-        thumbnail: media.fileList[0] ? media.compressedFile.split(',')[1] : '',
         file: media.fileList[0] ? media.base64.split(',')[1] : '',
         file_name: media.fileList[0] ? media.fileList[0].name : '',
         type: media.fileList[0] ? media.fileList[0].type : '',
@@ -84,18 +81,11 @@ const CreateModal = ({ visible, onClose }) => {
       } else {
         const base64 = await toBase64(file)
 
-        let base64_compFile;
-        if (mediaType === 'image') {
-          const compressedFile = await compressFile(file)
-          base64_compFile = await toBase64(compressedFile)
-        }
-
         setMedia(prev => ({
           ...prev,
           base64,
           fileList: [file],
           type: file.type,
-          compressedFile: base64_compFile
         }))
       }
 
@@ -139,7 +129,7 @@ const CreateModal = ({ visible, onClose }) => {
           <Radio.Group onChange={handleRadioChange}>
             <Radio value="image">Image</Radio>
             <Radio value="video">Video</Radio>
-            <Radio value="url">Url</Radio>
+            <Radio value="web">Url</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -151,7 +141,7 @@ const CreateModal = ({ visible, onClose }) => {
             const resource_type = getFieldValue('resource_type')
 
             switch (resource_type) {
-              case "url":
+              case "web":
                 return (
                   <Form.Item name='url_resource' label='Url'>
                     <Input placeholder="Input Url" />

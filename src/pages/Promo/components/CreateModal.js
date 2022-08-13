@@ -174,14 +174,15 @@ const CreateModal = ({ visible, onClose }) => {
         message.error(`${file.name} is not a ${mediaType === 'image' ? 'image' : 'video'} file`)
       } else {
         const base64 = await toBase64(file)
-        setState({
-          ...state,
+
+        setState(prev => ({
+          ...prev,
           media: {
             base64,
             fileList: [file],
             type: file.type,
           }
-        })
+        }))
       }
 
       return false
