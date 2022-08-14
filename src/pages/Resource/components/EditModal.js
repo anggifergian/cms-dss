@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Form, Row, Col, Button, Radio, Input, Upload, message, Space, InputNumber } from 'antd'
+import { Modal, Form, Row, Col, Button, Radio, Input, Upload, message, Space, InputNumber, Select } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
 import { requestCreateResource } from '../../../redux/master/action'
+import { onFilterOption } from '../../../utils/antdUtil'
 import { compressFile, toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const EditModal = ({ visible, onClose, data }) => {
@@ -256,6 +257,21 @@ const EditModal = ({ visible, onClose, data }) => {
               </Form.Item>
             )
           }}
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={onFilterOption}
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item noStyle>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
+import { onFilterOption } from '../../../utils/antdUtil'
 import { requestCreateRegion, requestListCompany } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
@@ -95,6 +96,21 @@ const EditModal = ({ visible, onClose, data }) => {
             filterOption={(input, option) =>
               option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
+            showSearch
+            allowClear
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={onFilterOption}
             showSearch
             allowClear
           />

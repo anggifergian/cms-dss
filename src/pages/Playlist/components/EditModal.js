@@ -4,6 +4,7 @@ import { Form, Modal, Select, Input, Row, Col, Button, DatePicker } from 'antd'
 import moment from 'moment'
 
 import { Title } from '../../../containers'
+import { onFilterOption } from '../../../utils/antdUtil'
 import { requestCreatePlaylist, requestListPlaylistResource } from '../../../redux/playlist/action'
 import {
   requestListBranch,
@@ -195,10 +196,6 @@ const EditModal = ({ visible, onClose, data }) => {
     form.setFieldsValue(resetedFields)
   }
 
-  const onFilterOption = (input, option) => {
-    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-  }
-
   const mapData = (data) => {
     data.start_date = moment(data.start_date)
     data.end_date = moment(data.end_date)
@@ -355,6 +352,21 @@ const EditModal = ({ visible, onClose, data }) => {
           {...dateConfig}
         >
           <DatePicker format="YYYY-MM-DD" />
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={onFilterOption}
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item noStyle>

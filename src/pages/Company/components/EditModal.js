@@ -4,6 +4,7 @@ import { Modal, Form, Input, Row, Col, Button, Select } from 'antd'
 
 import { Title } from '../../../containers'
 import { requestCreateCompany } from '../../../redux/master/action'
+import { onFilterOption } from '../../../utils/antdUtil'
 
 const EditModal = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -109,9 +110,7 @@ const EditModal = ({ visible, onClose, data }) => {
               { value: 'active', label: 'Active' },
               { value: 'inactive', label: 'Inactive' }
             ]}
-            filterOption={(input, option) =>
-              option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
+            filterOption={onFilterOption}
             showSearch
             allowClear
           />

@@ -10,6 +10,7 @@ import { stateFromHTML } from 'draft-js-import-html'
 
 import { Title } from '../../../containers'
 import { TextEditor } from '../../../components'
+import { onFilterOption } from '../../../utils/antdUtil'
 import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 import { requestCreatePromo, requestListBranch, requestListCompany, requestListRegion } from '../../../redux/master/action'
 
@@ -259,10 +260,6 @@ const EditModal = ({ visible, onClose, data }) => {
     form.setFieldsValue(resetedFields)
   }
 
-  const onFilterOption = (input, option) => {
-    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-  }
-
   const mapData = (data) => {
     data.start_date = moment(data.start_date)
     data.end_date = moment(data.end_date)
@@ -504,6 +501,21 @@ const EditModal = ({ visible, onClose, data }) => {
               </Col>
             </Row>
           ) : null}
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={onFilterOption}
+            showSearch
+            allowClear
+          />
         </Form.Item>
 
         <Form.Item noStyle>

@@ -103,7 +103,7 @@ function* getFile() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -134,7 +134,7 @@ function* changePassword() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -166,7 +166,7 @@ function* getListResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 30000),
+        timeout: call(delay, 50000),
       })
 
       if (response) {
@@ -197,7 +197,7 @@ function* addResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 20000),
+        timeout: call(delay, 50000),
       })
 
       if (response) {
@@ -230,7 +230,7 @@ function* deleteResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -262,7 +262,7 @@ function* getListPosition() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -293,7 +293,7 @@ function* addPosition() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -326,7 +326,7 @@ function* deletePosition() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -358,7 +358,7 @@ function* getListDevice() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -389,7 +389,7 @@ function* addDevice() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -422,7 +422,7 @@ function* deleteDevice() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -454,7 +454,7 @@ function* getListBranch() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -485,7 +485,7 @@ function* addBranch() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -518,7 +518,7 @@ function* deleteBranch() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -550,7 +550,7 @@ function* getListRegion() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -581,7 +581,7 @@ function* addRegion() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -613,7 +613,7 @@ function* deleteRegion() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -645,7 +645,7 @@ function* getListCompany() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -676,7 +676,7 @@ function* addCompany() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -708,7 +708,7 @@ function* deleteCompany() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -741,7 +741,7 @@ function* getListPromo() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -772,7 +772,7 @@ function* addPromo() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 50000),
       })
 
       if (response) {
@@ -804,7 +804,7 @@ function* deletePromo() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -837,7 +837,7 @@ function* addUser() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -870,7 +870,7 @@ function* deleteUser() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {
@@ -903,7 +903,7 @@ function* getListUser() {
           headers,
           body,
         }),
-        timeout: call(delay, 10000),
+        timeout: call(delay, 20000),
       })
 
       if (response) {

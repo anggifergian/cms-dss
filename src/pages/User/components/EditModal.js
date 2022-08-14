@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Form, Modal, Select, Input, Row, Col, Button } from 'antd'
 
 import { Title } from '../../../containers'
+import { onFilterOption } from '../../../utils/antdUtil'
 import { requestCreateUser, requestListBranch, requestListCompany, requestListRegion } from '../../../redux/master/action'
 
 const EditModal = ({ visible, onClose, data }) => {
@@ -136,10 +137,6 @@ const EditModal = ({ visible, onClose, data }) => {
     form.setFieldsValue(resetedFields)
   }
 
-  const onFilterOption = (input, option) => {
-    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-  }
-
   const mapData = (data) => {
     data.region_id = data.region_id === 0 ? 'all' : data.region_id
     data.branch_id = data.branch_id === 0 ? 'all' :data.branch_id
@@ -257,6 +254,21 @@ const EditModal = ({ visible, onClose, data }) => {
           <Input.Password
             size="large"
             placeholder="Password"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+        >
+          <Select
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'inactive', label: 'Inactive' }
+            ]}
+            filterOption={onFilterOption}
+            showSearch
+            allowClear
           />
         </Form.Item>
 

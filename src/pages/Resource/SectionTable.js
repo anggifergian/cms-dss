@@ -57,6 +57,15 @@ const SectionTable = ({ handleShowModal }) => {
         return (
           <div>
             <p>{value}</p>
+
+            {record['thumbnail'] && (
+              <img
+                alt='promo'
+                className='w-full object-cover h-28 rounded pb-2'
+                src={`data:image/png;base64,${record['thumbnail']}`}
+              />
+            )}
+
             {record['file'] && (
               <button
                 onClick={() => handleShowModal('preview', { file_name: record['file'] })}
