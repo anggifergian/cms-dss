@@ -26,10 +26,10 @@ import {
   requestAddPlaylistResource,
   successAddPlaylistResource,
   failureAddPlaylistResource,
-  successUpdatetPlaylistResource,
-  failureUpdatetPlaylistResource,
-  successDeletetPlaylistResource,
-  failureDeletetPlaylistResource
+  successUpdatePlaylistResource,
+  failureUpdatePlaylistResource,
+  successDeletePlaylistResource,
+  failureDeletePlaylistResource
 } from './action'
 
 function* addNewResource() {
@@ -84,12 +84,12 @@ function* updateResource() {
         const json = yield call(response.json.bind(response));
         const payload = yield call(checkStatus, json);
 
-        yield put(successUpdatetPlaylistResource(payload))
+        yield put(successUpdatePlaylistResource(payload))
       } else {
-        yield put(failureUpdatetPlaylistResource(timeout))
+        yield put(failureUpdatePlaylistResource(timeout))
       }
     } catch (error) {
-      yield put(failureUpdatetPlaylistResource(error))
+      yield put(failureUpdatePlaylistResource(error))
     }
   })
 }
@@ -115,12 +115,12 @@ function* deleteResource() {
         const json = yield call(response.json.bind(response));
         const payload = yield call(checkStatus, json);
 
-        yield put(successDeletetPlaylistResource(payload))
+        yield put(successDeletePlaylistResource(payload))
       } else {
-        yield put(failureDeletetPlaylistResource(timeout))
+        yield put(failureDeletePlaylistResource(timeout))
       }
     } catch (error) {
-      yield put(failureDeletetPlaylistResource(error))
+      yield put(failureDeletePlaylistResource(error))
     }
   })
 }

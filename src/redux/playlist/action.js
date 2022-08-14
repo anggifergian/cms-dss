@@ -22,9 +22,9 @@ export const successAddPlaylistResource = createAction('[Success] Add Playlist R
 export const failureAddPlaylistResource = createAction('[Error] Add Playlist Resource')
 
 export const requestUpdatePlaylistResource = createAction('[Request] Update Playlist Resource')
-export const successUpdatetPlaylistResource = createAction('[Success] Update Playlist Resource')
-export const failureUpdatetPlaylistResource = createAction('[Error] Update Playlist Resource')
+export const successUpdatePlaylistResource = createAction('[Success] Update Playlist Resource')
+export const failureUpdatePlaylistResource = createAction('[Error] Update Playlist Resource')
 
 export const requestDeletePlaylistResource = createAction('[Request] Delete Playlist Resource')
-export const successDeletetPlaylistResource = createAction('[Success] Delete Playlist Resource')
-export const failureDeletetPlaylistResource = createAction('[Error] Delete Playlist Resource')
+export const successDeletePlaylistResource = createAction('[Success] Delete Playlist Resource')
+export const failureDeletePlaylistResource = createAction('[Error] Delete Playlist Resource')

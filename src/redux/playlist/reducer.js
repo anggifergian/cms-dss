@@ -6,17 +6,26 @@ import {
 import { failureDeleteBranch } from '../master/action';
 
 import {
+  failureAddPlaylistResource,
   failureCreatePlaylist,
+  failureDeletePlaylistResource,
   failureListPlaylist,
   failureListPlaylistResource,
+  failureUpdatePlaylistResource,
+  requestAddPlaylistResource,
   requestCreatePlaylist,
   requestDeletePlaylist,
+  requestDeletePlaylistResource,
   requestListPlaylist,
   requestListPlaylistResource,
+  requestUpdatePlaylistResource,
+  successAddPlaylistResource,
   successCreatePlaylist,
   successDeletePlaylist,
+  successDeletePlaylistResource,
   successListPlaylist,
   successListPlaylistResource,
+  successUpdatePlaylistResource,
 } from "./action";
 
 const initialState = {
@@ -29,10 +38,87 @@ const initialState = {
   resource: {
     data: []
   },
+  update: {},
 }
 
 const playlistReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestDeletePlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...startLoading(state.update)
+        }
+      }
+    }
+    case successDeletePlaylistResource.type: {
+      console.log('delete ->', action.payload)
+      return {
+        ...state,
+        update: {
+          ...finishLoading(state.update)
+        }
+      }
+    }
+    case failureDeletePlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...errorLoading(state.update)
+        }
+      }
+    }
+    case requestUpdatePlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...startLoading(state.update)
+        }
+      }
+    }
+    case successUpdatePlaylistResource.type: {
+      console.log('updated ->', action.payload)
+      return {
+        ...state,
+        update: {
+          ...finishLoading(state.update)
+        }
+      }
+    }
+    case failureUpdatePlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...errorLoading(state.update)
+        }
+      }
+    }
+    case requestAddPlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...startLoading(state.update)
+        }
+      }
+    }
+    case successAddPlaylistResource.type: {
+      console.log('added ->', action.payload)
+
+      return {
+        ...state,
+        update: {
+          ...finishLoading(state.update)
+        }
+      }
+    }
+    case failureAddPlaylistResource.type: {
+      return {
+        ...state,
+        update: {
+          ...errorLoading(state.update)
+        }
+      }
+    }
     case requestListPlaylistResource.type: {
       return {
         ...state,
@@ -57,8 +143,6 @@ const playlistReducer = (state = initialState, action) => {
           }
         })
       }
-
-      // console.log('pyl', options)
 
       return {
         ...state,

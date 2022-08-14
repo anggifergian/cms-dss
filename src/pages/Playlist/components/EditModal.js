@@ -400,7 +400,10 @@ const EditModal = ({ visible, onClose, data }) => {
       <EditResource
         visible={state.isModalVisible}
         onClose={handleToggleModal}
-        data={state.resource_list}
+        data={{
+          playlist_id: data.playlist_id,
+          resource_list: state.resource_list
+        }}
       />
     </>
   )

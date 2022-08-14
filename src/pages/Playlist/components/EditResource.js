@@ -8,6 +8,7 @@ import { requestListResource } from '../../../redux/master/action'
 import { array_move } from '../../../utils/array'
 
 import _ from 'lodash'
+import { requestAddPlaylistResource, requestDeletePlaylistResource, requestUpdatePlaylistResource } from '../../../redux/playlist/action'
 
 const EditResource = ({ visible, onClose, data }) => {
   const dispatch = useDispatch()
@@ -44,8 +45,11 @@ const EditResource = ({ visible, onClose, data }) => {
   }, [initOptionResource])
 
   useEffect(() => {
-    setState(prev => ({ ...prev, resources: data }))
-  }, [visible, data])
+    setState(prev => ({
+      ...prev,
+      resources: data.resource_list,
+    }))
+  }, [visible, data.resource_list])
 
   useEffect(() => {
     form.resetFields()
@@ -75,54 +79,79 @@ const EditResource = ({ visible, onClose, data }) => {
     setState({ ...state, resources: newPositions })
   }
 
-  const checkDelete = (diffs) => {
-    if (!diffs.length)
-      return
-
-    const dels = _.difference(diffs, data)
-
-    if (dels.length === 0) {
-      console.log('yg didelete', diffs)
-    }
-  }
-
-  const checkUpdate = (diffs) => {
-    if (!diffs.length)
-      return
-  }
-
-  function arr_diff(a1, a2) {
-
-    var a = [], diff = [];
-
-    for (var i = 0; i < a1.length; i++) {
-      a[a1[i]] = true;
-    }
-
-    for (var i = 0; i < a2.length; i++) {
-      if (a[a2[i]]) {
-        delete a[a2[i]];
-      } else {
-        a[a2[i]] = true;
+  const mapData = (items, type = 'update') => {
+    return items.map(e => {
+      let item = {
+        resource_name: e.label,
+        resource_id: e.value,
+        order: e.order
       }
-    }
 
-    for (var k in a) {
-      diff.push(k);
-    }
+      if (type === 'delete') {
+        delete item.order
+      }
 
-    return diff;
+      return item
+    })
   }
 
   const handleApply = () => {
-    const diff = _.differenceBy(data, state.resources, 'value')
-    checkDelete(diff)
+    const { resource_list } = data
+    const deleted = _.differenceBy(resource_list, state.resources, 'value')
 
-    // 1. loop curr array
-    // 2. check whether curr item on prev array or not
-    state.resources.forEach(curr => {
-      console.log(data.find(prev => prev.value === curr.value))
+    const updated = []
+    const added = []
+
+    state.resources.forEach((curr, i) => {
+      const isExist = resource_list.some(pe => pe.value === curr.value)
+      const newCurr = { ...curr, order: i + 1 }
+
+      if (isExist) {
+        updated.push(newCurr)
+      } else {
+        added.push(newCurr)
+      }
     })
+
+    if (deleted.length) {
+      const mapDeleted = mapData(deleted, 'delete')
+      // console.log('deleted', mapDeleted)
+      // const payload_delete = {
+      //   endpoint: '/playlistResource/deletePlaylistResource',
+      //   data: deleted
+      // }
+      // dispatch(requestDeletePlaylistResource(payload_delete))
+    }
+
+    if (updated.length) {
+      const mapUpdated = mapData(updated)
+      // console.log('updated', mapUpdated)
+      // const payload_update = {
+      //   endpoint: '',
+      //   data: updated
+      // }
+      // dispatch(requestUpdatePlaylistResource(payload_update))
+    }
+
+    if (added.length) {
+      const mapAdded = mapData(added)
+      // console.log('added', mapAdded)
+      // const payload_add = {
+      //   endpoint: '',
+      //   data: added
+      // }
+      // dispatch(requestAddPlaylistResource(payload_add))
+    }
+
+    const payload = {
+      playlist_id: data.playlist_id,
+      resource: {
+        added: mapData(added),
+        update: mapData(updated),
+        delete: mapData(deleted, 'delete')
+      }
+    }
+    console.log(payload)
 
     onClose(state.resources)
   }
@@ -186,7 +215,7 @@ const EditResource = ({ visible, onClose, data }) => {
         </div>
       ]}
     >
-      <EditForm baseData={data} />
+      <EditForm baseData={data.resource_list} />
 
       {state.resources.length ? (
         <div className='m-auto px-16'>
