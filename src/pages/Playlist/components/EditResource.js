@@ -147,8 +147,8 @@ const EditResource = ({ visible, onClose, data }) => {
       playlist_id: data.playlist_id,
       resource: {
         added: mapData(added),
-        update: mapData(updated),
-        delete: mapData(deleted, 'delete')
+        updated: mapData(updated),
+        deleted: mapData(deleted, 'delete')
       }
     }
     console.log(payload)
