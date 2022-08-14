@@ -42,6 +42,14 @@ const CreateModal = ({ visible, onClose }) => {
 
   const fetchCreate = query => dispatch(requestCreateResource(query))
 
+  // const initLimitFileSize = useCallback(() => {
+  //   const payload = {
+  //     endpoint: '/utility/getConfig'
+  //   }
+
+  //   dispatch()
+  // }, [dispatch])
+
   const handleSubmit = (values) => {
     const copyValues = { ...values }
     delete copyValues.type

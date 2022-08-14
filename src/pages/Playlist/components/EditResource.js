@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, Modal, Select } from 'antd'
+import { Button, Form, Modal, Select, Spin } from 'antd'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
@@ -79,7 +79,7 @@ const EditResource = ({ visible, onClose, data }) => {
     setState({ ...state, resources: newPositions })
   }
 
-  const mapData = (items, type = 'update') => {
+  const mapData = (items, type = 'add') => {
     return items.map(e => {
       let item = {
         resource_name: e.label,
@@ -91,23 +91,28 @@ const EditResource = ({ visible, onClose, data }) => {
         delete item.order
       }
 
+      if (type === 'delete' || type === 'update') {
+        item.playlist_resource_id = e.playlist_resource_id
+      }
+
       return item
     })
   }
 
   const handleApply = () => {
     const { resource_list } = data
+
     const deleted = _.differenceBy(resource_list, state.resources, 'value')
 
     const updated = []
     const added = []
 
     state.resources.forEach((curr, i) => {
-      const isExist = resource_list.some(pe => pe.value === curr.value)
+      const obj = resource_list.find(pe => pe.value === curr.value)
       const newCurr = { ...curr, order: i + 1 }
 
-      if (isExist) {
-        updated.push(newCurr)
+      if (obj) {
+        updated.push({ ...newCurr, playlist_resource_id: obj.playlist_resource_id })
       } else {
         added.push(newCurr)
       }
@@ -115,43 +120,46 @@ const EditResource = ({ visible, onClose, data }) => {
 
     if (deleted.length) {
       const mapDeleted = mapData(deleted, 'delete')
-      // console.log('deleted', mapDeleted)
-      // const payload_delete = {
-      //   endpoint: '/playlistResource/deletePlaylistResource',
-      //   data: deleted
-      // }
-      // dispatch(requestDeletePlaylistResource(payload_delete))
+      
+      const payload_delete = {
+        endpoint: '/playlistResource/deletePlaylistResource',
+        data: {
+          user_token: Auth.token,
+          data: mapDeleted
+        }
+      }
+
+      dispatch(requestDeletePlaylistResource(payload_delete))
     }
 
     if (updated.length) {
-      const mapUpdated = mapData(updated)
-      // console.log('updated', mapUpdated)
-      // const payload_update = {
-      //   endpoint: '',
-      //   data: updated
-      // }
-      // dispatch(requestUpdatePlaylistResource(payload_update))
+      const mapUpdated = mapData(deleted, 'update')
+
+      const payload_update = {
+        endpoint: '/playlistResource/updatePlaylistResource',
+        data: {
+          user_token: Auth.token,
+          data: mapUpdated
+        }
+      }
+
+      dispatch(requestUpdatePlaylistResource(payload_update))
     }
 
     if (added.length) {
       const mapAdded = mapData(added)
-      // console.log('added', mapAdded)
-      // const payload_add = {
-      //   endpoint: '',
-      //   data: added
-      // }
-      // dispatch(requestAddPlaylistResource(payload_add))
-    }
 
-    const payload = {
-      playlist_id: data.playlist_id,
-      resource: {
-        added: mapData(added),
-        updated: mapData(updated),
-        deleted: mapData(deleted, 'delete')
+      const payload_add = {
+        endpoint: '/playlistResource/addPlaylistResource',
+        data: {
+          user_token: Auth.token,
+          playlist_id: data.playlist_id,
+          data: mapAdded
+        }
       }
+
+      dispatch(requestAddPlaylistResource(payload_add))
     }
-    console.log(payload)
 
     onClose(state.resources)
   }
@@ -223,41 +231,47 @@ const EditResource = ({ visible, onClose, data }) => {
             <p className='m-0 font-bold'>Queue</p>
           </div>
 
-          <div className='grid grid-cols-1 gap-4'>
-            {state.resources.map((item, index) => (
-              <div key={item.value} className='flex items-center'>
-                <p className='m-0 mr-3 pr-3 border-r h-full'>{index + 1}</p>
+          {Master.resource.isLoading ? (
+            <div className='flex justify-center'>
+              <Spin />
+            </div>
+          ) : (
+            <div className='grid grid-cols-1 gap-4'>
+              {state.resources.map((item, index) => (
+                <div key={item.value} className='flex items-center'>
+                  <p className='m-0 mr-3 pr-3 border-r h-full'>{index + 1}</p>
 
-                <div
-                  className='w-full flex items-center justify-between py-3 px-4 border border-opacity-50 rounded hover:border-opacity-100 hover:border-blue-400'
-                >
-                  <div className='flex'>
-                    <p className='m-0'>{item.label}</p>
-                  </div>
+                  <div
+                    className='w-full flex items-center justify-between py-3 px-4 border border-opacity-50 rounded hover:border-opacity-100 hover:border-blue-400'
+                  >
+                    <div className='flex'>
+                      <p className='m-0'>{item.label}</p>
+                    </div>
 
-                  <div className='flex flex-col'>
-                    {(index > 0) && (
-                      <Button
-                        disabled={Master.resource.isLoading}
-                        onClick={() => handleMove(index, -1)}
-                        icon={<UpOutlined />}
-                        size='small'
-                      />
-                    )}
+                    <div className='flex flex-col'>
+                      {(index > 0) && (
+                        <Button
+                          disabled={Master.resource.isLoading}
+                          onClick={() => handleMove(index, -1)}
+                          icon={<UpOutlined />}
+                          size='small'
+                        />
+                      )}
 
-                    {(index >= 0 && index !== state.resources.length - 1) && (
-                      <Button
-                        disabled={Master.resource.isLoading}
-                        onClick={() => handleMove(index, 1)}
-                        icon={<DownOutlined />}
-                        size='small'
-                      />
-                    )}
+                      {(index >= 0 && index !== state.resources.length - 1) && (
+                        <Button
+                          disabled={Master.resource.isLoading}
+                          onClick={() => handleMove(index, 1)}
+                          icon={<DownOutlined />}
+                          size='small'
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : null}
     </Modal>

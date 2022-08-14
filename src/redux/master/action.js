@@ -1,5 +1,7 @@
 import { createAction } from '@reduxjs/toolkit'
 
+// UTILITY
+
 // FILE
 export const requestFileImage = createAction('[Request] Image')
 export const successFileImage = createAction('[Success] Image')
