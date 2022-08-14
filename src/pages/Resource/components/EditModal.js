@@ -51,7 +51,6 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/resource/updateResource',
       data: {
         ...copyValues,
-        status: data['status'],
         resource_id: data['resource_id'],
         type: media.fileList[0] ? media.fileList[0].type : '',
         user_token: Auth.token,

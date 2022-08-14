@@ -4,7 +4,7 @@ import { Modal, Form, Input, Row, Col, Button, Radio, Upload, message, Space, In
 import { UploadOutlined } from '@ant-design/icons'
 
 import { Title } from '../../../containers'
-import { requestCreateResource } from '../../../redux/master/action'
+import { requestCreateResource, requestGetConfig } from '../../../redux/master/action'
 import { toBase64, validImageTypes, validVideoTypes } from '../../../utils/file'
 
 const CreateModal = ({ visible, onClose }) => {
@@ -42,13 +42,17 @@ const CreateModal = ({ visible, onClose }) => {
 
   const fetchCreate = query => dispatch(requestCreateResource(query))
 
-  // const initLimitFileSize = useCallback(() => {
-  //   const payload = {
-  //     endpoint: '/utility/getConfig'
-  //   }
+  const initLimitFileSize = useCallback(() => {
+    const payload = {
+      endpoint: '/utility/getConfig'
+    }
 
-  //   dispatch()
-  // }, [dispatch])
+    dispatch(requestGetConfig(payload))
+  }, [dispatch])
+
+  useEffect(() => {
+    initLimitFileSize()
+  }, [initLimitFileSize])
 
   const handleSubmit = (values) => {
     const copyValues = { ...values }

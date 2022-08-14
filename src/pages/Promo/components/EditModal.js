@@ -173,7 +173,6 @@ const EditModal = ({ visible, onClose, data }) => {
         popup_description: values.popup === 'yes' ? state.richText.htmlValue : '',
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
-        status: data['status'],
         promo_id: data['promo_id'],
         user_token: Auth.token,
       }

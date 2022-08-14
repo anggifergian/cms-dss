@@ -46,7 +46,6 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/branch/updateBranch',
       data: {
         ...values,
-        status: data['status'],
         branch_id: data['branch_id'],
         user_token: Auth.token,
       }

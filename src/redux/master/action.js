@@ -1,6 +1,9 @@
 import { createAction } from '@reduxjs/toolkit'
 
 // UTILITY
+export const requestGetConfig = createAction('[Request] Get Config')
+export const successGetConfig = createAction('[Success] Get Config')
+export const failureGetConfig = createAction('[Failure] Get Config')
 
 // FILE
 export const requestFileImage = createAction('[Request] Image')

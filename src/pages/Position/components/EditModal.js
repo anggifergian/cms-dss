@@ -47,7 +47,6 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/position/updatePosition',
       data: {
         ...values,
-        status: data['status'],
         position_id: data['position_id'],
         user_token: Auth.token,
       }

@@ -154,7 +154,6 @@ const EditModal = ({ visible, onClose, data }) => {
         ...values,
         start_date: values.start_date.format('YYYY-MM-DD'),
         end_date: values.end_date.format('YYYY-MM-DD'),
-        status: data['status'],
         playlist_id: data['playlist_id'],
         resource_list: data['resource_list'],
         user_token: Auth.token,

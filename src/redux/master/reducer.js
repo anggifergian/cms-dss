@@ -83,6 +83,9 @@ import {
   requestFileImage,
   successFileImage,
   failureFileImage,
+  requestGetConfig,
+  successGetConfig,
+  failureGetConfig,
 } from './action'
 
 const initialState = {
@@ -113,11 +116,35 @@ const initialState = {
   },
   file: {
     data: ''
+  },
+  config: {
+    data: {}
   }
 }
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestGetConfig.type:
+      return {
+        ...state,
+        config: {
+          ...startLoading(state.config)
+        }
+      }
+    case successGetConfig.type:
+      return {
+        ...state,
+        config: {
+          ...finishLoading(state.config)
+        }
+      }
+    case failureGetConfig.type:
+      return {
+        ...state,
+        config: {
+          ...errorLoading(state.config)
+        }
+      }
     case requestFileImage.type:
       return {
         ...state,

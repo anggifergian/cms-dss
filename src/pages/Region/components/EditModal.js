@@ -48,7 +48,6 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/region/updateRegion',
       data: {
         ...values,
-        status: data['status'],
         region_id: data['region_id'],
         user_token: Auth.token,
       }

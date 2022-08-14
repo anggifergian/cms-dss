@@ -87,7 +87,39 @@ import {
   requestFileImage,
   successFileImage,
   failureFileImage,
+  requestGetConfig,
+  successGetConfig,
+  failureGetConfig,
 } from './action'
+
+function* getConfig() {
+  yield takeEvery(requestGetConfig.type, function* ({ payload }) {
+    try {
+      const { endpoint } = payload
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+        }),
+        timeout: call(delay, 20000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successGetConfig(payload))
+      } else {
+        yield put(failureGetConfig(timeout))
+      }
+    } catch (error) {
+      yield put(failureGetConfig(error))
+    }
+  })
+}
 
 function* getFile() {
   yield takeEvery(requestFileImage.type, function* ({ payload }) {
@@ -948,5 +980,6 @@ export default function* rootSaga() {
     fork(getListPromo),
     fork(getListUser),
     fork(getFile),
+    fork(getConfig),
   ])
 }

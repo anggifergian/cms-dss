@@ -31,7 +31,6 @@ const EditModal = ({ visible, onClose, data }) => {
       endpoint: '/device/updateDevice',
       data: {
         ...values,
-        status: data['status'],
         device_id: data['device_id'],
         user_token: Auth.token,
       }
