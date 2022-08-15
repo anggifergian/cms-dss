@@ -421,12 +421,17 @@ const masterReducer = (state = initialState, action) => {
           return data
         })
 
+      // console.log(positions)
+
       return {
         ...state,
         position: {
           ...finishLoading(state.position),
           data: positions,
-          options: positions.map(data => ({ label: data.device_name, value: data.position_id }))
+          options: positions.map(data => ({
+            label: `${data.device_name} - ${data.box}`,
+            value: data.position_id
+          }))
         }
       }
     case failureListPosition.type:

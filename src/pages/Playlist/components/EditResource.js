@@ -120,7 +120,7 @@ const EditResource = ({ visible, onClose, data }) => {
 
     if (deleted.length) {
       const mapDeleted = mapData(deleted, 'delete')
-      
+
       const payload_delete = {
         endpoint: '/playlistResource/deletePlaylistResource',
         data: {
@@ -133,7 +133,7 @@ const EditResource = ({ visible, onClose, data }) => {
     }
 
     if (updated.length) {
-      const mapUpdated = mapData(deleted, 'update')
+      const mapUpdated = mapData(updated, 'update')
 
       const payload_update = {
         endpoint: '/playlistResource/updatePlaylistResource',
@@ -225,55 +225,57 @@ const EditResource = ({ visible, onClose, data }) => {
     >
       <EditForm baseData={data.resource_list} />
 
-      {state.resources.length ? (
-        <div className='m-auto px-16'>
-          <div className='mb-2'>
-            <p className='m-0 font-bold'>Queue</p>
+      <div className='m-auto px-16'>
+        <div className='mb-2'>
+          <p className='m-0 font-bold'>Queue</p>
+        </div>
+
+        {Master.resource.isLoading ? (
+          <div className='flex justify-center'>
+            <Spin />
           </div>
+        ) : (
+          <>
+            {state.resources.length ? (
+              <div className='grid grid-cols-1 gap-4'>
+                {state.resources.map((item, index) => (
+                  <div key={item.value} className='flex items-center'>
+                    <p className='m-0 mr-3 pr-3 border-r h-full'>{index + 1}</p>
 
-          {Master.resource.isLoading ? (
-            <div className='flex justify-center'>
-              <Spin />
-            </div>
-          ) : (
-            <div className='grid grid-cols-1 gap-4'>
-              {state.resources.map((item, index) => (
-                <div key={item.value} className='flex items-center'>
-                  <p className='m-0 mr-3 pr-3 border-r h-full'>{index + 1}</p>
+                    <div
+                      className='w-full flex items-center justify-between py-3 px-4 border border-opacity-50 rounded hover:border-opacity-100 hover:border-blue-400'
+                    >
+                      <div className='flex'>
+                        <p className='m-0'>{item.label}</p>
+                      </div>
 
-                  <div
-                    className='w-full flex items-center justify-between py-3 px-4 border border-opacity-50 rounded hover:border-opacity-100 hover:border-blue-400'
-                  >
-                    <div className='flex'>
-                      <p className='m-0'>{item.label}</p>
-                    </div>
+                      <div className='flex flex-col'>
+                        {(index > 0) && (
+                          <Button
+                            disabled={Master.resource.isLoading}
+                            onClick={() => handleMove(index, -1)}
+                            icon={<UpOutlined />}
+                            size='small'
+                          />
+                        )}
 
-                    <div className='flex flex-col'>
-                      {(index > 0) && (
-                        <Button
-                          disabled={Master.resource.isLoading}
-                          onClick={() => handleMove(index, -1)}
-                          icon={<UpOutlined />}
-                          size='small'
-                        />
-                      )}
-
-                      {(index >= 0 && index !== state.resources.length - 1) && (
-                        <Button
-                          disabled={Master.resource.isLoading}
-                          onClick={() => handleMove(index, 1)}
-                          icon={<DownOutlined />}
-                          size='small'
-                        />
-                      )}
+                        {(index >= 0 && index !== state.resources.length - 1) && (
+                          <Button
+                            disabled={Master.resource.isLoading}
+                            onClick={() => handleMove(index, 1)}
+                            icon={<DownOutlined />}
+                            size='small'
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ) : null}
+                ))}
+              </div>
+            ) : null}
+          </>
+        )}
+      </div>
     </Modal>
   )
 }

@@ -138,11 +138,13 @@ const SectionTable = ({ handleShowModal }) => {
             <p>{value}</p>
 
             {record['thumbnail'] && (
-              <img
-                alt='promo'
-                className='w-full object-contain h-28 rounded pb-2'
-                src={`data:image/png;base64,${record['thumbnail']}`}
-              />
+              <div className='rounded pb-2'>
+                <img
+                  alt='promo'
+                  className='w-32 h-32 object-cover'
+                  src={`data:image/png;base64,${record['thumbnail']}`}
+                />
+              </div>
             )}
 
             {record['file'] && (
