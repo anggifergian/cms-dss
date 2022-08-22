@@ -135,7 +135,7 @@ function* getFile() {
           headers,
           body,
         }),
-        timeout: call(delay, 20000),
+        timeout: call(delay, 300_000),
       })
 
       if (response) {
@@ -229,7 +229,7 @@ function* addResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 200_000),
+        timeout: call(delay, 600_000),
       })
 
       if (response) {
@@ -804,7 +804,7 @@ function* addPromo() {
           headers,
           body,
         }),
-        timeout: call(delay, 200_000),
+        timeout: call(delay, 600_000),
       })
 
       if (response) {
