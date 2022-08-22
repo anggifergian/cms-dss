@@ -229,7 +229,7 @@ function* addResource() {
           headers,
           body,
         }),
-        timeout: call(delay, 50000),
+        timeout: call(delay, 200_000),
       })
 
       if (response) {
@@ -804,7 +804,7 @@ function* addPromo() {
           headers,
           body,
         }),
-        timeout: call(delay, 50000),
+        timeout: call(delay, 200_000),
       })
 
       if (response) {
