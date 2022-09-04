@@ -1,5 +1,24 @@
 import { createAction } from '@reduxjs/toolkit'
 
+const action = {
+    request: '[Request]',
+    success: '[Success]',
+    failure: '[Failure]',
+}
+
+// Running text
+export const requestListRunningText = createAction(`${action.request} List Running Text`)
+export const successListRunningText = createAction(`${action.success} List Running Text`)
+export const failureListRunningText = createAction(`${action.failure} List Running Text`)
+
+export const requestCreateRunningText = createAction(`${action.request} Create Running Text`)
+export const successCreateRunningText = createAction(`${action.success} Create Running Text`)
+export const failureCreateRunningText = createAction(`${action.failure} Create Running Text`)
+
+export const requestDeleteRunningText = createAction(`${action.request} Delete Running Text`)
+export const successDeleteRunningText = createAction(`${action.success} Delete Running Text`)
+export const failureDeleteRunningText = createAction(`${action.failure} Delete Running Text`)
+
 // UTILITY
 export const requestGetConfig = createAction('[Request] Get Config')
 export const successGetConfig = createAction('[Success] Get Config')

@@ -86,6 +86,15 @@ import {
   requestGetConfig,
   successGetConfig,
   failureGetConfig,
+  requestListRunningText,
+  successListRunningText,
+  failureListRunningText,
+  requestCreateRunningText,
+  successCreateRunningText,
+  failureCreateRunningText,
+  requestDeleteRunningText,
+  successDeleteRunningText,
+  failureDeleteRunningText,
 } from './action'
 
 const initialState = {
@@ -119,11 +128,80 @@ const initialState = {
   },
   config: {
     data: {}
+  },
+  runningText: {
+    data: []
   }
 }
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
+    case requestListRunningText.type: 
+      return {
+        ...state,
+        runningText: {
+          ...startLoading(state.runningText)
+        }
+      }
+    case successListRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...finishLoading(state.runningText),
+          data: action.payload.data
+        }
+      }
+    case failureListRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...errorLoading(state.runningText, action.payload.message)
+        }
+      }
+    case requestCreateRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...startLoading(state.runningText)
+        }
+      }
+    case successCreateRunningText.type:
+      return {
+        ...state,
+        reload: true,
+        runningText: {
+          ...finishLoading(state.runningText)
+        }
+      }
+    case failureCreateRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...errorLoading(state.runningText, action.payload.message)
+        }
+      }
+    case requestDeleteRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...startLoading(state.runningText)
+        }
+      }
+    case successDeleteRunningText.type:
+      return {
+        ...state,
+        reload: true,
+        runningText: {
+          ...finishLoading(state.runningText)
+        }
+      }
+    case failureDeleteRunningText.type:
+      return {
+        ...state,
+        runningText: {
+          ...errorLoading(state.runningText, action.payload.message)
+        }
+      }
     case requestGetConfig.type:
       return {
         ...state,

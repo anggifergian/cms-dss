@@ -90,7 +90,109 @@ import {
   requestGetConfig,
   successGetConfig,
   failureGetConfig,
+  requestListRunningText,
+  requestCreateRunningText,
+  requestDeleteRunningText,
+  successListRunningText,
+  successCreateRunningText,
+  successDeleteRunningText,
+  failureListRunningText,
+  failureCreateRunningText,
+  failureDeleteRunningText,
 } from './action'
+
+function* getListRunningText() {
+  yield takeEvery(requestListRunningText.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 60_000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successListRunningText(payload))
+      } else {
+        yield put(failureListRunningText(timeout))
+      }
+    } catch (error) {
+      yield put(failureListRunningText(error))
+    }
+  })
+}
+
+function* deleteRunningText() {
+  yield takeEvery(requestDeleteRunningText.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 60_000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successDeleteRunningText(payload))
+      } else {
+        yield put(failureDeleteRunningText(timeout))
+      }
+    } catch (error) {
+      yield put(failureDeleteRunningText(error))
+    }
+  })
+}
+
+function* addRunningText() {
+  yield takeEvery(requestCreateRunningText.type, function* ({ payload }) {
+    try {
+      const { data, endpoint } = payload
+      const body = JSON.stringify(data)
+      const url = yield call(buildUrl, endpoint)
+      const headers = yield call(buildHeaders)
+
+      const { response, timeout } = yield race({
+        response: call(fetch, url, {
+          method: 'POST',
+          headers,
+          body,
+        }),
+        timeout: call(delay, 60_000),
+      })
+
+      if (response) {
+        const json = yield call(response.json.bind(response));
+        const payload = yield call(checkStatus, json);
+
+        yield put(successCreateRunningText(payload))
+      } else {
+        yield put(failureCreateRunningText(timeout))
+      }
+    } catch (error) {
+      yield put(failureCreateRunningText(error))
+    }
+  })
+}
 
 function* getConfig() {
   yield takeEvery(requestGetConfig.type, function* ({ payload }) {
@@ -963,6 +1065,7 @@ export default function* rootSaga() {
     fork(addPosition),
     fork(addResource),
     fork(addUser),
+    fork(addRunningText),
     fork(deleteCompany),
     fork(deleteRegion),
     fork(deletePromo),
@@ -971,6 +1074,7 @@ export default function* rootSaga() {
     fork(deletePosition),
     fork(deleteResource),
     fork(deleteUser),
+    fork(deleteRunningText),
     fork(getListCompany),
     fork(getListRegion),
     fork(getListBranch),
@@ -979,6 +1083,7 @@ export default function* rootSaga() {
     fork(getListResource),
     fork(getListPromo),
     fork(getListUser),
+    fork(getListRunningText),
     fork(getFile),
     fork(getConfig),
   ])
