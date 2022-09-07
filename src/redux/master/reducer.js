@@ -136,7 +136,7 @@ const initialState = {
 
 const masterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case requestListRunningText.type: 
+    case requestListRunningText.type:
       return {
         ...state,
         runningText: {
@@ -149,6 +149,15 @@ const masterReducer = (state = initialState, action) => {
         runningText: {
           ...finishLoading(state.runningText),
           data: action.payload.data
+            && action.payload.data.length
+            && action.payload.data.map(item => {
+              let data = {
+                ...item.running_text,
+                ...item.branch,
+              }
+
+              return data
+            })
         }
       }
     case failureListRunningText.type:

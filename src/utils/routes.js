@@ -18,6 +18,7 @@ import Playlist from "../pages/Playlist";
 import User from "../pages/User"
 import ForgotPassword from "../pages/Password"
 import FormCreate from "../pages/Playlist/components/FormCreate"
+import RunningText from '../pages/RunningText'
 
 export const publicRoutes = [
   {
@@ -99,6 +100,13 @@ export const privateRoutes = [
         title: 'Resource',
         icon: null
       },
+      {
+        key: 'runningText',
+        path: '/master-data/running-text',
+        component: RunningText,
+        title: 'Running Text',
+        icon: null
+      }
     ]
   },
   {
