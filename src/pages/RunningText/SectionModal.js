@@ -1,6 +1,6 @@
 import React from 'react'
 import CreateModal from './components/CreateModal'
-import EditModal from '../Company/components/EditModal'
+import EditModal from './components/EditModal'
 
 const SectionModal = ({
   modalType,

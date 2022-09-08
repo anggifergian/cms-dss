@@ -174,12 +174,12 @@ const SectionTable = ({ handleShowModal }) => {
       render: (data) => {
         return (
           <Space wrap>
-            {/* <Button
+            <Button
               type='primary'
               onClick={() => handleShowModal('edit', data)}
             >
               <EditOutlined />
-            </Button> */}
+            </Button>
             <Button
               danger
               onClick={() => showConfirm(data)}
@@ -197,8 +197,11 @@ const SectionTable = ({ handleShowModal }) => {
       title: 'Are you sure want to delete?',
       onOk() {
         const payload = {
-          "promo_id": data['promo_id'],
-          "user_token": Auth.token
+          endpoint: '/runningText/deleteRunningText',
+          data: {
+            "running_text_id": data['running_text_id'],
+            "user_token": Auth.token
+          }
         }
 
         handleDelete(payload)

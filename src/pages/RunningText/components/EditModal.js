@@ -95,11 +95,12 @@ const EditModal = ({ visible, onClose, data }) => {
 
   const handleSubmit = (values) => {
     const payload = {
-      endpoint: '',
+      endpoint: '/runningText/updateRunningText',
       data: {
         ...values,
-        start_date: '',
-        end_date: '',
+        start_date: values.start_date.format('YYYY-MM-DD'),
+        end_date: values.end_date.format('YYYY-MM-DD'),
+        running_text_id: data['running_text_id'],
         user_token: Auth.token,
       }
     }

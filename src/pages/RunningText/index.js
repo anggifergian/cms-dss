@@ -32,12 +32,12 @@ const RunningText = () => {
       >
         <Title label="Running Text" />
 
-        {/* <Button
+        <Button
           type='primary'
           onClick={() => handleShowModal('create')}
         >
           Add Running Text
-        </Button> */}
+        </Button>
       </Row>
 
       <div className='w-full bg-white p-4 rounded-md shadow-sm'>

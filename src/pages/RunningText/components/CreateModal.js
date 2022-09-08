@@ -84,11 +84,11 @@ const CreateModal = ({ visible, onClose }) => {
 
   const handleSubmit = (values) => {
     const payload = {
-      endpoint: '',
+      endpoint: '/runningText/addNewRunningText',
       data: {
         ...values,
-        start_date: '',
-        end_date: '',
+        start_date: values.start_date.format('YYYY-MM-DD'),
+        end_date: values.end_date.format('YYYY-MM-DD'),
         user_token: Auth.token
       }
     }
