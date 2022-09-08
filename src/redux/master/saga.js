@@ -989,7 +989,7 @@ function* addUser() {
       }
     } catch (error) {
       yield put(failureCreateUser(error))
-      notifyError('error', error)
+      notifyError('error', error.message)
     }
   })
 }
@@ -1022,7 +1022,7 @@ function* deleteUser() {
       }
     } catch (error) {
       yield put(failureDeleteUser(error))
-      notifyError('error', error)
+      notifyError('error', error.message)
     }
   })
 }
