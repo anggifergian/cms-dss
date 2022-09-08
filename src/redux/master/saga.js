@@ -154,11 +154,13 @@ function* deleteRunningText() {
         const payload = yield call(checkStatus, json);
 
         yield put(successDeleteRunningText(payload))
+        notifyError('success', 'Running text deleted')
       } else {
         yield put(failureDeleteRunningText(timeout))
       }
     } catch (error) {
       yield put(failureDeleteRunningText(error))
+      notifyError('error', error.message)
     }
   })
 }
@@ -185,11 +187,13 @@ function* addRunningText() {
         const payload = yield call(checkStatus, json);
 
         yield put(successCreateRunningText(payload))
+        notifyError('success', 'Running text created')
       } else {
         yield put(failureCreateRunningText(timeout))
       }
     } catch (error) {
       yield put(failureCreateRunningText(error))
+      notifyError('error', error.message)
     }
   })
 }

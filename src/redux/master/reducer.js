@@ -139,6 +139,7 @@ const masterReducer = (state = initialState, action) => {
     case requestListRunningText.type:
       return {
         ...state,
+        reload: false,
         runningText: {
           ...startLoading(state.runningText)
         }
@@ -152,8 +153,8 @@ const masterReducer = (state = initialState, action) => {
             && action.payload.data.length
             && action.payload.data.map(item => {
               let data = {
-                ...item.running_text,
                 ...item.branch,
+                ...item.running_text,
               }
 
               return data
